@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
 import { todayFormatted } from '../../data/mockData';
-import { Sun, Moon, Search, HelpCircle, Menu, Bell } from 'lucide-react';
+import { Sun, Moon, HelpCircle, Menu, Bell } from 'lucide-react';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const { toggleLanguage, isRTL, L } = useLanguage();
@@ -60,18 +60,6 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
 
       {/* Action controls */}
       <div className="flex items-center gap-2 no-print">
-        {/* Search trigger with shortcut pill */}
-        <button
-          onClick={onOpenSearch}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--muted)] hover:text-[var(--ink)] bg-[var(--primary-50)] hover:bg-[var(--primary-100)] rounded-full border border-[var(--line)] transition-all cursor-pointer"
-          title={isRTL ? 'بحث سريع (Ctrl + K)' : 'Quick search (Ctrl + K)'}
-        >
-          <Search className="w-3.5 h-3.5 text-[var(--primary)]" />
-          <span className="hidden sm:inline font-medium">{isRTL ? 'بحث...' : 'Search...'}</span>
-          <kbd className="hidden md:inline-block text-[10px] font-mono px-1.5 py-0.5 bg-[var(--card)] border border-[var(--line)] rounded-full text-[var(--muted)]">
-            ⌘K
-          </kbd>
-        </button>
 
         {/* Notifications / Help with small red notification dot */}
         <button
