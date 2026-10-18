@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
-import { LOGO_SVG } from '../../data/icons';
 import { todayFormatted } from '../../data/mockData';
-import { Sun, Moon, Search, HelpCircle, Menu, PanelLeftClose, Bell } from 'lucide-react';
+import { Sun, Moon, Search, HelpCircle, Menu, Bell } from 'lucide-react';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const { toggleLanguage, isRTL, L } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
-  const { currentRoute, cfg, sidebarExpanded, toggleSidebar } = useSeha();
+  const { currentRoute, toggleSidebar } = useSeha();
 
   // Keyboard shortcut Ctrl+K or Cmd+K for search
   useEffect(() => {
@@ -43,36 +42,20 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
 
   return (
     <header id="top" className="no-print">
-      {/* Sidebar toggle button */}
-      <button
-        onClick={toggleSidebar}
-        className="p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-xl transition-colors cursor-pointer"
-        title={sidebarExpanded ? (isRTL ? 'طي القائمة' : 'Collapse sidebar') : (isRTL ? 'توسيع القائمة' : 'Expand sidebar')}
-        aria-label="Toggle navigation menu"
-      >
-        {sidebarExpanded ? (
-          <PanelLeftClose className="w-4 h-4" />
-        ) : (
+      {/* Start side: Mobile toggle & Route Title (breadcrumb removed as requested) */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggleSidebar}
+          className="lg:hidden p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-xl transition-colors cursor-pointer"
+          title={isRTL ? 'القائمة' : 'Menu'}
+          aria-label="Toggle navigation menu"
+        >
           <Menu className="w-4 h-4" />
-        )}
-      </button>
+        </button>
 
-      {/* Brand Branding */}
-      <div className="brand">
-        {LOGO_SVG}
-        <div>
-          <b style={{ color: 'var(--ink)' }}>{L(cfg.org.ar, cfg.org.en)}</b>
-          <small style={{ color: 'var(--muted)' }}>
-            {L(cfg.org.sub.ar, cfg.org.sub.en)} · {L(cfg.org.decree.ar, cfg.org.decree.en)}
-          </small>
-        </div>
-      </div>
-
-      {/* Contextual Breadcrumbs */}
-      <div className="crumb">
-        <span>{L(cfg.org.owner.ar, cfg.org.owner.en)}</span>
-        <span className="opacity-40">/</span>
-        <b>{getRouteTitle()}</b>
+        <h2 className="text-sm sm:text-base font-bold text-[var(--ink)] tracking-tight">
+          {getRouteTitle()}
+        </h2>
       </div>
 
       {/* Action controls */}
@@ -115,23 +98,23 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
         >
           {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
         </button>
-      </div>
 
-      {/* User profile capsule */}
-      <div className="user">
-        <div className="av">{isRTL ? 'أ' : 'A'}</div>
-        <div style={{ lineHeight: 1.25 }}>
-          <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
-          <span className="mut" style={{ fontSize: '10.5px' }}>
-            {todayFormatted()}
-          </span>
+        {/* User profile capsule */}
+        <div className="user">
+          <div className="av">{isRTL ? 'أ' : 'A'}</div>
+          <div style={{ lineHeight: 1.25 }}>
+            <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
+            <span className="mut" style={{ fontSize: '10.5px' }}>
+              {todayFormatted()}
+            </span>
+          </div>
         </div>
-      </div>
 
-      {/* Language Toggle */}
-      <button className="lang" onClick={toggleLanguage} title={isRTL ? 'Switch to English' : 'التحويل للعربية'}>
-        {L('EN', 'عربي')}
-      </button>
+        {/* Language Toggle */}
+        <button className="lang" onClick={toggleLanguage} title={isRTL ? 'Switch to English' : 'التحويل للعربية'}>
+          {L('EN', 'عربي')}
+        </button>
+      </div>
     </header>
   );
 };

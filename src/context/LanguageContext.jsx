@@ -47,7 +47,7 @@ export const LanguageProvider = ({ children }) => {
 
   return (
     <LanguageContext.Provider value={value}>
-      <div dir={dir} className={isRTL ? 'font-arabic' : 'font-latin'}>
+      <div dir={dir} className={`h-full w-full ${isRTL ? 'font-arabic' : 'font-latin'}`}>
         {children}
       </div>
     </LanguageContext.Provider>

@@ -1,11 +1,12 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { IC } from '../../data/icons';
+import { IC, LOGO_SVG } from '../../data/icons';
+import { Menu, PanelLeftClose } from 'lucide-react';
 
 export const SideNavBar = () => {
   const { isRTL, L } = useLanguage();
-  const { currentRoute, navigate, sidebarExpanded } = useSeha();
+  const { currentRoute, navigate, sidebarExpanded, toggleSidebar, cfg } = useSeha();
 
   const sections = [
     {
@@ -38,39 +39,77 @@ export const SideNavBar = () => {
   ];
 
   return (
-    <nav
+    <aside
       id="side"
       className={`no-print ${sidebarExpanded ? 'expanded' : ''}`}
       aria-label={isRTL ? 'شريط التنقل الجانبي' : 'Sidebar navigation'}
     >
-      {sections.map((sec, secIdx) => (
-        <React.Fragment key={`sec-${secIdx}`}>
-          {secIdx > 0 && <div className="sep" />}
-          <div className="side-group-title">
-            {L(sec.title[0], sec.title[1])}
+      {/* Top Header: Burger Icon with Logo, Title, and Description */}
+      <div className="side-top-header">
+        <button
+          type="button"
+          onClick={toggleSidebar}
+          className="side-burger-btn"
+          title={sidebarExpanded ? (isRTL ? 'طي القائمة' : 'Collapse sidebar') : (isRTL ? 'توسيع القائمة' : 'Expand sidebar')}
+          aria-label="Toggle navigation menu"
+        >
+          {sidebarExpanded ? (
+            <PanelLeftClose className="w-5 h-5 shrink-0" />
+          ) : (
+            <Menu className="w-5 h-5 shrink-0" />
+          )}
+        </button>
+
+        {sidebarExpanded && (
+          <div
+            onClick={() => navigate('dash')}
+            className="side-brand cursor-pointer group"
+            title={L(cfg.org.ar, cfg.org.en)}
+          >
+            <div className="side-logo shrink-0">
+              {LOGO_SVG}
+            </div>
+            <div className="side-brand-text min-w-0 flex-1">
+              <b className="truncate block leading-tight">{L(cfg.org.ar, cfg.org.en)}</b>
+              <small className="truncate block leading-tight">{L(cfg.org.sub.ar, cfg.org.sub.en)}</small>
+            </div>
           </div>
-          {sec.routes.map((r) => {
-            const isOn = currentRoute === r.k;
-            const title = L(r.t[0], r.t[1]);
-            return (
-              <button
-                key={r.k}
-                className={`ic ${isOn ? 'on' : ''}`}
-                title={title}
-                aria-label={title}
-                onClick={() => navigate(r.k)}
-              >
-                {IC[r.ic]}
-                {sidebarExpanded && (
-                  <span className="truncate flex-1 select-none">
-                    {title}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </React.Fragment>
-      ))}
-    </nav>
+        )}
+      </div>
+
+      {/* Nav Content */}
+      <div className="side-nav-content">
+        {sections.map((sec, secIdx) => (
+          <React.Fragment key={`sec-${secIdx}`}>
+            {secIdx > 0 && <div className="sep" />}
+            {sidebarExpanded && (
+              <div className="side-group-title">
+                {L(sec.title[0], sec.title[1])}
+              </div>
+            )}
+            {sec.routes.map((r) => {
+              const isOn = currentRoute === r.k;
+              const title = L(r.t[0], r.t[1]);
+              return (
+                <button
+                  key={r.k}
+                  className={`ic ${isOn ? 'on' : ''}`}
+                  title={title}
+                  aria-label={title}
+                  onClick={() => navigate(r.k)}
+                >
+                  {IC[r.ic]}
+                  {sidebarExpanded && (
+                    <span className="truncate flex-1 select-none">
+                      {title}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+    </aside>
   );
 };
