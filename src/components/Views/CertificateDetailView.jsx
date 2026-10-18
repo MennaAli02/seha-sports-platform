@@ -68,7 +68,7 @@ export const CertificateDetailView = () => {
               'A confirmed booking is registered awaiting examination at the Sports Medicine Unit. The digitally signed certificate will be issued automatically upon clinical approval.'
             )}
           </p>
-          <div className="max-w-md mx-auto my-5 border border-[var(--line)] rounded-xl overflow-hidden bg-[var(--bg)]">
+          <div className="max-w-md mx-auto my-5 border border-[var(--line)] rounded-xl overflow-x-auto bg-[var(--bg)]">
             <table className="t">
               <tbody>
                 <tr>
@@ -260,42 +260,44 @@ export const CertificateDetailView = () => {
 
         {/* Examinations Performed Table */}
         <h3 className="csh">{L('نتائج الفحوصات الطبية المنفذة', 'Clinical examinations performed')}</h3>
-        <table className="t cex">
-          <thead>
-            <tr>
-              <th>{L('الفحص الطبي', 'Medical examination')}</th>
-              <th>{L('النتيجة الإكلينيكية والملاحظات', 'Clinical findings')}</th>
-              <th>{L('حالة الفحص', 'Status')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ex.map((r, i) => (
-              <tr key={i}>
-                <td className="font-semibold">{r[0]}</td>
-                <td className="text-xs">{r[1]}</td>
-                <td>
-                  <span
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
-                      r[2] ? 'bg-[var(--warning-bg)] text-[var(--warning-dark)]' : 'bg-[var(--success-bg)] text-[var(--success-dark)]'
-                    }`}
-                  >
-                    {r[2] ? (
-                      <>
-                        <HeartPulse className="w-3 h-3" />
-                        {L('يحتاج متابعة', 'Follow-up')}
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 className="w-3 h-3" />
-                        {L('طبيعي — لائق', 'Normal')}
-                      </>
-                    )}
-                  </span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="t cex">
+            <thead>
+              <tr>
+                <th>{L('الفحص الطبي', 'Medical examination')}</th>
+                <th>{L('النتيجة الإكلينيكية والملاحظات', 'Clinical findings')}</th>
+                <th>{L('حالة الفحص', 'Status')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {ex.map((r, i) => (
+                <tr key={i}>
+                  <td className="font-semibold">{r[0]}</td>
+                  <td className="text-xs">{r[1]}</td>
+                  <td>
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
+                        r[2] ? 'bg-[var(--warning-bg)] text-[var(--warning-dark)]' : 'bg-[var(--success-bg)] text-[var(--success-dark)]'
+                      }`}
+                    >
+                      {r[2] ? (
+                        <>
+                          <HeartPulse className="w-3 h-3" />
+                          {L('يحتاج متابعة', 'Follow-up')}
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-3 h-3" />
+                          {L('طبيعي — لائق', 'Normal')}
+                        </>
+                      )}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {/* Final Clinical Outcome Banner */}
         <div className={`cres ${resCls}`}>

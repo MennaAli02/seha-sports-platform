@@ -40,25 +40,24 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
 
   return (
     <header id="top" className="no-print">
-      {/* Start side: Mobile toggle & Route Title (breadcrumb removed as requested) */}
-      <div className="flex items-center gap-3">
+      {/* Start side: Mobile toggle & Route Title */}
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <button
           onClick={toggleSidebar}
-          className="lg:hidden p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-xl transition-colors cursor-pointer"
+          className="lg:hidden p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-xl transition-colors cursor-pointer flex-none"
           title={isRTL ? 'القائمة' : 'Menu'}
           aria-label="Toggle navigation menu"
         >
           <Menu className="w-4 h-4" />
         </button>
 
-        <h2 className="text-sm sm:text-base font-bold text-[var(--ink)] tracking-tight">
+        <h2 className="text-sm sm:text-base font-bold text-[var(--ink)] tracking-tight truncate max-w-[140px] xs:max-w-[200px] sm:max-w-none">
           {getRouteTitle()}
         </h2>
       </div>
 
       {/* Action controls */}
-      <div className="flex items-center gap-2 no-print">
-
+      <div className="flex items-center gap-1.5 sm:gap-2 no-print flex-none">
         {/* Notifications / Help with small red notification dot */}
         <button
           onClick={onOpenHelp}
@@ -71,7 +70,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
 
         <button
           onClick={onOpenHelp}
-          className="p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-full transition-colors cursor-pointer"
+          className="p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-full transition-colors cursor-pointer hidden sm:flex"
           title={isRTL ? 'الدليل والقرارات' : 'Guide & Decree'}
         >
           <HelpCircle className="w-4 h-4" />
@@ -86,7 +85,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
         </button>
 
         {/* Language toggle icon placed to the left of platform admin */}
-        <div className="flex items-center gap-2" style={{ direction: 'ltr' }}>
+        <div className="flex items-center gap-1.5 sm:gap-2" style={{ direction: 'ltr' }}>
           <button
             className="p-2 text-[var(--muted)] hover:text-[var(--primary)] hover:bg-[var(--primary-50)] rounded-full border border-[var(--line)] transition-all cursor-pointer flex items-center justify-center"
             onClick={toggleLanguage}
@@ -99,7 +98,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
           {/* User profile capsule */}
           <div className="user" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
             <div className="av">{isRTL ? 'أ' : 'A'}</div>
-            <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
+            <b className="hidden md:inline">{L('مسؤول المنظومة', 'Platform admin')}</b>
           </div>
         </div>
       </div>

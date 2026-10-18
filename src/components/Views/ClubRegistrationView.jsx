@@ -106,7 +106,7 @@ export const ClubRegistrationView = () => {
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="g4" style={{ marginBottom: '20px' }}>
+      <div className="g4" style={{ marginBottom: '10px' }}>
         <KPICard
           value={clubs.length}
           label={L('إجمالي الجهات المسجلة', 'Total Registered Entities')}

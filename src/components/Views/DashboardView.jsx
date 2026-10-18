@@ -70,7 +70,7 @@ export const DashboardView = () => {
       </div>
 
       {/* KPI Grid */}
-      <div className="g6" style={{ marginBottom: '20px' }}>
+      <div className="g6" style={{ marginBottom: '10px' }}>
         <KPICard
           variant="primary-700"
           value={stats.total}
@@ -210,7 +210,7 @@ export const DashboardView = () => {
               );
             })}
           </div>
-          <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
+          <div className="nt flex items-start gap-2" style={{ marginTop: '10px' }}>
             <span className="text-sm font-bold text-[var(--primary)]">ℹ</span>
             <span>
               {L(
@@ -238,45 +238,47 @@ export const DashboardView = () => {
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
-          <table className="t">
-            <thead>
-              <tr>
-                <th>{L('الجهة', 'Entity')}</th>
-                <th>{L('النوع', 'Type')}</th>
-                <th>{L('المحافظة', 'Governorate')}</th>
-                <th>{L('الحالة', 'Status')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {hosps.map((h) => (
-                <tr key={h.id}>
-                  <td>
-                    <b className="text-[var(--ink)]">{isRTL ? h.n : h.nEn || h.n}</b>
-                    <small className="block text-[11px] text-[var(--muted)]">{isRTL ? h.dir : h.dirEn || h.dir}</small>
-                  </td>
-                  <td>
-                    <span className="inline-flex items-center gap-1 text-xs">
-                      <Stethoscope className="w-3.5 h-3.5 text-[var(--primary)]" />
-                      {L('مستشفى معتمد', 'Hospital')}
-                    </span>
-                  </td>
-                  <td>{isRTL ? h.gov : GOV_EN[h.gov] || h.gov}</td>
-                  <td><StatusTag type="org" status={h.st} /></td>
+          <div className="overflow-x-auto">
+            <table className="t">
+              <thead>
+                <tr>
+                  <th>{L('الجهة', 'Entity')}</th>
+                  <th>{L('النوع', 'Type')}</th>
+                  <th>{L('المحافظة', 'Governorate')}</th>
+                  <th>{L('الحالة', 'Status')}</th>
                 </tr>
-              ))}
-              {clubs.slice(0, 3).map((c) => (
-                <tr key={c.id}>
-                  <td>
-                    <b className="text-[var(--ink)]">{isRTL ? c.n : c.nEn || c.n}</b>
-                    <small className="block text-[11px] text-[var(--muted)]">{isRTL ? c.mgr : c.mgrEn || c.mgr}</small>
-                  </td>
-                  <td><span className="text-xs">{isRTL ? c.type : c.typeEn || c.type}</span></td>
-                  <td>{isRTL ? c.gov : GOV_EN[c.gov] || c.gov}</td>
-                  <td><StatusTag type="org" status={c.st} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {hosps.map((h) => (
+                  <tr key={h.id}>
+                    <td>
+                      <b className="text-[var(--ink)]">{isRTL ? h.n : h.nEn || h.n}</b>
+                      <small className="block text-[11px] text-[var(--muted)]">{isRTL ? h.dir : h.dirEn || h.dir}</small>
+                    </td>
+                    <td>
+                      <span className="inline-flex items-center gap-1 text-xs">
+                        <Stethoscope className="w-3.5 h-3.5 text-[var(--primary)]" />
+                        {L('مستشفى معتمد', 'Hospital')}
+                      </span>
+                    </td>
+                    <td>{isRTL ? h.gov : GOV_EN[h.gov] || h.gov}</td>
+                    <td><StatusTag type="org" status={h.st} /></td>
+                  </tr>
+                ))}
+                {clubs.slice(0, 3).map((c) => (
+                  <tr key={c.id}>
+                    <td>
+                      <b className="text-[var(--ink)]">{isRTL ? c.n : c.nEn || c.n}</b>
+                      <small className="block text-[11px] text-[var(--muted)]">{isRTL ? c.mgr : c.mgrEn || c.mgr}</small>
+                    </td>
+                    <td><span className="text-xs">{isRTL ? c.type : c.typeEn || c.type}</span></td>
+                    <td>{isRTL ? c.gov : GOV_EN[c.gov] || c.gov}</td>
+                    <td><StatusTag type="org" status={c.st} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="card">
@@ -289,28 +291,30 @@ export const DashboardView = () => {
               {audit.length} {L('عملية مسجلة', 'events')}
             </span>
           </div>
-          <table className="t">
-            <thead>
-              <tr>
-                <th>{L('الوقت', 'Time')}</th>
-                <th>{L('الجهة', 'By')}</th>
-                <th>{L('الحدث والعملية', 'Event details')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {audit.slice(0, 8).map((a, i) => (
-                <tr key={i}>
-                  <td className="mono text-xs text-[var(--primary)] font-semibold" dir="ltr">{a[0]}</td>
-                  <td>
-                    <span className="font-semibold text-xs text-[var(--ink)]">{a[1]}</span>
-                  </td>
-                  <td className="text-xs text-[var(--ink)]">
-                    {isRTL ? a[2] : a[3] || a[2]}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="t">
+              <thead>
+                <tr>
+                  <th>{L('الوقت', 'Time')}</th>
+                  <th>{L('الجهة', 'By')}</th>
+                  <th>{L('الحدث والعملية', 'Event details')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {audit.slice(0, 8).map((a, i) => (
+                  <tr key={i}>
+                    <td className="mono text-xs text-[var(--primary)] font-semibold" dir="ltr">{a[0]}</td>
+                    <td>
+                      <span className="font-semibold text-xs text-[var(--ink)]">{a[1]}</span>
+                    </td>
+                    <td className="text-xs text-[var(--ink)]">
+                      {isRTL ? a[2] : a[3] || a[2]}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

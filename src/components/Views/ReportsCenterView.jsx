@@ -127,24 +127,26 @@ export const ReportsCenterView = () => {
   };
 
   const sTable = (heads, rows) => (
-    <table className="st" style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-      <thead>
-        <tr>
-          {heads.map((h, i) => (
-            <th key={i} style={{ background: 'var(--primary-50)', color: 'var(--primary-700)', padding: '10px 14px', fontWeight: 700, fontSize: '12.5px' }}>{h}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => (
-          <tr key={i} style={{ background: i % 2 === 1 ? 'var(--zebra)' : 'var(--card)' }}>
-            {row.map((cell, j) => (
-              <td key={j} style={{ padding: '9px 14px', borderBottom: '1px solid var(--line)', fontSize: '12.5px' }}>{cell}</td>
+    <div className="overflow-x-auto w-full">
+      <table className="st" style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', width: '100%' }}>
+        <thead>
+          <tr>
+            {heads.map((h, i) => (
+              <th key={i} style={{ background: 'var(--primary-50)', color: 'var(--primary-700)', padding: '10px 14px', fontWeight: 700, fontSize: '12.5px' }}>{h}</th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i} style={{ background: i % 2 === 1 ? 'var(--zebra)' : 'var(--card)' }}>
+              {row.map((cell, j) => (
+                <td key={j} style={{ padding: '9px 14px', borderBottom: '1px solid var(--line)', fontSize: '12.5px' }}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 
   const todayFin = players.filter(p => p.hs === 0 && (p.st === 'fit' || p.st === 'cond')).slice(0, 8);
@@ -448,7 +450,7 @@ export const ReportsCenterView = () => {
           <div className="lbl">{L('ملخص النادي', 'Club summary')}</div>
           <h2 className="hl">{clubValid} {L('من ', 'of ')}{clubRoster.length} {L('لاعبًا يحملون شهادة سارية', 'players hold a valid certificate')}</h2>
           <div className="sb">
-            <div className="sgrid" style={{ gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '20px' }}>
+            <div className="sgrid" style={{ gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '10px' }}>
               {statCard(clubRoster.length, L('لاعبون مسجلون', 'Registered players'))}
               {statCard(clubValid, L('شهادة سارية', 'Valid certificate'), 'gn')}
               {statCard(clubRoster.filter(p => p.st === 'book' || p.st === 'cond').length, L('إجراء قائم', 'In progress'), 'am')}
@@ -600,7 +602,7 @@ export const ReportsCenterView = () => {
           <div className="lbl">{L('نموذج التشغيل', 'Operating model')}</div>
           <h2 className="hl">{L('100 جنيه رسم ميكنة لكل كشف — 75 جنيهًا صافيًا للمنظومة', '100 EGP automation fee per exam — 75 EGP net to the platform')}</h2>
           <div className="sb">
-            <div className="sgrid" style={{ gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '20px' }}>
+            <div className="sgrid" style={{ gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '10px' }}>
               {statCard('100', L('رسم الميكنة (ج.م)', 'Automation fee (EGP)'))}
               {statCard('75', L('الصافي بعد الدفع الإلكتروني', 'Net after payment fees'), 'gn')}
               {statCard('20,000', L('كشف — نقطة التعادل سنويًا', 'exams — annual break-even'), 'am')}
@@ -758,8 +760,8 @@ export const ReportsCenterView = () => {
           background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: '14px',
-          padding: '12px 18px',
-          marginBottom: '20px',
+          padding: '10px 14px',
+          marginBottom: '10px',
           boxShadow: 'var(--sh)'
         }}>
           <button
@@ -828,7 +830,7 @@ export const ReportsCenterView = () => {
   return (
     <div>
       {/* Header */}
-      <div className="ph" style={{ marginBottom: '24px' }}>
+      <div className="ph" style={{ marginBottom: '12px' }}>
         <div>
           <span className="lab" style={{ 
             display: 'inline-flex', 

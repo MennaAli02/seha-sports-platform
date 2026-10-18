@@ -65,7 +65,7 @@ export const HospitalPortalView = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div className="g4" style={{ marginBottom: '20px' }}>
+      <div className="g4" style={{ marginBottom: '10px' }}>
         <KPICard
           variant="brand"
           value={ls.length}

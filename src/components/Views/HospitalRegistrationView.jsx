@@ -115,7 +115,7 @@ export const HospitalRegistrationView = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="g4" style={{ marginBottom: '20px' }}>
+      <div className="g4" style={{ marginBottom: '10px' }}>
         <KPICard
           value={hosps.length}
           label={L('إجمالي المستشفيات والمراكز', 'Total Facilities')}

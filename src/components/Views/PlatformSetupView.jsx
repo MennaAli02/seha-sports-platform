@@ -65,9 +65,9 @@ export const PlatformSetupView = () => {
         </div>
       </div>
 
-      <div className="card" style={{ padding: '20px', borderRadius: '16px' }}>
+      <div className="card" style={{ padding: '14px 16px', borderRadius: '14px' }}>
         {/* Navigation Tabs */}
-        <div className="tabs" style={{ marginBottom: '20px', borderBottom: '1px solid var(--line)', paddingBottom: '12px' }}>
+        <div className="tabs" style={{ marginBottom: '10px', borderBottom: '1px solid var(--line)', paddingBottom: '10px' }}>
           {tabs.map((t) => {
             const IconComponent = t.icon;
             const isActive = setupTab === t.id;
@@ -104,7 +104,7 @@ export const PlatformSetupView = () => {
               </span>
             </div>
 
-            <div className="g2" style={{ gap: '16px', marginBottom: '20px' }}>
+            <div className="g2" style={{ gap: '10px', marginBottom: '10px' }}>
               {cfg.levels.map((l, i) => (
                 <div
                   key={l.id}
@@ -429,7 +429,8 @@ export const PlatformSetupView = () => {
               </button>
             </div>
 
-            <table className="t">
+            <div className="overflow-x-auto">
+              <table className="t">
               <thead>
                 <tr>
                   <th>{L('اليوم', 'Day')}</th>
@@ -507,6 +508,7 @@ export const PlatformSetupView = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
 
@@ -582,28 +584,30 @@ export const PlatformSetupView = () => {
                 <span className="d"></span>
                 {L('منظومة الضوابط الأمنية والامتثال الحكومي', 'Security Controls & Regulatory Compliance')}
               </h3>
-              <table className="t" style={{ marginBottom: '16px' }}>
-                <tbody>
-                  {[
-                    [L('استضافة حكومية سحابية داخل جمهورية مصر العربية', 'Government Cloud Hosting inside Egypt')],
-                    [L('تشفير بيانات النقل والتخزين بمستويات TLS 1.3 و AES-256', 'Encryption in transit & at rest (TLS 1.3 / AES-256)')],
-                    [L('مصادقة ثنائية وصلاحيات وصول مبنية على الأدوار (RBAC)', '2FA and Role-Based Access Control')],
-                    [L('تقليل البيانات في واجهة التحقق العامة لحماية هوية اللاعب', 'Data minimisation on public verification interfaces')],
-                    [L('توقيع رقمي موثق ومطابق لاشتراطات ITIDA', 'ITIDA-certified e-signatures for physicians')],
-                    [L('سجل تدقيق رقابي غير قابل للتعديل أو الحذف (WORM)', 'Immutable Audit Log (Write Once Read Many)')]
-                  ].map((x, idx) => (
-                    <tr key={idx}>
-                      <td style={{ fontSize: '12.5px', fontWeight: 600 }}>{x[0]}</td>
-                      <td style={{ width: '100px', textAlign: 'center' }}>
-                        <span className="tag tg" style={{ gap: '4px', fontWeight: 700, fontSize: '11px' }}>
-                          <CheckCircle2 size={12} />
-                          {L('مفعّل نشط', 'Enabled')}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="overflow-x-auto">
+                <table className="t" style={{ marginBottom: '12px' }}>
+                  <tbody>
+                    {[
+                      [L('استضافة حكومية سحابية داخل جمهورية مصر العربية', 'Government Cloud Hosting inside Egypt')],
+                      [L('تشفير بيانات النقل والتخزين بمستويات TLS 1.3 و AES-256', 'Encryption in transit & at rest (TLS 1.3 / AES-256)')],
+                      [L('مصادقة ثنائية وصلاحيات وصول مبنية على الأدوار (RBAC)', '2FA and Role-Based Access Control')],
+                      [L('تقليل البيانات في واجهة التحقق العامة لحماية هوية اللاعب', 'Data minimisation on public verification interfaces')],
+                      [L('توقيع رقمي موثق ومطابق لاشتراطات ITIDA', 'ITIDA-certified e-signatures for physicians')],
+                      [L('سجل تدقيق رقابي غير قابل للتعديل أو الحذف (WORM)', 'Immutable Audit Log (Write Once Read Many)')]
+                    ].map((x, idx) => (
+                      <tr key={idx}>
+                        <td style={{ fontSize: '12.5px', fontWeight: 600 }}>{x[0]}</td>
+                        <td style={{ width: '100px', textAlign: 'center' }}>
+                          <span className="tag tg" style={{ gap: '4px', fontWeight: 700, fontSize: '11px' }}>
+                            <CheckCircle2 size={12} />
+                            {L('مفعّل نشط', 'Enabled')}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <div style={{
                 background: 'rgba(194, 65, 75, 0.06)',
@@ -652,7 +656,7 @@ export const PlatformSetupView = () => {
                 </span>
               </div>
 
-              <div style={{ maxHeight: '420px', overflowY: 'auto' }}>
+              <div style={{ maxHeight: '420px', overflowY: 'auto', overflowX: 'auto' }}>
                 <table className="t">
                   <thead>
                     <tr>

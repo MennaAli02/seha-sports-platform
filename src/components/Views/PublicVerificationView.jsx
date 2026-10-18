@@ -52,24 +52,24 @@ export const PublicVerificationView = () => {
           {L('الصيغة المعتمدة للشهادات الصادرة تبدأ بـ SH متبوعة برقم العام ثم التسلسل الرقمي المعتمد', 'Official certificate format begins with SH followed by year code and sequence')}
         </p>
 
-        <div className="flex gap-2 justify-center max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row gap-2 justify-center max-w-md mx-auto">
           <input
             id="vq"
             type="text"
             dir="ltr"
-            className="mono font-bold text-center text-sm"
+            className="mono font-bold text-center text-sm w-full"
             placeholder="SH-26-004517"
             value={vq}
             onChange={(e) => setVq(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && doV()}
           />
-          <button className="btn px-6 flex-none" onClick={() => doV()}>
+          <button className="btn px-6 w-full sm:w-auto flex-none" onClick={() => doV()}>
             <Search className="w-4 h-4" />
             {L('تحقق الآن', 'Verify now')}
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2.5" style={{ marginTop: '20px', marginBottom: '24px' }}>
+        <div className="flex flex-wrap items-center justify-center gap-2.5" style={{ marginTop: '10px', marginBottom: '12px' }}>
           <button
             className="chip text-xs"
             onClick={() => {
@@ -113,32 +113,34 @@ export const PublicVerificationView = () => {
 
             {verifyR.ok ? (
               <>
-                <table className="t bg-[var(--card)] rounded-lg overflow-hidden border border-[var(--line)]">
-                  <tbody>
-                    <tr>
-                      <td className="mut font-semibold w-1/3">{L('رقم الشهادة الموحد', 'Certificate no.')}</td>
-                      <td className="mono font-bold text-[var(--primary)]">{verifyR.c}</td>
-                    </tr>
-                    <tr>
-                      <td className="mut font-semibold">{L('اسم الرياضي', 'Athlete name')}</td>
-                      <td><b>{players[0].name}</b></td>
-                    </tr>
-                    <tr>
-                      <td className="mut font-semibold">{L('حالة اللياقة المعتمدة', 'Clearance status')}</td>
-                      <td>
-                        <span className="tag tg font-bold">{L('لائق طبيًا للمنافسات', 'Medically Fit')}</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="mut font-semibold">{L('صالحة حتى تاريخ', 'Valid until')}</td>
-                      <td className="font-mono font-semibold" dir="ltr">14/10/2027</td>
-                    </tr>
-                    <tr>
-                      <td className="mut font-semibold">{L('جهة الفحص والإصدار', 'Issuing facility')}</td>
-                      <td className="font-medium">{hosps[0].n}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                  <table className="t bg-[var(--card)] rounded-lg overflow-hidden border border-[var(--line)]">
+                    <tbody>
+                      <tr>
+                        <td className="mut font-semibold w-1/3">{L('رقم الشهادة الموحد', 'Certificate no.')}</td>
+                        <td className="mono font-bold text-[var(--primary)]">{verifyR.c}</td>
+                      </tr>
+                      <tr>
+                        <td className="mut font-semibold">{L('اسم الرياضي', 'Athlete name')}</td>
+                        <td><b>{players[0].name}</b></td>
+                      </tr>
+                      <tr>
+                        <td className="mut font-semibold">{L('حالة اللياقة المعتمدة', 'Clearance status')}</td>
+                        <td>
+                          <span className="tag tg font-bold">{L('لائق طبيًا للمنافسات', 'Medically Fit')}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="mut font-semibold">{L('صالحة حتى تاريخ', 'Valid until')}</td>
+                        <td className="font-mono font-semibold" dir="ltr">14/10/2027</td>
+                      </tr>
+                      <tr>
+                        <td className="mut font-semibold">{L('جهة الفحص والإصدار', 'Issuing facility')}</td>
+                        <td className="font-medium">{hosps[0].n}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
                 <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-[var(--line)] flex-wrap">
                   <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">

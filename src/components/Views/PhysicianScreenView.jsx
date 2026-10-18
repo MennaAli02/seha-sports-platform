@@ -62,7 +62,7 @@ export const PhysicianScreenView = () => {
       </div>
 
       {/* Stepper */}
-      <div className="stp max-w-2xl" style={{ marginBottom: '24px' }}>
+      <div className="stp max-w-2xl" style={{ marginBottom: '12px' }}>
         {[
           L('مسح الحجز ومطابقة الهوية', 'Scan & ID Match'),
           L('تسجيل الفحوصات الطبية', 'Record Findings'),

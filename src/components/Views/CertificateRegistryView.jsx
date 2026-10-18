@@ -116,7 +116,7 @@ export const CertificateRegistryView = () => {
       </div>
 
       {/* KPIs */}
-      <div className="g4" style={{ marginBottom: '20px' }}>
+      <div className="g4" style={{ marginBottom: '10px' }}>
         <KPICard
           variant="brand"
           value={stats.issued}
@@ -149,10 +149,10 @@ export const CertificateRegistryView = () => {
 
       {/* Search Bar & Filter Controls */}
       <div className="card">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 np">
-          <div className="flex items-center gap-2.5 flex-1 max-w-2xl">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 mb-6 np">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 max-w-2xl w-full">
             {/* Search Input */}
-            <div className="relative flex-1 min-w-[240px]">
+            <div className="relative flex-1 min-w-0 w-full">
               <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none" />
               <input
                 id="cq"
@@ -178,25 +178,29 @@ export const CertificateRegistryView = () => {
             </div>
 
             {/* Dropdown Button for Filtering */}
-            <div className="relative flex-none" ref={filterRef}>
+            <div className="relative flex-none w-full sm:w-auto" ref={filterRef}>
               <button
                 type="button"
                 onClick={() => setFilterMenuOpen(prev => !prev)}
-                className={`flex items-center gap-2 px-3.5 py-2.5 text-sm font-semibold rounded-xl border transition-all cursor-pointer ${
+                className={`w-full sm:w-auto flex items-center justify-between sm:justify-start gap-2 px-3.5 py-2.5 text-sm font-semibold rounded-xl border transition-all cursor-pointer ${
                   f !== 'all'
                     ? 'bg-[var(--primary-50)] border-[var(--primary)] text-[var(--primary-700)] shadow-xs'
                     : 'bg-[var(--card)] border-[var(--color-border)] text-[var(--ink)] hover:border-[var(--primary)]'
                 }`}
                 aria-expanded={filterMenuOpen}
               >
-                <Filter className="w-4 h-4 text-[var(--primary)] flex-none" />
-                <span className="truncate max-w-[140px] sm:max-w-none">
-                  {L(activeOption.ar, activeOption.en)}
-                </span>
-                {f !== 'all' && (
-                  <span className="w-2 h-2 rounded-full bg-[var(--primary)] flex-none" />
-                )}
-                <ChevronDown className={`w-3.5 h-3.5 text-[var(--muted)] flex-none transition-transform duration-200 ${filterMenuOpen ? 'rotate-180' : ''}`} />
+                <div className="flex items-center gap-2 truncate">
+                  <Filter className="w-4 h-4 text-[var(--primary)] flex-none" />
+                  <span className="truncate">
+                    {L(activeOption.ar, activeOption.en)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 flex-none">
+                  {f !== 'all' && (
+                    <span className="w-2 h-2 rounded-full bg-[var(--primary)] flex-none" />
+                  )}
+                  <ChevronDown className={`w-3.5 h-3.5 text-[var(--muted)] flex-none transition-transform duration-200 ${filterMenuOpen ? 'rotate-180' : ''}`} />
+                </div>
               </button>
 
               {/* Filter Options Dropdown Menu */}
@@ -352,9 +356,9 @@ export const CertificateRegistryView = () => {
 
         {/* Pagination Footer */}
         {totalRecords > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 mt-4 border-t border-[var(--line)] np">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-4 border-t border-[var(--line)] np">
             {/* Left / Start: Rows per page selector & range summary */}
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 w-full sm:w-auto">
               <div className="flex items-center gap-2 text-xs text-[var(--muted)]">
                 <span>{L('عدد الصفوف في الصفحة:', 'Rows per page:')}</span>
                 <select
@@ -382,7 +386,7 @@ export const CertificateRegistryView = () => {
             </div>
 
             {/* Right / End: Pagination controls */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-center sm:justify-end gap-1.5 w-full sm:w-auto">
               <button
                 type="button"
                 disabled={safePage === 1}

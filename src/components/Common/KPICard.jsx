@@ -82,28 +82,28 @@ export const KPICard = ({
   };
 
   return (
-    <div className={`relative bg-[var(--card)] border border-[var(--line)] rounded-xl p-5 shadow-[var(--shadow)] hover:shadow-[var(--shadow-md)] transition-all duration-200 overflow-hidden flex flex-col justify-between ${className}`}>
+    <div className={`relative bg-[var(--card)] border border-[var(--line)] rounded-xl p-3.5 sm:p-4 min-w-0 shadow-[var(--shadow)] hover:shadow-[var(--shadow-md)] transition-all duration-200 overflow-hidden flex flex-col justify-between ${className}`}>
       {/* Accent border stripe on inline-start */}
       <span className={`absolute top-0 start-0 w-1.5 h-full ${colors.stripe}`} />
 
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <b className="text-3xl font-extrabold tracking-tight leading-none block font-mono text-[var(--ink)]">
+      <div className="flex items-start justify-between gap-2.5">
+        <div className="min-w-0">
+          <b className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-none block font-mono text-[var(--ink)] truncate">
             {value}
           </b>
-          <span className="text-xs font-semibold text-[var(--muted)] mt-2 block">
+          <span className="text-xs font-semibold text-[var(--muted)] mt-1.5 block leading-snug">
             {label}
           </span>
         </div>
         {icon && (
-          <div className={`p-2.5 rounded-lg ${colors.iconBg} ${colors.iconText} flex-none transition-transform duration-200 hover:scale-105 flex items-center justify-center`}>
+          <div className={`p-2 rounded-lg ${colors.iconBg} ${colors.iconText} flex-none transition-transform duration-200 hover:scale-105 flex items-center justify-center`}>
             {renderIcon()}
           </div>
         )}
       </div>
 
       {subtext && (
-        <div className="mt-3 pt-2 border-t border-[var(--line)] text-[11.5px] text-[var(--muted)] font-medium flex items-center gap-1">
+        <div className="mt-2.5 pt-1.5 border-t border-[var(--line)] text-[11px] sm:text-[11.5px] text-[var(--muted)] font-medium flex items-center gap-1 leading-tight">
           {subtext}
         </div>
       )}

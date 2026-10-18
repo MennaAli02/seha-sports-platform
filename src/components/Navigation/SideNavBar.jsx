@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
 import { IC, LOGO_SVG } from '../../data/icons';
@@ -7,6 +7,25 @@ import { Menu } from 'lucide-react';
 export const SideNavBar = () => {
   const { isRTL, L } = useLanguage();
   const { currentRoute, navigate, sidebarExpanded, toggleSidebar, cfg } = useSeha();
+
+  // Close drawer on ESC key on mobile/tablet
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && sidebarExpanded && typeof window !== 'undefined' && window.innerWidth < 1024) {
+        toggleSidebar();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [sidebarExpanded, toggleSidebar]);
+
+  const handleNavClick = (routeKey) => {
+    navigate(routeKey);
+    // On mobile/tablet, close drawer after navigation
+    if (sidebarExpanded && typeof window !== 'undefined' && window.innerWidth < 1024) {
+      toggleSidebar();
+    }
+  };
 
   const sections = [
     {
@@ -38,73 +57,85 @@ export const SideNavBar = () => {
   ];
 
   return (
-    <aside
-      id="side"
-      className={`no-print ${sidebarExpanded ? 'expanded' : ''}`}
-      aria-label={isRTL ? 'شريط التنقل الجانبي' : 'Sidebar navigation'}
-    >
-      {/* Top Header: Burger Icon with Logo, Title, and Description */}
-      <div className="side-top-header">
-        <button
-          type="button"
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {sidebarExpanded && (
+        <div
+          className="sidebar-backdrop lg:hidden"
           onClick={toggleSidebar}
-          className="side-burger-btn"
-          title={sidebarExpanded ? (isRTL ? 'طي القائمة' : 'Collapse sidebar') : (isRTL ? 'توسيع القائمة' : 'Expand sidebar')}
-          aria-label="Toggle navigation menu"
-        >
-          <Menu className="w-5 h-5 shrink-0" />
-        </button>
+          aria-hidden="true"
+        />
+      )}
 
-        {sidebarExpanded && (
-          <div
-            onClick={() => navigate('dash')}
-            className="side-brand cursor-pointer group"
-            title={L(cfg.org.ar, cfg.org.en)}
+      <aside
+        id="side"
+        className={`no-print ${sidebarExpanded ? 'expanded' : ''}`}
+        aria-label={isRTL ? 'شريط التنقل الجانبي' : 'Sidebar navigation'}
+      >
+        {/* Top Header: Burger / Close Icon with Logo, Title, and Description */}
+        <div className="side-top-header">
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            className="side-burger-btn"
+            title={sidebarExpanded ? (isRTL ? 'طي القائمة' : 'Collapse sidebar') : (isRTL ? 'توسيع القائمة' : 'Expand sidebar')}
+            aria-label="Toggle navigation menu"
           >
-            <div className="side-logo shrink-0">
-              {LOGO_SVG}
-            </div>
-            <div className="side-brand-text min-w-0 flex-1">
-              <b className="truncate block leading-tight">{L(cfg.org.ar, cfg.org.en)}</b>
-              <small className="truncate block leading-tight">{L(cfg.org.sub.ar, cfg.org.sub.en)}</small>
-            </div>
-          </div>
-        )}
-      </div>
+            <Menu className="w-5 h-5 shrink-0" />
+          </button>
 
-      {/* Nav Content */}
-      <div className="side-nav-content">
-        {sections.map((sec, secIdx) => (
-          <React.Fragment key={`sec-${secIdx}`}>
-            {secIdx > 0 && <div className="sep" />}
-            {sidebarExpanded && (
-              <div className="side-group-title">
-                {L(sec.title[0], sec.title[1])}
+          {sidebarExpanded && (
+            <div
+              onClick={() => handleNavClick('dash')}
+              className="side-brand cursor-pointer group"
+              title={L(cfg.org.ar, cfg.org.en)}
+            >
+              <div className="side-logo shrink-0">
+                {LOGO_SVG}
               </div>
-            )}
-            {sec.routes.map((r) => {
-              const isOn = currentRoute === r.k;
-              const title = L(r.t[0], r.t[1]);
-              return (
-                <button
-                  key={r.k}
-                  className={`ic ${isOn ? 'on' : ''}`}
-                  title={title}
-                  aria-label={title}
-                  onClick={() => navigate(r.k)}
-                >
-                  {IC[r.ic]}
-                  {sidebarExpanded && (
-                    <span className="truncate flex-1 select-none">
-                      {title}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </React.Fragment>
-        ))}
-      </div>
-    </aside>
+              <div className="side-brand-text min-w-0 flex-1">
+                <b className="block leading-tight text-[13.5px] font-extrabold text-white">{L(cfg.org.ar, cfg.org.en)}</b>
+                <small className="block leading-snug text-[11px] text-white/85 mt-0.5">{L(cfg.org.sub.ar, cfg.org.sub.en)}</small>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Nav Content */}
+        <div className="side-nav-content">
+          {sections.map((sec, secIdx) => (
+            <React.Fragment key={`sec-${secIdx}`}>
+              {secIdx > 0 && <div className="sep" />}
+              {sidebarExpanded && (
+                <div className="side-group-title">
+                  {L(sec.title[0], sec.title[1])}
+                </div>
+              )}
+              {sec.routes.map((r) => {
+                const isOn = currentRoute === r.k;
+                const title = L(r.t[0], r.t[1]);
+                return (
+                  <button
+                    key={r.k}
+                    className={`ic ${isOn ? 'on' : ''}`}
+                    title={title}
+                    aria-label={title}
+                    onClick={() => handleNavClick(r.k)}
+                  >
+                    {IC[r.ic]}
+                    {sidebarExpanded && (
+                      <span className="truncate flex-1 select-none">
+                        {title}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </React.Fragment>
+          ))}
+        </div>
+      </aside>
+    </>
   );
 };
+

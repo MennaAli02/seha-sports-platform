@@ -59,7 +59,7 @@ export const ClubPortalView = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div className="g4" style={{ marginBottom: '20px' }}>
+      <div className="g4" style={{ marginBottom: '10px' }}>
         <KPICard
           variant="brand"
           value={rs.length}
@@ -287,36 +287,38 @@ export const ClubPortalView = () => {
             </span>
           </div>
 
-          <table className="t">
-            <thead>
-              <tr>
-                <th>{L('اللاعب', 'Athlete')}</th>
-                <th>{L('نطاق الاطلاع', 'Scope')}</th>
-                <th>{L('مدة الصلاحية', 'Duration')}</th>
-                <th>{L('تاريخ تقديم الطلب', 'Requested date')}</th>
-                <th>{L('حالة الموافقة', 'Approval status')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [L('مقبول — ساري', 'Approved — Active'), 'tg'],
-                [L('بانتظار موافقة ولي الأمر', 'Awaiting guardian'), 'tw'],
-                [L('مقبول — ساري', 'Approved — Active'), 'tg'],
-                [L('مرفوض من ولي الأمر', 'Denied by guardian'), 'tb'],
-                [L('منتهي الصلاحية', 'Expired duration'), 'tgy']
-              ].map((arr, i) => (
-                <tr key={i}>
-                  <td>
-                    <b className="text-xs text-[var(--ink)] block">{rs[i]?.name}</b>
-                  </td>
-                  <td>{L(cfg.scopes[0][0], cfg.scopes[0][1])}</td>
-                  <td>{L(cfg.durs[i % 4][0], cfg.durs[i % 4][1])}</td>
-                  <td className="mono text-xs" dir="ltr">{10 + i}/10/2026</td>
-                  <td><span className={`tag ${arr[1]}`}>{arr[0]}</span></td>
+          <div className="overflow-x-auto">
+            <table className="t">
+              <thead>
+                <tr>
+                  <th>{L('اللاعب', 'Athlete')}</th>
+                  <th>{L('نطاق الاطلاع', 'Scope')}</th>
+                  <th>{L('مدة الصلاحية', 'Duration')}</th>
+                  <th>{L('تاريخ تقديم الطلب', 'Requested date')}</th>
+                  <th>{L('حالة الموافقة', 'Approval status')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {[
+                  [L('مقبول — ساري', 'Approved — Active'), 'tg'],
+                  [L('بانتظار موافقة ولي الأمر', 'Awaiting guardian'), 'tw'],
+                  [L('مقبول — ساري', 'Approved — Active'), 'tg'],
+                  [L('مرفوض من ولي الأمر', 'Denied by guardian'), 'tb'],
+                  [L('منتهي الصلاحية', 'Expired duration'), 'tgy']
+                ].map((arr, i) => (
+                  <tr key={i}>
+                    <td>
+                      <b className="text-xs text-[var(--ink)] block">{rs[i]?.name}</b>
+                    </td>
+                    <td>{L(cfg.scopes[0][0], cfg.scopes[0][1])}</td>
+                    <td>{L(cfg.durs[i % 4][0], cfg.durs[i % 4][1])}</td>
+                    <td className="mono text-xs" dir="ltr">{10 + i}/10/2026</td>
+                    <td><span className={`tag ${arr[1]}`}>{arr[0]}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

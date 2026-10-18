@@ -131,45 +131,47 @@ export const ConsentGovernanceView = () => {
               </span>
             </div>
 
-            <table className="t">
-              <thead>
-                <tr>
-                  <th>{L('الجهة المفوضة', 'Authorized entity')}</th>
-                  <th>{L('النطاق والمدة', 'Scope & duration')}</th>
-                  <th>{L('الحالة', 'Status')}</th>
-                  <th className="text-end">{L('الإجراء', 'Action')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {consents.map((c, i) => (
-                  <tr key={i}>
-                    <td>
-                      <b className="text-xs text-[var(--ink)] block">{c.to}</b>
-                    </td>
-                    <td className="mut text-xs">
-                      {L(cfg.scopes[c.sc]?.[0], cfg.scopes[c.sc]?.[1])} · {L(cfg.durs[c.du]?.[0], cfg.durs[c.du]?.[1])}
-                    </td>
-                    <td>
-                      <StatusTag type="consent" status={c.st} />
-                    </td>
-                    <td className="text-end">
-                      {c.st === 'ok' ? (
-                        <button
-                          className="btn ghost sm text-xs text-[var(--danger-dark)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
-                          onClick={() => handleRevoke(i)}
-                          title={L('سحب الصلاحية فورًا', 'Revoke consent')}
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          {L('سحب', 'Revoke')}
-                        </button>
-                      ) : (
-                        <span className="text-[11px] text-[var(--muted)] font-medium">—</span>
-                      )}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="t">
+                <thead>
+                  <tr>
+                    <th>{L('الجهة المفوضة', 'Authorized entity')}</th>
+                    <th>{L('النطاق والمدة', 'Scope & duration')}</th>
+                    <th>{L('الحالة', 'Status')}</th>
+                    <th className="text-end">{L('الإجراء', 'Action')}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {consents.map((c, i) => (
+                    <tr key={i}>
+                      <td>
+                        <b className="text-xs text-[var(--ink)] block">{c.to}</b>
+                      </td>
+                      <td className="mut text-xs">
+                        {L(cfg.scopes[c.sc]?.[0], cfg.scopes[c.sc]?.[1])} · {L(cfg.durs[c.du]?.[0], cfg.durs[c.du]?.[1])}
+                      </td>
+                      <td>
+                        <StatusTag type="consent" status={c.st} />
+                      </td>
+                      <td className="text-end">
+                        {c.st === 'ok' ? (
+                          <button
+                            className="btn ghost sm text-xs text-[var(--danger-dark)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
+                            onClick={() => handleRevoke(i)}
+                            title={L('سحب الصلاحية فورًا', 'Revoke consent')}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            {L('سحب', 'Revoke')}
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-[var(--muted)] font-medium">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
