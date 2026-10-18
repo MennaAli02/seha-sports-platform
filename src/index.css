@@ -3,83 +3,85 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #6384FA;
-  --color-primary-600: #5A78EE;
-  --color-primary-700: #4A63D6;
-  --color-primary-300: #A3BDFB;
-  --color-primary-100: #E4EBFE;
-  --color-primary-50: #F0F4FE;
+  --color-primary: #5E60CE;
+  --color-primary-600: #5354BD;
+  --color-primary-700: #4244A8;
+  --color-primary-300: #A6B1E1;
+  --color-primary-100: #EAE4F2;
+  --color-primary-50: #F7F7FF;
 
-  --color-bg: #F3F5FA;
+  --color-bg: #F7F7FF;
   --color-card: #FFFFFF;
-  --color-line: #DDE4F3;
-  --color-ink: #1B1E3A;
-  --color-muted: #8590B0;
-  --color-placeholder: #C5CBE0;
+  --color-line: #D3CCE3;
+  --color-ink: #17183B;
+  --color-muted: #7E7B9A;
+  --color-placeholder: #A6B1E1;
 
-  --color-action: #2493F2;
-  --color-action-hover: #1B83DC;
-  --color-cyan: #29C5E6;
-  --color-teal: #2DC7C9;
-  --color-teal-dark: #1AA8AA;
-  --color-teal-bg: #E6F7F6;
-  --color-lavender: #8E7CE0;
-  --color-lavender-dark: #6E5AC7;
-  --color-lavender-bg: #EEEAFD;
-  --color-zebra: #F8FAFF;
+  --color-action: #4D71EE;
+  --color-action-hover: #3E60DA;
+  --color-cyan: #4EA8DE;
+  --color-teal: #2EBFA5;
+  --color-teal-dark: #1B8573;
+  --color-teal-bg: #E3F8F4;
+  --color-lavender: #5E60CE;
+  --color-lavender-dark: #4244A8;
+  --color-lavender-bg: #EAE4F2;
+  --color-zebra: #FAF9FF;
 
   --color-success: #2BAE7B;
-  --color-success-dark: #1E8A5E;
-  --color-success-bg: #E3F6EE;
-  --color-warning: #E0A030;
-  --color-warning-dark: #A57016;
-  --color-warning-bg: #FDF3DC;
-  --color-danger: #E26363;
-  --color-danger-dark: #C43838;
-  --color-danger-bg: #FDEAEA;
+  --color-success-dark: #177D56;
+  --color-success-bg: #E8F8F1;
+  --color-warning: #D9822B;
+  --color-warning-dark: #9A5812;
+  --color-warning-bg: #FDF4E7;
+  --color-danger: #E25252;
+  --color-danger-dark: #B92828;
+  --color-danger-bg: #FDECEC;
 }
 
 :root {
   /* ==========================================================================
-     Periwinkle SaaS Clinic Design System
+     Lavender-Periwinkle SaaS Clinic Design System
+     Palette: linear-gradient(45deg, #F7F7FF, #EAE4F2, #D3CCE3, #A6B1E1, #5E60CE)
      ========================================================================== */
-  --primary: #6384FA;
-  --primary-600: #5A78EE;
-  --primary-700: #4A63D6;
-  --primary-300: #A3BDFB;
-  --primary-100: #E4EBFE;
-  --primary-50: #F0F4FE;
+  --primary: #5E60CE;
+  --primary-600: #5354BD;
+  --primary-700: #4244A8;
+  --primary-300: #A6B1E1;
+  --primary-100: #EAE4F2;
+  --primary-50: #F7F7FF;
 
-  --bg: #F3F5FA;
+  --bg: #F7F7FF;
   --card: #FFFFFF;
-  --line: #DDE4F3;
-  --ink: #1B1E3A;
-  --muted: #8590B0;
-  --placeholder: #C5CBE0;
+  --line: #D3CCE3;
+  --ink: #17183B;
+  --muted: #7E7B9A;
+  --placeholder: #A6B1E1;
 
-  --action: #2493F2;
-  --action-hover: #1B83DC;
-  --cyan: #29C5E6;
-  --teal: #2DC7C9;
-  --teal-dark: #1AA8AA;
-  --teal-bg: #E6F7F6;
-  --lavender: #8E7CE0;
-  --lavender-dark: #6E5AC7;
-  --lavender-bg: #EEEAFD;
-  --zebra: #F8FAFF;
+  --action: #4D71EE;
+  --action-hover: #3E60DA;
+  --cyan: #4EA8DE;
+  --teal: #2EBFA5;
+  --teal-dark: #1B8573;
+  --teal-bg: #E3F8F4;
+  --lavender: #5E60CE;
+  --lavender-dark: #4244A8;
+  --lavender-bg: #EAE4F2;
+  --zebra: #FAF9FF;
 
   --success: #2BAE7B;
-  --success-dark: #1E8A5E;
-  --success-bg: #E3F6EE;
-  --warning: #E0A030;
-  --warning-dark: #A57016;
-  --warning-bg: #FDF3DC;
-  --danger: #E26363;
-  --danger-dark: #C43838;
-  --danger-bg: #FDEAEA;
+  --success-dark: #177D56;
+  --success-bg: #E8F8F1;
+  --warning: #D9822B;
+  --warning-dark: #9A5812;
+  --warning-bg: #FDF4E7;
+  --danger: #E25252;
+  --danger-dark: #B92828;
+  --danger-bg: #FDECEC;
 
-  --gradient: linear-gradient(135deg, #5F7FF5, #2DB9E0);
-  --gradient-soft: linear-gradient(135deg, #F0F4FE, #E6F7F6);
+  --gradient: linear-gradient(135deg, #4D4EBA 0%, #5E60CE 50%, #7E7BE6 100%);
+  --gradient-palette: linear-gradient(45deg, #F7F7FF, #EAE4F2, #D3CCE3, #A6B1E1, #5E60CE);
+  --gradient-soft: linear-gradient(135deg, #F7F7FF 0%, #EAE4F2 50%, #F7F7FF 100%);
 
   /* Compatibility mappings for legacy variables */
   --brand: var(--primary-700);
@@ -102,11 +104,11 @@
   --green: var(--success);
   --amber: var(--warning);
 
-  /* Soft Dribbble-style shadows */
-  --shadow-sm: 0 1px 3px rgba(27, 30, 58, 0.04);
-  --shadow: 0 4px 20px rgba(99, 132, 250, 0.07);
-  --shadow-md: 0 10px 28px rgba(99, 132, 250, 0.11);
-  --shadow-lg: 0 18px 45px rgba(99, 132, 250, 0.14);
+  /* Soft modern shadows tailored to #5E60CE */
+  --shadow-sm: 0 1px 3px rgba(23, 24, 59, 0.04);
+  --shadow: 0 4px 20px rgba(94, 96, 206, 0.08);
+  --shadow-md: 0 10px 28px rgba(94, 96, 206, 0.12);
+  --shadow-lg: 0 18px 45px rgba(94, 96, 206, 0.16);
 
   --sh: var(--shadow);
   --sh-md: var(--shadow-md);
@@ -127,22 +129,24 @@
 }
 
 .dark {
-  --primary: #7593FC;
-  --primary-600: #6384FA;
-  --primary-700: #8CA4FB;
-  --primary-300: #A3BDFB;
-  --primary-100: #1E2648;
-  --primary-50: #171C35;
+  --primary: #7E7BE6;
+  --primary-600: #5E60CE;
+  --primary-700: #A6B1E1;
+  --primary-300: #BCC4EA;
+  --primary-100: #25244A;
+  --primary-50: #1A1935;
 
-  --bg: #0F1222;
-  --card: #181C33;
-  --line: #262D4D;
-  --ink: #F3F5FA;
-  --muted: #8E99BC;
-  --placeholder: #576288;
+  --bg: #100F24;
+  --card: #181733;
+  --line: #2E2C59;
+  --ink: #F7F7FF;
+  --muted: #9390B7;
+  --placeholder: #615E87;
+  --zebra: rgba(255, 255, 255, 0.02);
 
-  --action: #3AA1F5;
-  --cyan: #47D2EF;
+  --action: #6082F2;
+  --action-hover: #4D71EE;
+  --cyan: #5BB7ED;
   --teal: #3AD5D7;
   --teal-bg: #142F34;
   --lavender: #A596EB;
@@ -158,25 +162,26 @@
   --danger-dark: #FF9B9B;
   --danger-bg: #381B1D;
 
-  --gradient: linear-gradient(135deg, #4A63D6, #1C99B8);
-  --gradient-soft: linear-gradient(135deg, #171C35, #142F34);
+  --gradient: linear-gradient(135deg, #4546A3, #25244A);
+  --gradient-palette: linear-gradient(45deg, #1A1935, #25244A, #2E2C59, #5E60CE, #7E7BE6);
+  --gradient-soft: linear-gradient(135deg, #100F24, #181733);
 
-  --brand: #8CA4FB;
-  --primary-hover: #7593FC;
-  --primary-light: #1E2648;
+  --brand: #A6B1E1;
+  --primary-hover: #7E7BE6;
+  --primary-light: #25244A;
   --positive: #3AD5D7;
   --positive-light: #142F34;
-  --teal-soft: #171C35;
-  --teal-soft2: #1E2648;
+  --teal-soft: #1A1935;
+  --teal-soft2: #25244A;
   --error: #F07A7A;
-  --neutral: #8E99BC;
+  --neutral: #9390B7;
 
-  --navy: #8CA4FB;
-  --navy2: #6384FA;
-  --blue: #7593FC;
-  --sky: #47D2EF;
-  --baby: #171C35;
-  --baby2: #1E2648;
+  --navy: #A6B1E1;
+  --navy2: #5E60CE;
+  --blue: #7E7BE6;
+  --sky: #5BB7ED;
+  --baby: #1A1935;
+  --baby2: #25244A;
   --red: #F07A7A;
   --green: #35C78E;
   --amber: #F5B646;
@@ -230,17 +235,18 @@ button, input, select, textarea {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(133, 144, 176, 0.28);
+  background: rgba(166, 177, 225, 0.4);
   border-radius: var(--rad-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(133, 144, 176, 0.45);
+  background: rgba(166, 177, 225, 0.65);
 }
 
 /* ---------- floating app shell ---------- */
 .app-shell-wrapper {
   min-height: 100vh;
   background: var(--bg);
+  background-image: var(--gradient-palette);
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -370,7 +376,7 @@ button, input, select, textarea {
   justify-content: center;
   font-weight: 800;
   font-size: 12.5px;
-  box-shadow: 0 2px 8px rgba(99, 132, 250, 0.35);
+  box-shadow: 0 2px 8px rgba(94, 96, 206, 0.35);
 }
 
 /* Notification dot */
@@ -706,11 +712,11 @@ textarea {
   cursor: pointer;
   white-space: nowrap;
   transition: all var(--transition-fast);
-  box-shadow: 0 2px 8px rgba(99, 132, 250, 0.25);
+  box-shadow: 0 2px 8px rgba(94, 96, 206, 0.25);
 }
 .btn:hover {
   background: var(--primary-600);
-  box-shadow: 0 4px 14px rgba(99, 132, 250, 0.35);
+  box-shadow: 0 4px 14px rgba(94, 96, 206, 0.35);
   transform: translateY(-1px);
 }
 .btn.sm {
@@ -892,7 +898,7 @@ table.t {
   background: var(--primary);
   color: var(--card);
   border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(99, 132, 250, 0.25);
+  box-shadow: 0 2px 8px rgba(94, 96, 206, 0.25);
 }
 
 /* Timeline & tinted list blocks with 3px inline-start border */
@@ -957,7 +963,7 @@ table.t {
   background: var(--primary);
   border-color: var(--primary);
   color: var(--card);
-  box-shadow: 0 3px 10px rgba(99, 132, 250, 0.35);
+  box-shadow: 0 3px 10px rgba(94, 96, 206, 0.35);
 }
 .stp .s.done .dot {
   background: var(--success);
@@ -1073,7 +1079,7 @@ table.t {
   border-radius: 40px;
   border: 10px solid var(--primary-600);
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(90, 120, 238, 0.28);
+  box-shadow: 0 20px 50px rgba(94, 96, 206, 0.28);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -1139,7 +1145,7 @@ table.t {
   padding: 12px 14px;
   margin-bottom: 10px;
   background: var(--card);
-  box-shadow: 0 2px 8px rgba(99, 132, 250, 0.05);
+  box-shadow: 0 2px 8px rgba(94, 96, 206, 0.05);
 }
 
 /* ---------- A4 certificate (print-ready) ---------- */
