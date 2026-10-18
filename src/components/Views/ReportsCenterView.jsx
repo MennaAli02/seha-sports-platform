@@ -127,7 +127,7 @@ export const ReportsCenterView = () => {
   };
 
   const sTable = (heads, rows) => (
-    <table className="st" style={{ border: '1px solid var(--line)', borderRadius: '10px', overflow: 'hidden' }}>
+    <table className="st" style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
       <thead>
         <tr>
           {heads.map((h, i) => (
@@ -137,7 +137,7 @@ export const ReportsCenterView = () => {
       </thead>
       <tbody>
         {rows.map((row, i) => (
-          <tr key={i} style={{ background: i % 2 === 1 ? 'rgba(240, 244, 254, 0.5)' : 'var(--card)' }}>
+          <tr key={i} style={{ background: i % 2 === 1 ? 'var(--zebra)' : 'var(--card)' }}>
             {row.map((cell, j) => (
               <td key={j} style={{ padding: '9px 14px', borderBottom: '1px solid var(--line)', fontSize: '12.5px' }}>{cell}</td>
             ))}

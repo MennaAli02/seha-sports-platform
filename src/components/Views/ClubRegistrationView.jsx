@@ -89,29 +89,14 @@ export const ClubRegistrationView = () => {
   return (
     <div>
       {/* Header */}
-      <div className="ph" style={{ marginBottom: '20px' }}>
+      <div className="ph">
         <div>
-          <span className="lab" style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '6px',
-            color: 'var(--primary)',
-            background: 'var(--teal-soft)',
-            padding: '3px 10px',
-            borderRadius: '6px',
-            fontSize: '11px',
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            marginBottom: '6px'
-          }}>
+          <span className="lab flex items-center gap-1.5">
             <Building2 size={13} />
             {L('إدارة الكيانات الرياضية', 'Entity Management')}
           </span>
-          <h1 style={{ margin: '4px 0 6px', fontSize: '26px', fontWeight: 800, color: 'var(--brand)' }}>
-            {L('تسجيل واعتماد الأندية والأكاديميات الرياضية', 'Club & Sports Academy Accreditation')}
-          </h1>
-          <p style={{ margin: 0, color: 'var(--muted)', fontSize: '13.5px' }}>
+          <h1>{L('تسجيل واعتماد الأندية والأكاديميات الرياضية', 'Club & Sports Academy Accreditation')}</h1>
+          <p>
             {L(
               'تسجيل الهيئات الرياضية المعتمدة، ربط مسؤولي السجلات الطبية، وضبط صلاحيات الاطلاع وفق قانون 151/2020',
               'Accredit verified athletic organizations, link medical-records officers, and govern access under Law 151/2020'
@@ -219,11 +204,11 @@ export const ClubRegistrationView = () => {
           </label>
 
           <div style={{
-            background: 'var(--teal-soft)',
+            background: 'var(--color-brand-light)',
             padding: '12px 14px',
-            borderRadius: '10px',
+            borderRadius: 'var(--radius-md)',
             marginBottom: '16px',
-            border: '1px solid rgba(8, 127, 140, 0.2)'
+            border: '1px solid var(--color-border)'
           }}>
             <label className="chk" style={{ margin: 0, alignItems: 'flex-start' }}>
               <input

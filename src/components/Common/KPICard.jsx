@@ -82,7 +82,7 @@ export const KPICard = ({
   };
 
   return (
-    <div className={`relative bg-[var(--card)] border border-[var(--line)] rounded-2xl p-5 shadow-[var(--shadow)] hover:shadow-[var(--shadow-md)] transition-all duration-200 overflow-hidden flex flex-col justify-between ${className}`}>
+    <div className={`relative bg-[var(--card)] border border-[var(--line)] rounded-xl p-5 shadow-[var(--shadow)] hover:shadow-[var(--shadow-md)] transition-all duration-200 overflow-hidden flex flex-col justify-between ${className}`}>
       {/* Accent border stripe on inline-start */}
       <span className={`absolute top-0 start-0 w-1.5 h-full ${colors.stripe}`} />
 
@@ -96,7 +96,7 @@ export const KPICard = ({
           </span>
         </div>
         {icon && (
-          <div className={`p-2.5 rounded-xl ${colors.iconBg} ${colors.iconText} flex-none transition-transform duration-200 hover:scale-105 flex items-center justify-center`}>
+          <div className={`p-2.5 rounded-lg ${colors.iconBg} ${colors.iconText} flex-none transition-transform duration-200 hover:scale-105 flex items-center justify-center`}>
             {renderIcon()}
           </div>
         )}

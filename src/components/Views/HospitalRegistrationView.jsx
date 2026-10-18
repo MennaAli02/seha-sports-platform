@@ -98,29 +98,14 @@ export const HospitalRegistrationView = () => {
   return (
     <div>
       {/* Header */}
-      <div className="ph" style={{ marginBottom: '20px' }}>
+      <div className="ph">
         <div>
-          <span className="lab" style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '6px',
-            color: 'var(--primary)',
-            background: 'var(--teal-soft)',
-            padding: '3px 10px',
-            borderRadius: '6px',
-            fontSize: '11px',
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            marginBottom: '6px'
-          }}>
+          <span className="lab flex items-center gap-1.5">
             <Stethoscope size={13} />
             {L('شبكة الرعاية والطب الرياضي', 'Clinical Network & Sports Medicine')}
           </span>
-          <h1 style={{ margin: '4px 0 6px', fontSize: '26px', fontWeight: 800, color: 'var(--brand)' }}>
-            {L('اعتماد المستشفيات ووحدات الفحص الطبي الرياضي', 'Hospital & Medical Center Accreditation')}
-          </h1>
-          <p style={{ margin: 0, color: 'var(--muted)', fontSize: '13.5px' }}>
+          <h1>{L('اعتماد المستشفيات ووحدات الفحص الطبي الرياضي', 'Hospital & Medical Center Accreditation')}</h1>
+          <p>
             {L(
               'تسجيل واعتماد مرافق الفحص، تحديد مستويات الكود الطبي المعتمدة، وضبط الطاقة الاستيعابية اليومية وجداول الأطباء',
               'Accredit clinical facilities, configure authorized examination levels, daily capacities, and certified physician schedules'
@@ -274,11 +259,11 @@ export const HospitalRegistrationView = () => {
           </div>
 
           <div style={{
-            background: 'var(--teal-soft)',
+            background: 'var(--color-brand-light)',
             padding: '12px 14px',
-            borderRadius: '10px',
+            borderRadius: 'var(--radius-md)',
             marginBottom: '16px',
-            border: '1px solid rgba(8, 127, 140, 0.2)'
+            border: '1px solid var(--color-border)'
           }}>
             <label className="chk" style={{ margin: 0, alignItems: 'flex-start' }}>
               <input

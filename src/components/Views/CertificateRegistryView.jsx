@@ -65,7 +65,7 @@ export const CertificateRegistryView = () => {
       </div>
 
       {/* KPIs */}
-      <div className="g4">
+      <div className="g4" style={{ marginBottom: '20px' }}>
         <KPICard
           variant="brand"
           value={stats.issued}

@@ -9,7 +9,6 @@ import { ErrorBoundary } from './components/Common/ErrorBoundary';
 
 // Views
 import { DashboardView } from './components/Views/DashboardView';
-import { CitizenMobileView } from './components/Views/CitizenMobileView';
 import { ConsentGovernanceView } from './components/Views/ConsentGovernanceView';
 import { CertificateRegistryView } from './components/Views/CertificateRegistryView';
 import { PublicVerificationView } from './components/Views/PublicVerificationView';
@@ -30,8 +29,6 @@ export default function App() {
     switch (currentRoute) {
       case 'dash':
         return <DashboardView />;
-      case 'mobile':
-        return <CitizenMobileView />;
       case 'consent':
         return <ConsentGovernanceView />;
       case 'cert':

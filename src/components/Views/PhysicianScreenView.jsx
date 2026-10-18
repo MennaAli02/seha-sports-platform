@@ -53,19 +53,23 @@ export const PhysicianScreenView = () => {
       </div>
 
       {/* Stepper */}
-      <div className="steps max-w-2xl">
+      <div className="stp max-w-2xl" style={{ marginBottom: '24px' }}>
         {[
-          L('مسح الحجز ومطابقة الهوية', '1. Scan & ID Match'),
-          L('تسجيل الفحوصات الطبية', '2. Record Findings'),
-          L('القرار الطبي الإكلينيكي', '3. Medical Decision'),
-          L('الاعتماد والختم الرقمي', '4. Clearance & Issue')
+          L('مسح الحجز ومطابقة الهوية', 'Scan & ID Match'),
+          L('تسجيل الفحوصات الطبية', 'Record Findings'),
+          L('القرار الطبي الإكلينيكي', 'Medical Decision'),
+          L('الاعتماد والختم الرقمي', 'Clearance & Issue')
         ].map((s, i) => (
           <div
             key={i}
-            className={`stp ${examStep > i + 1 ? 'done' : examStep === i + 1 ? 'cur' : ''}`}
-            data-n={i + 1}
+            className={`s ${examStep > i + 1 ? 'done' : examStep === i + 1 ? 'on' : ''}`}
+            onClick={() => {
+              if (examStep > i + 1) setExamStep(i + 1);
+            }}
+            style={{ cursor: examStep > i + 1 ? 'pointer' : 'default' }}
           >
-            {s}
+            <div className="dot">{examStep > i + 1 ? '✓' : i + 1}</div>
+            <span>{s}</span>
           </div>
         ))}
       </div>

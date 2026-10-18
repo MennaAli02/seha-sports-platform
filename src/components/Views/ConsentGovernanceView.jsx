@@ -172,7 +172,7 @@ export const ConsentGovernanceView = () => {
             </table>
           </div>
 
-          <div className="nt mt-4 flex items-start gap-2">
+          <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
             <ShieldCheck className="w-4 h-4 text-[var(--primary)] flex-none mt-0.5" />
             <span className="text-xs leading-relaxed">
               {L(

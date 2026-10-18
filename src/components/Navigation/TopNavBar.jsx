@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
 import { todayFormatted } from '../../data/mockData';
-import { Sun, Moon, HelpCircle, Menu, Bell } from 'lucide-react';
+import { Sun, Moon, HelpCircle, Menu, Bell, Globe } from 'lucide-react';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const { toggleLanguage, isRTL, L } = useLanguage();
@@ -25,7 +25,6 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const getRouteTitle = () => {
     switch (currentRoute) {
       case 'dash': return isRTL ? 'لوحة المؤشرات' : 'Dashboard';
-      case 'mobile': return isRTL ? 'تطبيق المواطن' : 'Citizen app';
       case 'consent': return isRTL ? 'موافقات الاطلاع' : 'Access consents';
       case 'cert': return isRTL ? 'سجل الشهادات' : 'Certificates';
       case 'verify': return isRTL ? 'التحقق العام' : 'Public verification';
@@ -87,21 +86,28 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
           {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
         </button>
 
-        {/* User profile capsule */}
-        <div className="user">
-          <div className="av">{isRTL ? 'أ' : 'A'}</div>
-          <div style={{ lineHeight: 1.25 }}>
-            <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
-            <span className="mut" style={{ fontSize: '10.5px' }}>
-              {todayFormatted()}
-            </span>
+        {/* Language toggle icon placed to the left of platform admin */}
+        <div className="flex items-center gap-2" style={{ direction: 'ltr' }}>
+          <button
+            className="p-2 text-[var(--muted)] hover:text-[var(--primary)] hover:bg-[var(--primary-50)] rounded-full border border-[var(--line)] transition-all cursor-pointer flex items-center justify-center"
+            onClick={toggleLanguage}
+            title={isRTL ? 'Switch to English' : 'التحويل للعربية'}
+            aria-label="Toggle language"
+          >
+            <Globe className="w-4 h-4" />
+          </button>
+
+          {/* User profile capsule */}
+          <div className="user" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+            <div className="av">{isRTL ? 'أ' : 'A'}</div>
+            <div style={{ lineHeight: 1.25 }}>
+              <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
+              <span className="mut" style={{ fontSize: '10.5px' }}>
+                {todayFormatted()}
+              </span>
+            </div>
           </div>
         </div>
-
-        {/* Language Toggle */}
-        <button className="lang" onClick={toggleLanguage} title={isRTL ? 'Switch to English' : 'التحويل للعربية'}>
-          {L('EN', 'عربي')}
-        </button>
       </div>
     </header>
   );

@@ -13,7 +13,6 @@ export const SideNavBar = () => {
       title: ['العمليات الرئيسية', 'Core Operations'],
       routes: [
         { k: 'dash', ic: 'dash', t: ['لوحة المؤشرات', 'Dashboard'] },
-        { k: 'mobile', ic: 'mobile', t: ['تطبيق المواطن', 'Citizen app'] },
         { k: 'consent', ic: 'shield', t: ['موافقات الاطلاع', 'Access consents'] },
         { k: 'cert', ic: 'cert', t: ['سجل الشهادات', 'Certificates'] },
         { k: 'verify', ic: 'scan', t: ['التحقق العام', 'Public verification'] }

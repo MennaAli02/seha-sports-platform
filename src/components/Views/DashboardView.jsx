@@ -63,14 +63,14 @@ export const DashboardView = () => {
           >
             {IC.rep} {L('التقرير التنفيذي', 'Executive report')}
           </button>
-          <button className="btn" onClick={() => navigate('mobile')}>
-            {IC.mobile} {L('تجربة المواطن', 'Citizen journey')}
+          <button className="btn" onClick={() => navigate('cert')}>
+            {IC.cert} {L('سجل الشهادات', 'Certificates registry')}
           </button>
         </div>
       </div>
 
       {/* KPI Grid */}
-      <div className="g6">
+      <div className="g6" style={{ marginBottom: '20px' }}>
         <KPICard
           variant="primary-700"
           value={stats.total}
@@ -116,7 +116,7 @@ export const DashboardView = () => {
       </div>
 
       {/* Distribution: Governorate & Sport */}
-      <div className="g2">
+      <div className="g2" style={{ marginTop: '20px' }}>
         <div className="card">
           <h3>
             <span className="d"></span>
@@ -210,7 +210,7 @@ export const DashboardView = () => {
               );
             })}
           </div>
-          <div className="nt mt-3 flex items-start gap-2">
+          <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
             <span className="text-sm font-bold text-[var(--primary)]">ℹ</span>
             <span>
               {L(

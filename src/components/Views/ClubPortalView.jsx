@@ -52,7 +52,7 @@ export const ClubPortalView = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div className="g4">
+      <div className="g4" style={{ marginBottom: '20px' }}>
         <KPICard
           variant="brand"
           value={rs.length}
@@ -176,7 +176,7 @@ export const ClubPortalView = () => {
             </table>
           </div>
 
-          <div className="nt mt-4 flex items-start gap-2">
+          <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
             <span className="text-sm font-bold text-[var(--primary)]">🔒</span>
             <span className="text-xs">
               {L(
@@ -250,7 +250,7 @@ export const ClubPortalView = () => {
             </div>
           </div>
 
-          <div className="nt mt-4">
+          <div className="nt" style={{ marginTop: '20px' }}>
             {L(
               'إجراءات الحجز الجماعي: تؤكد وحدة الطب الرياضي الموعد أو تقترح بديلاً خلال 24 ساعة؛ وتصل رسالة نصية (SMS) فورية بالموعد لولي أمر كل لاعب مسجل.',
               'Booking workflow: Hospital unit confirms or reschedules within 24 hours; an automated SMS confirmation with preparation guidelines is sent to each athlete/guardian.'

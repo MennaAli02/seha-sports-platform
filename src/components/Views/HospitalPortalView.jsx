@@ -57,7 +57,7 @@ export const HospitalPortalView = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div className="g4">
+      <div className="g4" style={{ marginBottom: '20px' }}>
         <KPICard
           variant="brand"
           value={ls.length}
@@ -356,19 +356,19 @@ export const HospitalPortalView = () => {
               )}
             </p>
 
-            <div className="steps max-w-2xl mx-auto">
+            <div className="stp max-w-2xl mx-auto mb-6">
               {[
-                L('الفحص الإكلينيكي للمعاين', '1. Clinical Exam'),
-                L('مراجعة المدير الطبي المعتمد', '2. Director Review'),
-                L('التوقيع والختم الإلكتروني', '3. Cryptographic Stamp'),
-                L('إصدار فوري وإشعار ولي الأمر', '4. Instant Issuance & SMS')
+                L('الفحص الإكلينيكي للمعاين', 'Clinical Exam'),
+                L('مراجعة المدير الطبي المعتمد', 'Director Review'),
+                L('التوقيع والختم الإلكتروني', 'Cryptographic Stamp'),
+                L('إصدار فوري وإشعار ولي الأمر', 'Instant Issuance & SMS')
               ].map((s, i) => (
                 <div
                   key={i}
-                  className={`stp ${i < 2 ? 'done' : i === 2 ? 'cur' : ''}`}
-                  data-n={i + 1}
+                  className={`s ${i < 2 ? 'done' : i === 2 ? 'on' : ''}`}
                 >
-                  {s}
+                  <div className="dot">{i < 2 ? '✓' : i + 1}</div>
+                  <span>{s}</span>
                 </div>
               ))}
             </div>
