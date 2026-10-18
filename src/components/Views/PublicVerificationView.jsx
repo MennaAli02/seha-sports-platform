@@ -69,7 +69,7 @@ export const PublicVerificationView = () => {
           </button>
         </div>
 
-        <div className="chips mt-4 justify-center">
+        <div className="flex flex-wrap items-center justify-center gap-2.5" style={{ marginTop: '20px', marginBottom: '24px' }}>
           <button
             className="chip text-xs"
             onClick={() => {
@@ -92,7 +92,7 @@ export const PublicVerificationView = () => {
 
         {verifyR && (
           <div
-            className={`mt-6 text-start rounded-xl p-5 border transition-all ${
+            className={`text-start rounded-xl p-5 border transition-all ${
               verifyR.ok
                 ? 'border-[var(--success)]/40 bg-[var(--success-bg)]'
                 : 'border-[var(--danger)]/40 bg-[var(--danger-bg)]'

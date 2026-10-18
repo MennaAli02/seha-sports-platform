@@ -25,6 +25,12 @@ export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
 
+  React.useEffect(() => {
+    if (currentRoute === 'mobile') {
+      navigate('dash');
+    }
+  }, [currentRoute, navigate]);
+
   const renderActiveView = () => {
     switch (currentRoute) {
       case 'dash':

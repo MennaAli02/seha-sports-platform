@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
-import { todayFormatted } from '../../data/mockData';
 import { Sun, Moon, HelpCircle, Menu, Bell, Globe } from 'lucide-react';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
@@ -100,12 +99,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
           {/* User profile capsule */}
           <div className="user" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
             <div className="av">{isRTL ? 'أ' : 'A'}</div>
-            <div style={{ lineHeight: 1.25 }}>
-              <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
-              <span className="mut" style={{ fontSize: '10.5px' }}>
-                {todayFormatted()}
-              </span>
-            </div>
+            <b>{L('مسؤول المنظومة', 'Platform admin')}</b>
           </div>
         </div>
       </div>

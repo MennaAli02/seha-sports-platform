@@ -35,9 +35,16 @@ export const ClubPortalView = () => {
             <Shield className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('بوابة الأندية والاتحادات الرياضية', 'Sports Clubs & Federations Portal')}
           </span>
-          <h1>{c.n}</h1>
-          <p>
-            {L('المسؤول الإداري والطبي: ', 'Medical and administrative liaison: ')}{c.mgr} · {isRTL ? c.gov : GOV_EN[c.gov] || c.gov} · {c.type}
+          <h1>{isRTL ? c.n : c.nEn || c.n}</h1>
+          <p className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-[var(--muted)] mt-1">
+            <span className="font-semibold text-[var(--ink)]">
+              {L('المسؤول الإداري والطبي: ', 'Medical and administrative liaison: ')}
+            </span>
+            <span>{isRTL ? c.mgr : c.mgrEn || c.mgr}</span>
+            <span className="text-[var(--muted)]/50">·</span>
+            <span>{isRTL ? c.gov : GOV_EN[c.gov] || c.gov}</span>
+            <span className="text-[var(--muted)]/50">·</span>
+            <span>{isRTL ? c.type : c.typeEn || c.type}</span>
           </p>
         </div>
         <div className="act np">

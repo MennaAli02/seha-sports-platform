@@ -251,8 +251,8 @@ export const DashboardView = () => {
               {hosps.map((h) => (
                 <tr key={h.id}>
                   <td>
-                    <b className="text-[var(--ink)]">{h.n}</b>
-                    <small className="block text-[11px] text-[var(--muted)]">{h.dir}</small>
+                    <b className="text-[var(--ink)]">{isRTL ? h.n : h.nEn || h.n}</b>
+                    <small className="block text-[11px] text-[var(--muted)]">{isRTL ? h.dir : h.dirEn || h.dir}</small>
                   </td>
                   <td>
                     <span className="inline-flex items-center gap-1 text-xs">
@@ -267,10 +267,10 @@ export const DashboardView = () => {
               {clubs.slice(0, 3).map((c) => (
                 <tr key={c.id}>
                   <td>
-                    <b className="text-[var(--ink)]">{c.n}</b>
-                    <small className="block text-[11px] text-[var(--muted)]">{c.mgr}</small>
+                    <b className="text-[var(--ink)]">{isRTL ? c.n : c.nEn || c.n}</b>
+                    <small className="block text-[11px] text-[var(--muted)]">{isRTL ? c.mgr : c.mgrEn || c.mgr}</small>
                   </td>
-                  <td><span className="text-xs">{c.type}</span></td>
+                  <td><span className="text-xs">{isRTL ? c.type : c.typeEn || c.type}</span></td>
                   <td>{isRTL ? c.gov : GOV_EN[c.gov] || c.gov}</td>
                   <td><StatusTag type="org" status={c.st} /></td>
                 </tr>

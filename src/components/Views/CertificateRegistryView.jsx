@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
 import { CertificateDetailView } from './CertificateDetailView';
@@ -6,7 +6,7 @@ import { StatusTag } from '../Common/StatusTag';
 import { KPICard } from '../Common/KPICard';
 import { IC } from '../../data/icons';
 import { fmtDate } from '../../data/mockData';
-import { Award, ShieldCheck, AlertTriangle, Clock, Search, Filter, FileText, ChevronRight, Check } from 'lucide-react';
+import { Award, ShieldCheck, AlertTriangle, Clock, Search, Filter, FileText, ChevronRight, Check, ChevronDown, X, ChevronLeft } from 'lucide-react';
 
 export const CertificateRegistryView = () => {
   const { isRTL, L } = useLanguage();
@@ -22,6 +22,37 @@ export const CertificateRegistryView = () => {
 
   const [q, setQ] = useState('');
   const [f, setF] = useState('all');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false);
+  const filterRef = useRef(null);
+
+  useEffect(() => {
+    setPage(1);
+  }, [q, f, pageSize]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setFilterMenuOpen(false);
+      }
+    };
+    if (filterMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [filterMenuOpen]);
+
+  const filterOptions = [
+    { key: 'all', ar: 'كل الحالات', en: 'All statuses', dot: 'var(--color-text-secondary)', count: players.length },
+    { key: 'fit', ar: 'سارية (لائق)', en: 'Valid (Fit)', dot: 'var(--color-success)', count: stats.fit },
+    { key: 'cond', ar: 'أشبالنا (بشروط)', en: 'Ashbalna (Conditional)', dot: 'var(--color-warning)', count: stats.cond },
+    { key: 'exp', ar: 'منتهية الصلاحية', en: 'Expired', dot: 'var(--color-error)', count: stats.exp },
+    { key: 'book', ar: 'حجوزات بانتظار الكشف', en: 'Awaiting exam', dot: 'var(--color-brand-violet)', count: stats.book }
+  ];
+  const activeOption = filterOptions.find(o => o.key === f) || filterOptions[0];
 
   // If a certificate is currently selected, render the detail view
   if (selectedCertIndex !== null) {
@@ -39,6 +70,26 @@ export const CertificateRegistryView = () => {
       p.bk.toLowerCase().includes(query);
     return matchesFilter && matchesQuery;
   });
+
+  const totalRecords = list.length;
+  const totalPages = Math.max(1, Math.ceil(totalRecords / pageSize));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const startIndex = (safePage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalRecords);
+  const paginatedList = list.slice(startIndex, endIndex);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, idx) => idx + 1);
+    }
+    if (safePage <= 3) {
+      return [1, 2, 3, 4, '...', totalPages];
+    }
+    if (safePage >= totalPages - 2) {
+      return [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', safePage - 1, safePage, safePage + 1, '...', totalPages];
+  };
 
   return (
     <div className="space-y-4">
@@ -98,10 +149,11 @@ export const CertificateRegistryView = () => {
 
       {/* Search Bar & Filter Controls */}
       <div className="card">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 np">
-          <div className="flex items-center gap-2 flex-1 max-w-xl">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3 pointer-events-none" />
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 np">
+          <div className="flex items-center gap-2.5 flex-1 max-w-2xl">
+            {/* Search Input */}
+            <div className="relative flex-1 min-w-[240px]">
+              <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none" />
               <input
                 id="cq"
                 type="text"
@@ -111,52 +163,114 @@ export const CertificateRegistryView = () => {
                 )}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                className="ps-9 pe-3 py-2 text-sm"
+                className="w-full ps-10 pe-9 py-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--color-brand-violet)] focus:ring-2 focus:ring-[var(--color-brand-lavender)] transition-all shadow-xs"
               />
+              {q && (
+                <button
+                  type="button"
+                  onClick={() => setQ('')}
+                  className="absolute top-1/2 -translate-y-1/2 end-3 text-[var(--muted)] hover:text-[var(--ink)] p-0.5 rounded-full hover:bg-[var(--primary-50)] transition-colors cursor-pointer"
+                  title={L('مسح البحث', 'Clear search')}
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-            <select
-              value={f}
-              onChange={(e) => setF(e.target.value)}
-              className="w-44 text-sm"
-            >
-              {[
-                ['all', L('كل الحالات', 'All statuses')],
-                ['fit', L('لائق — سارية', 'Fit — valid')],
-                ['cond', L('أشبالنا — بشروط', 'Conditional')],
-                ['exp', L('منتهية الصلاحية', 'Expired')],
-                ['book', L('حجز — قيد الفحص', 'Pending exam')]
-              ].map(([val, label]) => (
-                <option key={val} value={val}>
-                  {label}
-                </option>
-              ))}
-            </select>
+
+            {/* Dropdown Button for Filtering */}
+            <div className="relative flex-none" ref={filterRef}>
+              <button
+                type="button"
+                onClick={() => setFilterMenuOpen(prev => !prev)}
+                className={`flex items-center gap-2 px-3.5 py-2.5 text-sm font-semibold rounded-xl border transition-all cursor-pointer ${
+                  f !== 'all'
+                    ? 'bg-[var(--primary-50)] border-[var(--primary)] text-[var(--primary-700)] shadow-xs'
+                    : 'bg-[var(--card)] border-[var(--color-border)] text-[var(--ink)] hover:border-[var(--primary)]'
+                }`}
+                aria-expanded={filterMenuOpen}
+              >
+                <Filter className="w-4 h-4 text-[var(--primary)] flex-none" />
+                <span className="truncate max-w-[140px] sm:max-w-none">
+                  {L(activeOption.ar, activeOption.en)}
+                </span>
+                {f !== 'all' && (
+                  <span className="w-2 h-2 rounded-full bg-[var(--primary)] flex-none" />
+                )}
+                <ChevronDown className={`w-3.5 h-3.5 text-[var(--muted)] flex-none transition-transform duration-200 ${filterMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Filter Options Dropdown Menu */}
+              {filterMenuOpen && (
+                <div
+                  className={`absolute z-30 mt-2 w-64 bg-[var(--card)] border border-[var(--line)] rounded-xl shadow-lg p-1.5 start-0`}
+                  style={{ minWidth: '220px' }}
+                >
+                  <div className="px-3 py-2 text-[11px] font-bold text-[var(--muted)] uppercase border-b border-[var(--line)] mb-1 flex items-center justify-between">
+                    <span>{L('تصفية حسب حالة الشهادة', 'Filter by Status')}</span>
+                    {f !== 'all' && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setF('all');
+                          setFilterMenuOpen(false);
+                        }}
+                        className="text-[11px] text-[var(--primary)] hover:underline font-normal cursor-pointer"
+                      >
+                        {L('إعادة تعيين', 'Reset')}
+                      </button>
+                    )}
+                  </div>
+                  {filterOptions.map((opt) => {
+                    const isSelected = f === opt.key;
+                    return (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        onClick={() => {
+                          setF(opt.key);
+                          setFilterMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer text-start ${
+                          isSelected
+                            ? 'bg-[var(--primary-50)] text-[var(--primary-700)]'
+                            : 'text-[var(--ink)] hover:bg-[var(--line)]/40'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span
+                            className="w-2.5 h-2.5 rounded-full flex-none"
+                            style={{ backgroundColor: opt.dot }}
+                          />
+                          <span className="truncate">{L(opt.ar, opt.en)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 flex-none">
+                          <span className="text-[11px] font-mono opacity-70">({opt.count})</span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-[var(--primary)]" />}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-[var(--muted)]">
+          {/* Records Count Badge */}
+          <div className="flex items-center gap-2 flex-none">
+            {f !== 'all' && (
+              <button
+                type="button"
+                onClick={() => setF('all')}
+                className="text-xs text-[var(--muted)] hover:text-[var(--danger)] cursor-pointer flex items-center gap-1 font-medium transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+                {L('إلغاء التصفية', 'Clear filter')}
+              </button>
+            )}
+            <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-[var(--primary-50)] text-[var(--primary-700)] border border-[var(--primary-100)] font-mono">
               {list.length} {L('شهادة مطابقة', 'matching records')}
             </span>
           </div>
-        </div>
-
-        {/* Filter Quick Chips */}
-        <div className="chips mb-4 np">
-          {[
-            ['all', L('الكل', 'All')],
-            ['fit', L('سارية (لائق)', 'Valid (Fit)')],
-            ['cond', L('أشبالنا (بشروط)', 'Ashbalna (Conditional)')],
-            ['exp', L('منتهية', 'Expired')],
-            ['book', L('حجوزات بانتظار الكشف', 'Awaiting exam')]
-          ].map(([val, label]) => (
-            <button
-              key={val}
-              className={`chip ${f === val ? 'on' : ''}`}
-              onClick={() => setF(val)}
-            >
-              {label}
-            </button>
-          ))}
         </div>
 
         {list.length === 0 ? (
@@ -186,7 +300,7 @@ export const CertificateRegistryView = () => {
                 </tr>
               </thead>
               <tbody>
-                {list.slice(0, 40).map((p) => {
+                {paginatedList.map((p) => {
                   const i = players.indexOf(p);
                   return (
                     <tr key={p.id} className="hover:bg-[var(--primary-50)]/50 transition-colors">
@@ -236,13 +350,95 @@ export const CertificateRegistryView = () => {
           </div>
         )}
 
-        {list.length > 40 && (
-          <p className="mut text-xs mt-3 text-center">
-            {L(
-              'تُعرض أول 40 نتيجة لتسريع التصفح — استخدم حقول البحث بالأعلى للوصول الدقيق',
-              'Showing first 40 records — use search above to narrow down'
-            )}
-          </p>
+        {/* Pagination Footer */}
+        {totalRecords > 0 && (
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 mt-4 border-t border-[var(--line)] np">
+            {/* Left / Start: Rows per page selector & range summary */}
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2 text-xs text-[var(--muted)]">
+                <span>{L('عدد الصفوف في الصفحة:', 'Rows per page:')}</span>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="w-auto py-1 px-2.5 text-xs bg-[var(--card)] border border-[var(--color-border)] rounded-lg font-mono font-bold cursor-pointer"
+                >
+                  {[5, 10, 20, 50].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="text-xs text-[var(--muted)]">
+                {L('عرض ', 'Showing ')}
+                <b className="font-mono text-[var(--ink)]">{startIndex + 1}</b>
+                {L(' إلى ', ' to ')}
+                <b className="font-mono text-[var(--ink)]">{endIndex}</b>
+                {L(' من أصل ', ' of ')}
+                <b className="font-mono text-[var(--ink)]">{totalRecords}</b>
+                {L(' سجل', ' records')}
+              </div>
+            </div>
+
+            {/* Right / End: Pagination controls */}
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                disabled={safePage === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className={`p-1.5 rounded-lg border text-xs font-semibold flex items-center justify-center transition-all ${
+                  safePage === 1
+                    ? 'opacity-40 cursor-not-allowed border-[var(--line)] text-[var(--muted)]'
+                    : 'cursor-pointer hover:bg-[var(--primary-50)] border-[var(--color-border)] text-[var(--ink)]'
+                }`}
+                title={L('الصفحة السابقة', 'Previous page')}
+              >
+                {isRTL ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+              </button>
+
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((num, idx) => {
+                  if (num === '...') {
+                    return (
+                      <span key={`ellipsis-${idx}`} className="px-2 text-xs text-[var(--muted)] font-mono">
+                        …
+                      </span>
+                    );
+                  }
+                  const isCurrent = safePage === num;
+                  return (
+                    <button
+                      key={`page-${num}`}
+                      type="button"
+                      onClick={() => setPage(num)}
+                      className={`min-w-[32px] h-8 px-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'bg-[var(--primary)] text-white shadow-xs'
+                          : 'bg-[var(--card)] border border-[var(--color-border)] text-[var(--ink)] hover:bg-[var(--primary-50)]'
+                      }`}
+                    >
+                      {num}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                disabled={safePage >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                className={`p-1.5 rounded-lg border text-xs font-semibold flex items-center justify-center transition-all ${
+                  safePage >= totalPages
+                    ? 'opacity-40 cursor-not-allowed border-[var(--line)] text-[var(--muted)]'
+                    : 'cursor-pointer hover:bg-[var(--primary-50)] border-[var(--color-border)] text-[var(--ink)]'
+                }`}
+                title={L('الصفحة التالية', 'Next page')}
+              >
+                {isRTL ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

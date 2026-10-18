@@ -40,13 +40,14 @@ export const SehaProvider = ({ children }) => {
   }, []);
 
   const navigate = useCallback((route, meta = {}) => {
-    setCurrentRoute(route);
+    const targetRoute = (!route || route === 'mobile') ? 'dash' : route;
+    setCurrentRoute(targetRoute);
     if (meta.certIndex !== undefined) {
       setSelectedCertIndex(meta.certIndex);
     }
     if (meta.report !== undefined) {
       setSelectedReport(meta.report);
-    } else if (route !== 'reports') {
+    } else if (targetRoute !== 'reports') {
       setSelectedReport(null);
     }
     if (meta.verifyQ !== undefined) {

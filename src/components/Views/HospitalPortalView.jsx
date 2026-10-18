@@ -41,9 +41,17 @@ export const HospitalPortalView = () => {
             <Stethoscope className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('بوابة وحدات الطب الرياضي والمستشفيات', 'Sports Medicine Units & Hospitals Portal')}
           </span>
-          <h1>{h.n}</h1>
-          <p>
-            {L('المدير الطبي للوحدة: ', 'Medical unit director: ')}{h.dir} · {L('الطاقة الاستيعابية اليومية: ', 'Daily screening capacity: ')}{h.cap} {L('رياضي/يوم', 'athletes/day')}
+          <h1>{isRTL ? h.n : h.nEn || h.n}</h1>
+          <p className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-[var(--muted)] mt-1">
+            <span className="font-semibold text-[var(--ink)]">
+              {L('المدير الطبي للوحدة: ', 'Medical unit director: ')}
+            </span>
+            <span>{isRTL ? h.dir : h.dirEn || h.dir}</span>
+            <span className="text-[var(--muted)]/50">·</span>
+            <span>
+              {L('الطاقة الاستيعابية اليومية: ', 'Daily screening capacity: ')}
+              <b className="font-mono text-[var(--ink)]">{h.cap}</b> {L('رياضي/يوم', 'athletes/day')}
+            </span>
           </p>
         </div>
         <div className="act np">

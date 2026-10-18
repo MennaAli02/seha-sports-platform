@@ -270,39 +270,44 @@ export function generateSeedData() {
   players[0].gov = "القاهرة";
 
   const cn = [
-    ["نادي المستقبل الرياضي", "نادي"],
-    ["أكاديمية النيل لكرة القدم", "أكاديمية"],
-    ["نادي الصيد", "نادي"],
-    ["مركز شباب سموحة", "مركز شباب"],
-    ["أكاديمية الأهرام للسباحة", "أكاديمية"]
+    { ar: "نادي المستقبل الرياضي", en: "Al-Mostakbal Sports Club", typeAr: "نادي", typeEn: "Club", mgrAr: "م. خالد حمدي", mgrEn: "Eng. Khaled Hamdi" },
+    { ar: "أكاديمية النيل لكرة القدم", en: "Nile Football Academy", typeAr: "أكاديمية", typeEn: "Academy", mgrAr: "أ. منى عبدالرحمن", mgrEn: "Ms. Mona Abdulrahman" },
+    { ar: "نادي الصيد", en: "Shooting Club (Al-Seid)", typeAr: "نادي", typeEn: "Club", mgrAr: "ك. طارق سعيد", mgrEn: "Coach Tarek Saeed" },
+    { ar: "مركز شباب سموحة", en: "Smouha Youth Center", typeAr: "مركز شباب", typeEn: "Youth Center", mgrAr: "أ. هاني فتحي", mgrEn: "Mr. Hany Fathy" },
+    { ar: "أكاديمية الأهرام للسباحة", en: "Al-Ahram Swimming Academy", typeAr: "أكاديمية", typeEn: "Academy", mgrAr: "د. ريم عاطف", mgrEn: "Dr. Reem Atef" }
   ];
   cn.forEach((c, i) => {
     clubs.push({
       id: "CL-" + (101 + i),
-      n: c[0],
-      type: c[1],
+      n: c.ar,
+      nEn: c.en,
+      type: c.typeAr,
+      typeEn: c.typeEn,
       gov: CFG.govs[i % 4],
       ph: "010" + (10000000 + rnd(89999999)),
-      mgr: ["م. خالد حمدي", "أ. منى عبدالرحمن", "ك. طارق سعيد", "أ. هاني فتحي", "د. ريم عاطف"][i],
+      mgr: c.mgrAr,
+      mgrEn: c.mgrEn,
       players: [42, 38, 27, 22, 19][i],
       st: i < 4 ? "on" : "pend"
     });
   });
 
   const hn = [
-    ["مستشفى هليوبوليس التخصصي", "القاهرة", [2, 3, 4], 40],
-    ["مستشفى النيل بدر", "القاهرة", [2, 3], 30],
-    ["وحدة الطب الرياضي — المعادي", "القاهرة", [2, 3, 4], 36],
-    ["مستشفى الإسكندرية الدولي", "الإسكندرية", [2, 3], 28]
+    { ar: "مستشفى هليوبوليس التخصصي", en: "Heliopolis Specialized Hospital", gov: "القاهرة", lv: [2, 3, 4], cap: 40, dirAr: "د. سارة كامل", dirEn: "Dr. Sarah Kamel" },
+    { ar: "مستشفى النيل بدر", en: "Nile Badr Hospital", gov: "القاهرة", lv: [2, 3], cap: 30, dirAr: "د. وليد منير", dirEn: "Dr. Walid Mounir" },
+    { ar: "وحدة الطب الرياضي — المعادي", en: "Sports Medicine Unit — Maadi", gov: "القاهرة", lv: [2, 3, 4], cap: 36, dirAr: "د. ياسر الشافعي", dirEn: "Dr. Yasser El-Shafei" },
+    { ar: "مستشفى الإسكندرية الدولي", en: "Alexandria International Hospital", gov: "الإسكندرية", lv: [2, 3], cap: 28, dirAr: "د. نهى رشاد", dirEn: "Dr. Noha Rashad" }
   ];
   hn.forEach((h, i) => {
     hosps.push({
       id: "HS-" + (201 + i),
-      n: h[0],
-      gov: h[1],
-      lv: h[2],
-      cap: h[3],
-      dir: ["د. سارة كامل", "د. وليد منير", "د. ياسر الشافعي", "د. نهى رشاد"][i],
+      n: h.ar,
+      nEn: h.en,
+      gov: h.gov,
+      lv: h.lv,
+      cap: h.cap,
+      dir: h.dirAr,
+      dirEn: h.dirEn,
       ph: "02-2" + (1000000 + rnd(8999999)),
       st: i < 3 ? "on" : "pend"
     });

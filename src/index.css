@@ -714,7 +714,7 @@ h4, h5, h6, .font-headline {
 .ph {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;

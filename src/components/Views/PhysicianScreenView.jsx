@@ -48,7 +48,16 @@ export const PhysicianScreenView = () => {
             {L('الكشف والفحص الطبي الإكلينيكي', 'Clinical Examination & Medical Clearance')}
           </span>
           <h1>{L('شاشة الطبيب المعاين بوحدة الطب الرياضي', 'Examining Physician Console')}</h1>
-          <p>{h.n} · {h.dir} · {L('المستوى الطبي المعتمد: ', 'Medical clearance code: ')}{L(lv.ar, lv.en)}</p>
+          <p className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-[var(--muted)] mt-1">
+            <span>{isRTL ? h.n : h.nEn || h.n}</span>
+            <span className="text-[var(--muted)]/50">·</span>
+            <span>{isRTL ? h.dir : h.dirEn || h.dir}</span>
+            <span className="text-[var(--muted)]/50">·</span>
+            <span className="font-semibold text-[var(--ink)]">
+              {L('المستوى الطبي المعتمد: ', 'Medical clearance code: ')}
+            </span>
+            <span>{L(lv.ar, lv.en)}</span>
+          </p>
         </div>
       </div>
 
