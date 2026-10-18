@@ -74,7 +74,7 @@ export const CitizenMobileView = () => {
       <div
         className="mcard shadow-md p-4 text-white rounded-2xl relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #123B4A 0%, #087F8C 100%)',
+          background: 'var(--gradient)',
           border: 'none'
         }}
       >
@@ -83,7 +83,7 @@ export const CitizenMobileView = () => {
           <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px]">{todayFormatted()}</span>
         </div>
         <b className="text-base font-extrabold block text-white">{p.name}</b>
-        <div className="text-xs text-[#DDF4F1] mt-1 font-medium flex items-center gap-1.5 flex-wrap">
+        <div className="text-xs text-[var(--primary-100)] mt-1 font-medium flex items-center gap-1.5 flex-wrap">
           <span>{isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]}</span>
           <span>·</span>
           <span>{L(cfg.levels[p.lv - 1]?.ar, cfg.levels[p.lv - 1]?.en)}</span>
@@ -95,10 +95,10 @@ export const CitizenMobileView = () => {
       {/* Current Certificate Status Capsule */}
       <div className="mcard">
         <div className="flex items-center justify-between">
-          <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7]">
+          <b className="text-xs text-[var(--ink)]">
             {L('حالة الشهادة الطبية الرياضية', 'Medical Certificate Status')}
           </b>
-          <span className="mono text-xs font-bold text-[#087F8C] dark:text-[#7AD3DC]">
+          <span className="mono text-xs font-bold text-[var(--primary)]">
             {p.ct}
           </span>
         </div>
@@ -106,14 +106,14 @@ export const CitizenMobileView = () => {
           <span className="tag tg font-bold">
             {L('سارية حتى 14/10/2027', 'Valid until 14/10/2027')}
           </span>
-          <span className="text-[11px] text-[#16835F] font-bold">
+          <span className="text-[11px] text-[var(--success-dark)] font-bold">
             {L('لائق للمنافسات', 'Fit for sports')}
           </span>
         </div>
         <div className="bar mt-3 mb-1">
-          <b className="text-[11px] w-14 text-[#64748B]">{L('الصلاحية', 'Validity')}</b>
+          <b className="text-[11px] w-14 text-[var(--muted)]">{L('الصلاحية', 'Validity')}</b>
           <span className="tr">
-            <span className="fl bg-[#16A085]" style={{ width: '92%' }}></span>
+            <span className="fl bg-[var(--success)]" style={{ width: '92%' }}></span>
           </span>
           <i className="text-[11px] font-mono w-12">11 {L('شهر', 'mo')}</i>
         </div>
@@ -121,20 +121,20 @@ export const CitizenMobileView = () => {
 
       {/* Timeline Tracking */}
       <div className="mcard">
-        <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block mb-2">
+        <b className="text-xs text-[var(--ink)] block mb-2">
           {L('آخر الإجراءات الطبية المسجلة', 'Latest Medical Milestones')}
         </b>
-        <div className="text-[11.5px] text-[#64748B] dark:text-[#87A2B2] space-y-1.5 leading-relaxed">
+        <div className="text-[11.5px] text-[var(--muted)] space-y-1.5 leading-relaxed">
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#16835F] flex-none" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-[var(--success-dark)] flex-none" />
             <span>{L('تأكيد الحجز وسداد الرسوم', 'Booking confirmed')} — <span className="mono">{p.bk}</span></span>
           </div>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#16835F] flex-none" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-[var(--success-dark)] flex-none" />
             <span>{L('اكتمال الفحص الطبي', 'Exam completed')} — {h.n}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#16835F] flex-none" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-[var(--success-dark)] flex-none" />
             <span>{L('إصدار الشهادة الرقمية المعتمدة', 'Certificate issued')} — <span className="mono">{p.ct}</span></span>
           </div>
         </div>
@@ -169,25 +169,25 @@ export const CitizenMobileView = () => {
       const lv = cfg.levels[mDone.lv - 1] || cfg.levels[1];
       return (
         <div className="mcard text-center p-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#E4F7F2] text-[#16835F] flex items-center justify-center mx-auto mb-2 shadow-2xs">
+          <div className="w-14 h-14 rounded-2xl bg-[var(--success-bg)] text-[var(--success-dark)] flex items-center justify-center mx-auto mb-2 shadow-sm">
             <CheckCircle2 className="w-7 h-7" />
           </div>
-          <b className="text-sm text-[#123B4A] dark:text-[#EDF4F7] block">{L('تم تأكيد الحجز بنجاح', 'Booking Confirmed')}</b>
-          <div className="mono text-lg font-extrabold text-[#087F8C] my-1">
+          <b className="text-sm text-[var(--ink)] block">{L('تم تأكيد الحجز بنجاح', 'Booking Confirmed')}</b>
+          <div className="mono text-lg font-extrabold text-[var(--primary)] my-1">
             {mDone.bk}
           </div>
-          <div className="text-xs text-[#64748B] dark:text-[#87A2B2] leading-relaxed">
+          <div className="text-xs text-[var(--muted)] leading-relaxed">
             {mDone.hosp}<br />
             {mDone.slot.d} · {mDone.slot.f}
           </div>
-          <div className="mt-2 text-xs bg-[#F4F7FA] dark:bg-[#0E242E] p-2 rounded-lg border border-[#DCE5EC] dark:border-[#1D3A4B]">
+          <div className="mt-2 text-xs bg-[var(--bg)] p-2 rounded-lg border border-[var(--line)]">
             {L('رسم الكشف', 'Exam fee')} {lv.fee} + {L('رسم الميكنة', 'automation')} {cfg.autoFee} ={' '}
-            <b className="num text-[#087F8C]">{lv.fee + cfg.autoFee} {L('ج.م', 'EGP')}</b>
+            <b className="num text-[var(--primary)]">{lv.fee + cfg.autoFee} {L('ج.م', 'EGP')}</b>
           </div>
           <div className="my-3 flex justify-center">
             <QRCodeSVG seed={mDone.bk} size={90} />
           </div>
-          <p className="text-[10.5px] text-[#64748B]">
+          <p className="text-[10.5px] text-[var(--muted)]">
             {L('اعرض هذا الرمز لمكتب استقبال المستشفى عند الحضور', 'Show this ticket QR at hospital reception')}
           </p>
           <button
@@ -319,7 +319,7 @@ export const CitizenMobileView = () => {
                 ))}
               </select>
             </label>
-            <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block mb-2">
+            <b className="text-xs text-[var(--ink)] block mb-2">
               {L('المواعيد والفترات المتاحة للحجز', 'Available examination shifts')}
             </b>
             <div className="chips">
@@ -352,10 +352,10 @@ export const CitizenMobileView = () => {
 
         {mstep === 4 && (
           <div className="mcard">
-            <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block mb-2">
+            <b className="text-xs text-[var(--ink)] block mb-2">
               {L('إقرار الصحة والسلامة وقانون البيانات', 'Pre-exam Health & Legal Declaration')}
             </b>
-            <div className="space-y-1.5 mb-3 bg-[#F4F7FA] dark:bg-[#0E242E] p-2.5 rounded-lg border border-[#DCE5EC] dark:border-[#1D3A4B]">
+            <div className="space-y-1.5 mb-3 bg-[var(--bg)] p-2.5 rounded-lg border border-[var(--line)]">
               <label className="chk text-[11px] m-0">
                 <input type="checkbox" defaultChecked />
                 <span>{L('لا يوجد تاريخ لوفيات قلبية مفاجئة بالعائلة', 'No family history of sudden cardiac arrest')}</span>
@@ -380,9 +380,9 @@ export const CitizenMobileView = () => {
                   <td className="mut text-xs">{L('رسم الميكنة والشهادة المؤمنة', 'Digital automation fee')}</td>
                   <td className="num text-xs">{cfg.autoFee} {L('ج.م', 'EGP')}</td>
                 </tr>
-                <tr className="bg-[#DDF4F1]/30">
+                <tr className="bg-[var(--primary-50)]">
                   <td className="font-bold text-xs">{L('إجمالي الرسوم المستحقة', 'Total fees')}</td>
-                  <td className="num text-xs font-extrabold text-[#087F8C]">{250 + cfg.autoFee} {L('ج.م', 'EGP')}</td>
+                  <td className="num text-xs font-extrabold text-[var(--primary-700)]">{250 + cfg.autoFee} {L('ج.م', 'EGP')}</td>
                 </tr>
               </tbody>
             </table>
@@ -420,16 +420,16 @@ export const CitizenMobileView = () => {
   const renderCerts = () => (
     <div className="space-y-3">
       <div className="mcard p-4">
-        <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block mb-2">
+        <b className="text-xs text-[var(--ink)] block mb-2">
           {L('شهادة اللياقة الطبية الرقمية المعتمدة', 'Active Verified Digital Certificate')}
         </b>
-        <div className="flex gap-3 items-center mt-2 bg-[#F0F9F8] dark:bg-[#0E242E] p-3 rounded-xl border border-[#DCE5EC] dark:border-[#1D3A4B]">
+        <div className="flex gap-3 items-center mt-2 bg-[var(--bg)] p-3 rounded-xl border border-[var(--line)]">
           <QRCodeSVG seed={p.ct} size={76} />
           <div className="text-xs space-y-1">
-            <b className="mono text-xs text-[#087F8C] block">{p.ct}</b>
+            <b className="mono text-xs text-[var(--primary)] block">{p.ct}</b>
             <span className="tag tg font-bold text-[10.5px]">{L('سارية المفعول', 'Valid')}</span>
-            <div className="text-[11px] text-[#64748B]">
-              {L('صالحة حتى: ', 'Expires: ')}<b className="text-[#123B4A] dark:text-[#EDF4F7]">14/10/2027</b>
+            <div className="text-[11px] text-[var(--muted)]">
+              {L('صالحة حتى: ', 'Expires: ')}<b className="text-[var(--ink)]">14/10/2027</b>
             </div>
           </div>
         </div>
@@ -451,15 +451,15 @@ export const CitizenMobileView = () => {
       </div>
 
       <div className="mcard">
-        <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block mb-2">
+        <b className="text-xs text-[var(--ink)] block mb-2">
           {L('سجل الشهادات السابقة للرياضي', 'Historical Certificates')}
         </b>
-        <div className="text-xs text-[#64748B] space-y-2">
-          <div className="flex items-center justify-between p-2 rounded-lg bg-[#F4F7FA] dark:bg-[#0E242E]">
+        <div className="text-xs text-[var(--muted)] space-y-2">
+          <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--bg)]">
             <span className="mono font-semibold">SH-25-000912</span>
             <span className="tag tgy">{L('منتهية', 'Expired')}</span>
           </div>
-          <div className="flex items-center justify-between p-2 rounded-lg bg-[#F4F7FA] dark:bg-[#0E242E]">
+          <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--bg)]">
             <span className="mono font-semibold">SH-24-003301</span>
             <span className="tag tgy">{L('منتهية', 'Expired')}</span>
           </div>
@@ -471,7 +471,7 @@ export const CitizenMobileView = () => {
   const renderConsents = () => (
     <div className="mcard space-y-3">
       <div>
-        <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block">
+        <b className="text-xs text-[var(--ink)] block">
           {L('إدارة تفويضات وموافقات الاطلاع', 'Privacy & Access Consents')}
         </b>
         <div className="nt text-[10.5px] leading-relaxed my-2">
@@ -486,10 +486,10 @@ export const CitizenMobileView = () => {
         {consents.map((c, i) => (
           <div
             key={i}
-            className="flex items-center justify-between p-2.5 rounded-lg border border-[#DCE5EC] dark:border-[#1D3A4B] bg-[#F4F7FA] dark:bg-[#0E242E]"
+            className="flex items-center justify-between p-2.5 rounded-lg border border-[var(--line)] bg-[var(--bg)]"
           >
             <div className="text-xs">
-              <b className="text-[#123B4A] dark:text-[#EDF4F7] block">{c.to}</b>
+              <b className="text-[var(--ink)] block">{c.to}</b>
               <span className="mut text-[10.5px]">
                 {L(cfg.scopes[c.sc]?.[0], cfg.scopes[c.sc]?.[1])} · {L(cfg.durs[c.du]?.[0], cfg.durs[c.du]?.[1])}
               </span>
@@ -503,7 +503,7 @@ export const CitizenMobileView = () => {
         ))}
       </div>
 
-      <div className="pt-2 border-t border-[#DCE5EC] dark:border-[#1D3A4B]">
+      <div className="pt-2 border-t border-[var(--line)]">
         <label className="f mb-2">
           <span>{L('منح جهة رياضية جديدة صلاحية الاطلاع', 'Grant new entity access')}</span>
           <input placeholder={L('اكتب اسم النادي / الأكاديمية…', 'Club or academy name…')} className="text-xs" />
@@ -536,7 +536,7 @@ export const CitizenMobileView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <Smartphone className="w-3.5 h-3.5 text-[#087F8C]" />
+            <Smartphone className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('قناة المواطن الرقمية الموحدة', 'Unified Citizen Mobile Channel')}
           </span>
           <h1>{L('تطبيق المواطن — واجهة الهاتف الذكي', 'Citizen Mobile Experience')}</h1>
@@ -555,7 +555,7 @@ export const CitizenMobileView = () => {
           <span className="notch"></span>
           <div className="phd">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#16A085] animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-[var(--success)] animate-pulse"></span>
               <b>{L('منظومة صحة للرياضيين', 'Seha SportsMed')}</b>
             </div>
             <span className="flex-1"></span>

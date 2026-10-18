@@ -40,7 +40,7 @@ export const IC = {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <rect x="3.5" y="4" width="17" height="14" rx="2"/>
       <path d="M7 9h10M7 12.5h6"/>
-      <circle cx="17" cy="19" r="2.6" fill="#fff" strokeWidth="1.8"/>
+      <circle cx="17" cy="19" r="2.6" fill="var(--card)" strokeWidth="1.8"/>
     </svg>
   ),
   scan: (
@@ -178,9 +178,9 @@ export const IC = {
 
 export const LOGO_SVG = (
   <svg viewBox="0 0 48 48" width="34" height="34" fill="none" aria-label="Seha" style={{ flex: 'none' }}>
-    <rect x="2" y="2" width="44" height="44" rx="12" fill="#123B4A"/>
-    <circle cx="24" cy="24" r="15" stroke="#087F8C" strokeWidth="2.2"/>
-    <path d="M11 24h5.5l2.5-6 5 12 3.5-9 2 3H37" stroke="#16A085" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="2" y="2" width="44" height="44" rx="12" fill="var(--primary-600)"/>
+    <circle cx="24" cy="24" r="15" stroke="var(--primary-300)" strokeWidth="2.2"/>
+    <path d="M11 24h5.5l2.5-6 5 12 3.5-9 2 3H37" stroke="var(--card)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
@@ -188,7 +188,7 @@ export const ECG_SVG = (
   <svg className="ecg" viewBox="0 0 700 250" preserveAspectRatio="none" fill="none">
     <path
       d="M0 170h150l25-50 25 100 30-150 30 170 25-70 20 20h60l20-40 20 60 25-90 25 120 20-40 25 20h180"
-      stroke="#087F8C"
+      stroke="var(--primary-300)"
       strokeWidth="2.4"
       strokeLinejoin="round"
       strokeLinecap="round"

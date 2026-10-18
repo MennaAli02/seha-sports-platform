@@ -4,10 +4,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
 import { LOGO_SVG } from '../../data/icons';
 import { todayFormatted } from '../../data/mockData';
-import { Sun, Moon, Search, HelpCircle, Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Sun, Moon, Search, HelpCircle, Menu, PanelLeftClose, Bell } from 'lucide-react';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
-  const { language, toggleLanguage, isRTL, L } = useLanguage();
+  const { toggleLanguage, isRTL, L } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
   const { currentRoute, cfg, sidebarExpanded, toggleSidebar } = useSeha();
 
@@ -46,7 +46,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
       {/* Sidebar toggle button */}
       <button
         onClick={toggleSidebar}
-        className="p-2 text-[#64748B] hover:text-[#123B4A] dark:text-[#87A2B2] dark:hover:text-[#EDF4F7] hover:bg-[#DDF4F1]/40 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+        className="p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-xl transition-colors cursor-pointer"
         title={sidebarExpanded ? (isRTL ? 'طي القائمة' : 'Collapse sidebar') : (isRTL ? 'توسيع القائمة' : 'Expand sidebar')}
         aria-label="Toggle navigation menu"
       >
@@ -61,8 +61,8 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
       <div className="brand">
         {LOGO_SVG}
         <div>
-          <b>{L(cfg.org.ar, cfg.org.en)}</b>
-          <small>
+          <b style={{ color: 'var(--ink)' }}>{L(cfg.org.ar, cfg.org.en)}</b>
+          <small style={{ color: 'var(--muted)' }}>
             {L(cfg.org.sub.ar, cfg.org.sub.en)} · {L(cfg.org.decree.ar, cfg.org.decree.en)}
           </small>
         </div>
@@ -75,23 +75,34 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
         <b>{getRouteTitle()}</b>
       </div>
 
-      {/* Search trigger with shortcut pill */}
+      {/* Action controls */}
       <div className="flex items-center gap-2 no-print">
+        {/* Search trigger with shortcut pill */}
         <button
           onClick={onOpenSearch}
-          className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#64748B] hover:text-[#123B4A] dark:text-[#87A2B2] dark:hover:text-[#EDF4F7] bg-[#F4F7FA] dark:bg-[#0E242E] hover:bg-[#DDF4F1]/40 dark:hover:bg-[#143542] rounded-lg border border-[#DCE5EC] dark:border-[#1D3A4B] transition-all cursor-pointer shadow-2xs"
+          className="flex items-center gap-2 px-3 py-1.5 text-xs text-[var(--muted)] hover:text-[var(--ink)] bg-[var(--primary-50)] hover:bg-[var(--primary-100)] rounded-full border border-[var(--line)] transition-all cursor-pointer"
           title={isRTL ? 'بحث سريع (Ctrl + K)' : 'Quick search (Ctrl + K)'}
         >
-          <Search className="w-3.5 h-3.5" />
+          <Search className="w-3.5 h-3.5 text-[var(--primary)]" />
           <span className="hidden sm:inline font-medium">{isRTL ? 'بحث...' : 'Search...'}</span>
-          <kbd className="hidden md:inline-block text-[10px] font-mono px-1.5 py-0.5 bg-white dark:bg-[#132631] border border-[#DCE5EC] dark:border-[#1D3A4B] rounded text-[#64748B] dark:text-[#87A2B2]">
+          <kbd className="hidden md:inline-block text-[10px] font-mono px-1.5 py-0.5 bg-[var(--card)] border border-[var(--line)] rounded-full text-[var(--muted)]">
             ⌘K
           </kbd>
         </button>
 
+        {/* Notifications / Help with small red notification dot */}
         <button
           onClick={onOpenHelp}
-          className="p-2 text-[#64748B] hover:text-[#123B4A] dark:text-[#87A2B2] dark:hover:text-[#EDF4F7] hover:bg-[#DDF4F1]/40 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+          className="relative p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-full transition-colors cursor-pointer"
+          title={isRTL ? 'الإشعارات والدليل' : 'Notifications & Guide'}
+        >
+          <Bell className="w-4 h-4" />
+          <span className="notif-dot" />
+        </button>
+
+        <button
+          onClick={onOpenHelp}
+          className="p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-full transition-colors cursor-pointer"
           title={isRTL ? 'الدليل والقرارات' : 'Guide & Decree'}
         >
           <HelpCircle className="w-4 h-4" />
@@ -99,7 +110,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
 
         <button
           onClick={toggleTheme}
-          className="p-2 text-[#64748B] hover:text-[#123B4A] dark:text-[#87A2B2] dark:hover:text-[#EDF4F7] hover:bg-[#DDF4F1]/40 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+          className="p-2 text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] rounded-full transition-colors cursor-pointer"
           title={isDark ? (isRTL ? 'الوضع النهاري' : 'Light mode') : (isRTL ? 'الوضع الليلي' : 'Dark mode')}
         >
           {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}

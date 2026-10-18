@@ -127,7 +127,7 @@ export const PlatformSetupView = () => {
                     border: '1px solid var(--line)',
                     borderRadius: '14px',
                     padding: '16px',
-                    background: '#FAFCFE',
+                    background: 'var(--primary-50)',
                     boxShadow: '0 1px 3px rgba(18, 59, 74, 0.04)'
                   }}
                 >
@@ -147,7 +147,7 @@ export const PlatformSetupView = () => {
                         height: '24px', 
                         borderRadius: '6px', 
                         background: 'var(--brand)', 
-                        color: '#FFFFFF', 
+                        color: 'var(--card)', 
                         fontSize: '11px', 
                         fontWeight: 800, 
                         display: 'flex', 
@@ -270,7 +270,7 @@ export const PlatformSetupView = () => {
         {/* Tab 2: Sports & Governorates */}
         {setupTab === 'lists' && (
           <div className="g2" style={{ gap: '24px' }}>
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>
                 {L('الألعاب الرياضية المعتمدة', 'Accredited Sports')}
@@ -345,7 +345,7 @@ export const PlatformSetupView = () => {
               </div>
             </div>
 
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>
                 {L('المحافظات والتغطية الجغرافية', 'Governorates & Coverage')}
@@ -528,7 +528,7 @@ export const PlatformSetupView = () => {
         {/* Tab 4: Payments & Consents */}
         {setupTab === 'ops' && (
           <div className="g3" style={{ gap: '20px' }}>
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>
                 {L('بوابات الدفع الإلكتروني المعتمدة', 'Payment Gateways')}
@@ -544,7 +544,7 @@ export const PlatformSetupView = () => {
               </div>
             </div>
 
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>
                 {L('نطاقات الاطلاع القانونية', 'Authorized Access Scopes')}
@@ -567,7 +567,7 @@ export const PlatformSetupView = () => {
               </div>
             </div>
 
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>
                 {L('أسباب التحويل لمسار «أشبالنا»', 'Ashbalna Referral Reasons')}
@@ -592,7 +592,7 @@ export const PlatformSetupView = () => {
         {/* Tab 5: Security & Audit */}
         {setupTab === 'sec' && (
           <div className="g2" style={{ gap: '20px' }}>
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>
                 {L('منظومة الضوابط الأمنية والامتثال الحكومي', 'Security Controls & Regulatory Compliance')}
@@ -655,7 +655,7 @@ export const PlatformSetupView = () => {
               </div>
             </div>
 
-            <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
+            <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                 <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                   <span className="d"></span>

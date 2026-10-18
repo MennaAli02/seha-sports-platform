@@ -28,7 +28,7 @@ export const PublicVerificationView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#087F8C]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('بوابة الثقة العامة والأمان', 'Public Trust & Verification Portal')}
           </span>
           <h1>{L('التحقق العام المباشر من صحة الشهادات الطبية', 'Instant Public Certificate Verification')}</h1>
@@ -42,10 +42,10 @@ export const PublicVerificationView = () => {
       </div>
 
       <div className="card max-w-2xl mx-auto text-center p-6 sm:p-8 shadow-sm">
-        <div className="w-14 h-14 rounded-2xl bg-[#DDF4F1] dark:bg-[#143542] text-[#087F8C] dark:text-[#7AD3DC] flex items-center justify-center mx-auto mb-4 shadow-2xs">
+        <div className="w-14 h-14 rounded-2xl bg-[var(--primary-50)] text-[var(--primary)] flex items-center justify-center mx-auto mb-4 shadow-sm">
           <ShieldCheck className="w-7 h-7" />
         </div>
-        <h2 className="text-lg sm:text-xl font-bold text-[#123B4A] dark:text-[#EDF4F7] mb-1">
+        <h2 className="text-lg sm:text-xl font-bold text-[var(--ink)] mb-1">
           {L('أدخل رقم الشهادة أو امسح الرمز (QR)', 'Enter Certificate Number or Scan QR')}
         </h2>
         <p className="mut text-xs max-w-md mx-auto mb-5">
@@ -80,7 +80,7 @@ export const PublicVerificationView = () => {
             {L('مثال تجريبي: شهادة سارية وموثقة', 'Sample: valid certificate')}
           </button>
           <button
-            className="chip text-xs text-[#C2414B] border-[#C2414B]/30"
+            className="chip text-xs text-[var(--danger-dark)] border-[var(--danger)]/30"
             onClick={() => {
               setVq('XX-99-0000');
               doV('XX-99-0000');
@@ -94,17 +94,17 @@ export const PublicVerificationView = () => {
           <div
             className={`mt-6 text-start rounded-xl p-5 border transition-all ${
               verifyR.ok
-                ? 'border-[#16A085]/40 bg-[#F0FAF5] dark:bg-[#113B35]/40'
-                : 'border-[#C2414B]/40 bg-[#FDECEE] dark:bg-[#3D181C]/40'
+                ? 'border-[var(--success)]/40 bg-[var(--success-bg)]'
+                : 'border-[var(--danger)]/40 bg-[var(--danger-bg)]'
             }`}
           >
             <div className="flex items-center gap-2 mb-3">
               {verifyR.ok ? (
-                <CheckCircle2 className="w-6 h-6 text-[#16835F] dark:text-[#20A77A] flex-none" />
+                <CheckCircle2 className="w-6 h-6 text-[var(--success-dark)] flex-none" />
               ) : (
-                <ShieldAlert className="w-6 h-6 text-[#C2414B] dark:text-[#E55863] flex-none" />
+                <ShieldAlert className="w-6 h-6 text-[var(--danger-dark)] flex-none" />
               )}
-              <h3 className={`m-0 text-base font-bold ${verifyR.ok ? 'text-[#16835F] dark:text-[#20A77A]' : 'text-[#C2414B] dark:text-[#E55863]'}`}>
+              <h3 className={`m-0 text-base font-bold ${verifyR.ok ? 'text-[var(--success-dark)]' : 'text-[var(--danger-dark)]'}`}>
                 {verifyR.ok
                   ? L('شهادة طبية رياضية سارية وموثقة بالسجل الوطني', 'Valid & Authenticated Sports Medical Certificate')
                   : L('الشهادة غير مطابقة — غير موجودة بالسجل الرسمي', 'Certificate Not Found in Official Registry')}
@@ -113,11 +113,11 @@ export const PublicVerificationView = () => {
 
             {verifyR.ok ? (
               <>
-                <table className="t bg-white dark:bg-[#132631] rounded-lg overflow-hidden border border-[#DCE5EC] dark:border-[#1D3A4B]">
+                <table className="t bg-[var(--card)] rounded-lg overflow-hidden border border-[var(--line)]">
                   <tbody>
                     <tr>
                       <td className="mut font-semibold w-1/3">{L('رقم الشهادة الموحد', 'Certificate no.')}</td>
-                      <td className="mono font-bold text-[#087F8C]">{verifyR.c}</td>
+                      <td className="mono font-bold text-[var(--primary)]">{verifyR.c}</td>
                     </tr>
                     <tr>
                       <td className="mut font-semibold">{L('اسم الرياضي', 'Athlete name')}</td>
@@ -140,9 +140,9 @@ export const PublicVerificationView = () => {
                   </tbody>
                 </table>
 
-                <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-[#DCE5EC]/60 dark:border-[#1D3A4B]/60 flex-wrap">
-                  <div className="flex items-center gap-1.5 text-xs text-[#64748B] dark:text-[#87A2B2]">
-                    <Lock className="w-3.5 h-3.5 text-[#087F8C]" />
+                <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-[var(--line)] flex-wrap">
+                  <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
+                    <Lock className="w-3.5 h-3.5 text-[var(--primary)]" />
                     <span>
                       {L(
                         'تُعرض حالة اللياقة والصلاحية فقط حمايةً للخصوصية وسرية الملف الطبي (قانون 151/2020).',
@@ -163,7 +163,7 @@ export const PublicVerificationView = () => {
                 </div>
               </>
             ) : (
-              <div className="text-center py-3 text-xs text-[#C2414B] dark:text-[#E55863] leading-relaxed">
+              <div className="text-center py-3 text-xs text-[var(--danger-dark)] leading-relaxed">
                 <p className="font-semibold mb-1">
                   {L(
                     'تنبيه: هذا الرقم لا يطابق أي شهادة صادرة عن منظومة «صحة» الرسمية.',

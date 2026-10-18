@@ -88,15 +88,15 @@ export const ReportsCenterView = () => {
   );
 
   const numCard = (n, t, p) => (
-    <div className="scard" style={{ border: '1px solid var(--line)', background: '#FFFFFF' }}>
-      <div className="n" style={{ background: 'var(--brand)', color: '#FFFFFF', fontWeight: 800 }}>{n}</div>
+    <div className="scard" style={{ border: '1px solid var(--line)', background: 'var(--card)' }}>
+      <div className="n" style={{ background: 'var(--brand)', color: 'var(--card)', fontWeight: 800 }}>{n}</div>
       <b style={{ color: 'var(--brand)', fontSize: '14px' }}>{t}</b>
       <p style={{ color: 'var(--muted)', fontSize: '12px', lineHeight: 1.5, margin: 0 }}>{p}</p>
     </div>
   );
 
   const icCard = (ic, t, p) => (
-    <div className="scard" style={{ border: '1px solid var(--line)', background: '#FFFFFF' }}>
+    <div className="scard" style={{ border: '1px solid var(--line)', background: 'var(--card)' }}>
       <div style={{ color: 'var(--primary)', marginBottom: '8px' }}>
         {IC[ic]}
       </div>
@@ -131,13 +131,13 @@ export const ReportsCenterView = () => {
       <thead>
         <tr>
           {heads.map((h, i) => (
-            <th key={i} style={{ background: 'var(--brand)', color: '#FFFFFF', padding: '10px 14px', fontWeight: 700, fontSize: '12.5px' }}>{h}</th>
+            <th key={i} style={{ background: 'var(--primary-50)', color: 'var(--primary-700)', padding: '10px 14px', fontWeight: 700, fontSize: '12.5px' }}>{h}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         {rows.map((row, i) => (
-          <tr key={i} style={{ background: i % 2 === 1 ? 'rgba(244, 247, 250, 0.7)' : '#FFFFFF' }}>
+          <tr key={i} style={{ background: i % 2 === 1 ? 'rgba(240, 244, 254, 0.5)' : 'var(--card)' }}>
             {row.map((cell, j) => (
               <td key={j} style={{ padding: '9px 14px', borderBottom: '1px solid var(--line)', fontSize: '12.5px' }}>{cell}</td>
             ))}
@@ -679,7 +679,7 @@ export const ReportsCenterView = () => {
                 ))}
               </div>
               <div className="sgrid" style={{ gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '18px' }}>
-                <div className="sc hi" style={{ background: 'var(--brand)', color: '#FFFFFF' }}>
+                <div className="sc hi" style={{ background: 'var(--brand)', color: 'var(--card)' }}>
                   <b style={{ fontSize: '15px' }}>{L('بوابة القرار بعد التجريبي', 'Go / no-go gate after pilot')}</b>
                   <p className="mut" style={{ marginTop: '6px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.8)' }}>
                     {L(

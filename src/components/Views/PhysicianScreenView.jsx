@@ -44,7 +44,7 @@ export const PhysicianScreenView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <Stethoscope className="w-3.5 h-3.5 text-[#087F8C]" />
+            <Stethoscope className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('الكشف والفحص الطبي الإكلينيكي', 'Clinical Examination & Medical Clearance')}
           </span>
           <h1>{L('شاشة الطبيب المعاين بوحدة الطب الرياضي', 'Examining Physician Console')}</h1>
@@ -74,7 +74,7 @@ export const PhysicianScreenView = () => {
       {examStep === 1 && (
         <div className="card max-w-2xl">
           <div className="flex items-center gap-2 mb-3">
-            <QrCode className="w-5 h-5 text-[#087F8C]" />
+            <QrCode className="w-5 h-5 text-[var(--primary)]" />
             <h3 className="m-0 text-base">{L('التحقق من تذكرة الحجز ومطابقة هوية الرياضي', 'Booking Verification & Biometric ID Match')}</h3>
           </div>
           <p className="mut text-xs mb-4">
@@ -100,13 +100,13 @@ export const PhysicianScreenView = () => {
           </button>
 
           {dshow && (
-            <div className="mt-4 pt-4 border-t border-[#DCE5EC] dark:border-[#1D3A4B]">
+            <div className="mt-4 pt-4 border-t border-[var(--line)]">
               <div className="nt ok flex items-start gap-2.5">
-                <CheckCircle2 className="w-5 h-5 text-[#16835F] flex-none mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-[var(--success-dark)] flex-none mt-0.5" />
                 <div className="text-xs leading-relaxed">
-                  <b className="text-sm text-[#123B4A] dark:text-[#EDF4F7] block">{p.name}</b>
+                  <b className="text-sm text-[var(--ink)] block">{p.name}</b>
                   <span>{p.age} {L('سنة', 'y')} · {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]} · {L(lv.ar, lv.en)}</span>
-                  <div className="mt-1 font-semibold text-[#16835F] dark:text-[#20A77A]">
+                  <div className="mt-1 font-semibold text-[var(--success-dark)]">
                     {L('✓ مطابقة الهوية: ناجحة · الدفع الإلكتروني: مسدد · إقرار ولي الأمر: موقع رسميًا', '✓ ID Match: OK · Payment: Settled · Guardian Declaration: Signed')}
                   </div>
                 </div>
@@ -128,7 +128,7 @@ export const PhysicianScreenView = () => {
               <span className="d"></span>
               {L(lv.ar, lv.en)}
             </h3>
-            <span className="text-xs font-semibold text-[#087F8C] bg-[#DDF4F1] dark:bg-[#143542] px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-[var(--primary-700)] bg-[var(--primary-50)] px-2.5 py-1 rounded-full">
               {lv.ex.length} {L('فحوصات مطلوبة', 'mandatory tests')}
             </span>
           </div>
@@ -146,15 +146,15 @@ export const PhysicianScreenView = () => {
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-between gap-3 p-3 rounded-xl border border-[#DCE5EC] dark:border-[#1D3A4B] bg-[#F4F7FA] dark:bg-[#0E242E] flex-wrap"
+                  className="flex items-center justify-between gap-3 p-3 rounded-xl border border-[var(--line)] bg-[var(--bg)] flex-wrap"
                 >
-                  <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] flex-1">{e}</b>
+                  <b className="text-xs text-[var(--ink)] flex-1">{e}</b>
                   <div className="flex items-center gap-2">
                     <button
                       className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                         v === 1
-                          ? 'bg-[#16835F] text-white shadow-xs'
-                          : 'bg-white dark:bg-[#132631] text-[#64748B] border border-[#DCE5EC] dark:border-[#1D3A4B]'
+                          ? 'bg-[var(--success)] text-white shadow-xs'
+                          : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--line)]'
                       }`}
                       onClick={() => setExamRes({ ...examRes, [i]: 1 })}
                     >
@@ -163,14 +163,14 @@ export const PhysicianScreenView = () => {
                     <button
                       className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                         v === 0
-                          ? 'bg-[#C2414B] text-white shadow-xs'
-                          : 'bg-white dark:bg-[#132631] text-[#C2414B] border border-[#C2414B]/30'
+                          ? 'bg-[var(--danger)] text-white shadow-xs'
+                          : 'bg-[var(--card)] text-[var(--danger-dark)] border border-[var(--danger)]/30'
                       }`}
                       onClick={() => setExamRes({ ...examRes, [i]: 0 })}
                     >
                       {L('ملاحظة / غير طبيعي', 'Abnormal')}
                     </button>
-                    <label className="btn ghost sm p-1.5 cursor-pointer text-[#087F8C]" title={L('إرفاق صورة أو تخطيط', 'Attach photo/strip')}>
+                    <label className="btn ghost sm p-1.5 cursor-pointer text-[var(--primary)]" title={L('إرفاق صورة أو تخطيط', 'Attach photo/strip')}>
                       <Camera className="w-4 h-4" />
                       <input
                         type="file"
@@ -212,7 +212,7 @@ export const PhysicianScreenView = () => {
 
           {abn > 0 ? (
             <div className="nt wr flex items-start gap-2 mb-4">
-              <AlertTriangle className="w-5 h-5 text-[#B77912] flex-none mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-[var(--warning-dark)] flex-none mt-0.5" />
               <div className="text-xs">
                 <b>{L('تنبيه: تم رصد نتائج غير طبيعية بالفحص', 'Warning: Abnormal clinical findings detected')}</b>
                 <p className="mt-0.5">
@@ -228,7 +228,7 @@ export const PhysicianScreenView = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
             <button
-              className="p-4 rounded-xl border-2 border-[#16A085] bg-[#E4F7F2] dark:bg-[#113B35] text-[#16835F] dark:text-[#20A77A] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
+              className="p-4 rounded-xl border-2 border-[var(--success)] bg-[var(--success-bg)] text-[var(--success-dark)] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
               onClick={() => docDo('fit')}
             >
               <CheckCircle2 className="w-7 h-7" />
@@ -236,7 +236,7 @@ export const PhysicianScreenView = () => {
             </button>
 
             <button
-              className="p-4 rounded-xl border-2 border-[#B77912] bg-[#FEF7E8] dark:bg-[#3D2C10] text-[#B77912] dark:text-[#E09A20] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
+              className="p-4 rounded-xl border-2 border-[var(--warning)] bg-[var(--warning-bg)] text-[var(--warning-dark)] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
               onClick={() => docDo('cond')}
             >
               <HeartPulse className="w-7 h-7" />
@@ -244,7 +244,7 @@ export const PhysicianScreenView = () => {
             </button>
 
             <button
-              className="p-4 rounded-xl border-2 border-[#C2414B] bg-[#FDECEE] dark:bg-[#3D181C] text-[#C2414B] dark:text-[#E55863] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
+              className="p-4 rounded-xl border-2 border-[var(--danger)] bg-[var(--danger-bg)] text-[var(--danger-dark)] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
               onClick={() => docDo('unfit')}
             >
               <XCircle className="w-7 h-7" />
@@ -253,7 +253,7 @@ export const PhysicianScreenView = () => {
           </div>
 
           {rf && (
-            <div className="p-4 rounded-xl border border-[#DCE5EC] dark:border-[#1D3A4B] bg-[#F4F7FA] dark:bg-[#0E242E] space-y-3 mt-4">
+            <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)] space-y-3 mt-4">
               <label className="f m-0">
                 <span>{L('سبب التحويل لمسار أشبالنا (سري — لا يظهر للنادي حفاظًا على الخصوصية)', 'Referral clinical reason (confidential — protected per Law 151/2020)')}</span>
                 <select
@@ -280,7 +280,7 @@ export const PhysicianScreenView = () => {
             </div>
           )}
 
-          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-[#DCE5EC] dark:border-[#1D3A4B]">
+          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-[var(--line)]">
             <button className="btn ghost" onClick={() => setExamStep(2)}>
               {L('رجوع لتعديل الفحوصات', 'Back to tests')}
             </button>
@@ -293,13 +293,13 @@ export const PhysicianScreenView = () => {
         <div className="card max-w-xl mx-auto text-center p-8 shadow-md">
           {exKind === 'fit' ? (
             <>
-              <div className="w-16 h-16 rounded-2xl bg-[#E4F7F2] text-[#16835F] flex items-center justify-center mx-auto mb-4 shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-[var(--success-bg)] text-[var(--success-dark)] flex items-center justify-center mx-auto mb-4 shadow-sm">
                 <CheckCircle2 className="w-9 h-9" />
               </div>
-              <h3 className="justify-center text-lg text-[#16835F]">
+              <h3 className="justify-center text-lg text-[var(--success-dark)]">
                 {L('تم اعتماد النتيجة وإصدار الشهادة الطبية المؤمنة', 'Clinical Clearance Approved — Certificate Issued')}
               </h3>
-              <p className="mono text-2xl font-extrabold text-[#087F8C] my-2">
+              <p className="mono text-2xl font-extrabold text-[var(--primary)] my-2">
                 SH-26-004652
               </p>
               <p className="mut text-xs max-w-md mx-auto leading-relaxed">
@@ -311,15 +311,15 @@ export const PhysicianScreenView = () => {
             </>
           ) : (
             <>
-              <div className="w-16 h-16 rounded-2xl bg-[#FEF7E8] text-[#B77912] flex items-center justify-center mx-auto mb-4 shadow-xs">
+              <div className="w-16 h-16 rounded-2xl bg-[var(--warning-bg)] text-[var(--warning-dark)] flex items-center justify-center mx-auto mb-4 shadow-sm">
                 <HeartPulse className="w-9 h-9" />
               </div>
-              <h3 className="justify-center text-lg text-[#B77912]">
+              <h3 className="justify-center text-lg text-[var(--warning-dark)]">
                 {L('تم فتح ملف رعاية ومتابعة في برنامج «أشبالنا»', 'Ashbalna Specialized Follow-up Care File Activated')}
               </h3>
               <p className="mut text-xs max-w-md mx-auto leading-relaxed my-2">
                 {L('المرحلة المسجلة: ', 'Registered stage: ')}
-                <b className="text-[#123B4A] dark:text-[#EDF4F7]">{L(cfg.stages[0][0], cfg.stages[0][1])}</b>
+                <b className="text-[var(--ink)]">{L(cfg.stages[0][0], cfg.stages[0][1])}</b>
                 <br />
                 {L(
                   'يراعي النظام خصوصية الرياضي: يظهر للنادي وصف «لائق بشروط» دون أي تفاصيل تشخيصية مرضية.',
@@ -329,7 +329,7 @@ export const PhysicianScreenView = () => {
             </>
           )}
 
-          <div className="flex items-center justify-center gap-3 mt-6 pt-4 border-t border-[#DCE5EC] dark:border-[#1D3A4B]">
+          <div className="flex items-center justify-center gap-3 mt-6 pt-4 border-t border-[var(--line)]">
             <button className="btn sec" onClick={() => navigate('hosp')}>
               {L('العودة لبوابة المستشفى', 'Hospital portal')}
             </button>

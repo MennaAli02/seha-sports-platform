@@ -58,18 +58,20 @@ export default function App() {
   };
 
   return (
-    <>
-      <TopNavBar
-        onOpenSearch={() => setIsSearchOpen(true)}
-        onOpenHelp={() => setIsHelpOpen(true)}
-      />
-      <div id="shell">
-        <SideNavBar />
-        <main id="main">
-          <ErrorBoundary onNavigateHome={() => navigate('dash')}>
-            {renderActiveView()}
-          </ErrorBoundary>
-        </main>
+    <div className="app-shell-wrapper">
+      <div className="app-floating-container">
+        <TopNavBar
+          onOpenSearch={() => setIsSearchOpen(true)}
+          onOpenHelp={() => setIsHelpOpen(true)}
+        />
+        <div id="shell">
+          <SideNavBar />
+          <main id="main">
+            <ErrorBoundary onNavigateHome={() => navigate('dash')}>
+              {renderActiveView()}
+            </ErrorBoundary>
+          </main>
+        </div>
       </div>
 
       <QuickSearchModal
@@ -81,6 +83,6 @@ export default function App() {
         onClose={() => setIsHelpOpen(false)}
       />
       <Toast />
-    </>
+    </div>
   );
 }

@@ -46,7 +46,7 @@ export const CertificateRegistryView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-[#087F8C]" />
+            <Award className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('السجل الوطني الموحد', 'National Unified Registry')}
           </span>
           <h1>{L('سجل الشهادات الطبية الرياضية الموثقة', 'Sports Medical Certificate Registry')}</h1>
@@ -101,7 +101,7 @@ export const CertificateRegistryView = () => {
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4 np">
           <div className="flex items-center gap-2 flex-1 max-w-xl">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 text-[#64748B] absolute top-1/2 -translate-y-1/2 start-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3 pointer-events-none" />
               <input
                 id="cq"
                 type="text"
@@ -134,7 +134,7 @@ export const CertificateRegistryView = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-[#64748B] dark:text-[#87A2B2]">
+            <span className="text-xs font-semibold text-[var(--muted)]">
               {list.length} {L('شهادة مطابقة', 'matching records')}
             </span>
           </div>
@@ -160,9 +160,9 @@ export const CertificateRegistryView = () => {
         </div>
 
         {list.length === 0 ? (
-          <div className="text-center py-12 border border-dashed border-[#DCE5EC] dark:border-[#1D3A4B] rounded-xl my-4">
-            <FileText className="w-10 h-10 text-[#64748B] mx-auto mb-2 opacity-50" />
-            <b className="text-base text-[#123B4A] dark:text-[#EDF4F7] block">
+          <div className="text-center py-12 border border-dashed border-[var(--line)] rounded-xl my-4">
+            <FileText className="w-10 h-10 text-[var(--muted)] mx-auto mb-2 opacity-50" />
+            <b className="text-base text-[var(--ink)] block">
               {L('لم يتم العثور على سجلات مطابقة', 'No matching certificate records found')}
             </b>
             <p className="mut text-xs mt-1">
@@ -189,31 +189,31 @@ export const CertificateRegistryView = () => {
                 {list.slice(0, 40).map((p) => {
                   const i = players.indexOf(p);
                   return (
-                    <tr key={p.id} className="hover:bg-[#087F8C]/5 transition-colors">
-                      <td className="mono font-bold text-xs text-[#087F8C] dark:text-[#7AD3DC]">
+                    <tr key={p.id} className="hover:bg-[var(--primary-50)]/50 transition-colors">
+                      <td className="mono font-bold text-xs text-[var(--primary)]">
                         {p.st === 'book' ? '—' : p.ct}
                       </td>
                       <td>
-                        <b className="text-sm text-[#123B4A] dark:text-[#EDF4F7] block">{p.name}</b>
-                        <span className="text-[11px] text-[#64748B] dark:text-[#87A2B2]">
+                        <b className="text-sm text-[var(--ink)] block">{p.name}</b>
+                        <span className="text-[11px] text-[var(--muted)]">
                           {p.age} {L('سنة', 'y')} · {isRTL ? p.gov : GOV_EN[p.gov] || p.gov}
                         </span>
                       </td>
                       <td className="mono text-xs" dir="ltr">{p.nid}</td>
                       <td>
-                        <span className="font-semibold text-xs text-[#243746] dark:text-[#EDF4F7]">
+                        <span className="font-semibold text-xs text-[var(--ink)]">
                           {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]}
                         </span>
                       </td>
                       <td>
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[#DDF4F1] dark:bg-[#143542] text-[#087F8C] dark:text-[#7AD3DC] font-extrabold text-xs">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[var(--primary-50)] text-[var(--primary-700)] font-extrabold text-xs">
                           {p.lv}
                         </span>
                       </td>
-                      <td className="text-xs text-[#64748B] dark:text-[#87A2B2]">
+                      <td className="text-xs text-[var(--muted)]">
                         {p.st === 'book' ? '—' : fmtDate(p.iss, isRTL ? 'ar' : 'en')}
                       </td>
-                      <td className="text-xs text-[#64748B] dark:text-[#87A2B2]">
+                      <td className="text-xs text-[var(--muted)]">
                         {p.st === 'book' ? '—' : fmtDate(p.exp, isRTL ? 'ar' : 'en')}
                       </td>
                       <td>

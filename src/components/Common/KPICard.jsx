@@ -16,46 +16,56 @@ export const KPICard = ({
       case 'g':
       case 'green':
       case 'emerald':
+      case 'success':
         return {
-          stripe: 'bg-[#16A085]',
-          text: 'text-[#16835F] dark:text-[#20A77A]',
-          iconBg: 'bg-[#E4F7F2] dark:bg-[#113B35]',
-          iconText: 'text-[#16835F] dark:text-[#20A77A]'
+          stripe: 'bg-[var(--success)]',
+          iconBg: 'bg-[var(--success-bg)]',
+          iconText: 'text-[var(--success-dark)]'
         };
       case 'a':
       case 'amber':
       case 'warning':
         return {
-          stripe: 'bg-[#B77912]',
-          text: 'text-[#B77912] dark:text-[#E09A20]',
-          iconBg: 'bg-[#FEF7E8] dark:bg-[#3D2C10]',
-          iconText: 'text-[#B77912] dark:text-[#E09A20]'
+          stripe: 'bg-[var(--warning)]',
+          iconBg: 'bg-[var(--warning-bg)]',
+          iconText: 'text-[var(--warning-dark)]'
         };
       case 'r':
       case 'red':
       case 'error':
+      case 'danger':
         return {
-          stripe: 'bg-[#C2414B]',
-          text: 'text-[#C2414B] dark:text-[#E55863]',
-          iconBg: 'bg-[#FDECEE] dark:bg-[#3D181C]',
-          iconText: 'text-[#C2414B] dark:text-[#E55863]'
+          stripe: 'bg-[var(--danger)]',
+          iconBg: 'bg-[var(--danger-bg)]',
+          iconText: 'text-[var(--danger-dark)]'
         };
       case 'n':
       case 'brand':
+      case 'primary-700':
         return {
-          stripe: 'bg-[#123B4A]',
-          text: 'text-[#123B4A] dark:text-[#EDF4F7]',
-          iconBg: 'bg-[#DDF4F1] dark:bg-[#143542]',
-          iconText: 'text-[#123B4A] dark:text-[#7AD3DC]'
+          stripe: 'bg-[var(--primary-700)]',
+          iconBg: 'bg-[var(--primary-100)]',
+          iconText: 'text-[var(--primary-700)]'
+        };
+      case 'teal':
+        return {
+          stripe: 'bg-[var(--teal)]',
+          iconBg: 'bg-[var(--teal-bg)]',
+          iconText: 'text-[var(--teal-dark)]'
+        };
+      case 'lavender':
+        return {
+          stripe: 'bg-[var(--lavender)]',
+          iconBg: 'bg-[var(--lavender-bg)]',
+          iconText: 'text-[var(--lavender-dark)]'
         };
       case 'medical':
       case 'primary':
       default:
         return {
-          stripe: 'bg-[#087F8C]',
-          text: 'text-[#087F8C] dark:text-[#7AD3DC]',
-          iconBg: 'bg-[#DDF4F1] dark:bg-[#143542]',
-          iconText: 'text-[#087F8C] dark:text-[#7AD3DC]'
+          stripe: 'bg-[var(--primary)]',
+          iconBg: 'bg-[var(--primary-50)]',
+          iconText: 'text-[var(--primary-700)]'
         };
     }
   };
@@ -72,28 +82,28 @@ export const KPICard = ({
   };
 
   return (
-    <div className={`relative bg-white dark:bg-[#132631] border border-[#DCE5EC] dark:border-[#1D3A4B] rounded-xl p-4 shadow-xs hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between ${className}`}>
+    <div className={`relative bg-[var(--card)] border border-[var(--line)] rounded-2xl p-5 shadow-[var(--shadow)] hover:shadow-[var(--shadow-md)] transition-all duration-200 overflow-hidden flex flex-col justify-between ${className}`}>
       {/* Accent border stripe on inline-start */}
       <span className={`absolute top-0 start-0 w-1.5 h-full ${colors.stripe}`} />
 
       <div className="flex items-start justify-between gap-3">
         <div>
-          <b className={`text-2xl md:text-3xl font-extrabold tracking-tight leading-none block font-mono ${colors.text}`}>
+          <b className="text-3xl font-extrabold tracking-tight leading-none block font-mono text-[var(--ink)]">
             {value}
           </b>
-          <span className="text-xs font-semibold text-[#64748B] dark:text-[#87A2B2] mt-2 block">
+          <span className="text-xs font-semibold text-[var(--muted)] mt-2 block">
             {label}
           </span>
         </div>
         {icon && (
-          <div className={`p-2.5 rounded-lg ${colors.iconBg} ${colors.iconText} flex-none transition-transform duration-200 hover:scale-105 flex items-center justify-center`}>
+          <div className={`p-2.5 rounded-xl ${colors.iconBg} ${colors.iconText} flex-none transition-transform duration-200 hover:scale-105 flex items-center justify-center`}>
             {renderIcon()}
           </div>
         )}
       </div>
 
       {subtext && (
-        <div className="mt-3 pt-2 border-t border-[#DCE5EC]/70 dark:border-[#1D3A4B]/70 text-[11px] text-[#64748B] dark:text-[#87A2B2] font-medium flex items-center gap-1">
+        <div className="mt-3 pt-2 border-t border-[var(--line)] text-[11.5px] text-[var(--muted)] font-medium flex items-center gap-1">
           {subtext}
         </div>
       )}

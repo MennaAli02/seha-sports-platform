@@ -254,7 +254,7 @@ export const HospitalRegistrationView = () => {
             </div>
           </div>
 
-          <div style={{ background: '#FAFCFE', border: '1px solid var(--line)', borderRadius: '10px', padding: '12px 14px', marginBottom: '14px' }}>
+          <div style={{ background: 'var(--primary-50)', border: '1px solid var(--line)', borderRadius: '10px', padding: '12px 14px', marginBottom: '14px' }}>
             <label className="chk" style={{ marginBottom: '8px' }}>
               <input 
                 type="checkbox" 

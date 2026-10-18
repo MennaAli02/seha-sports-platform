@@ -32,7 +32,7 @@ export const ClubPortalView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <Shield className="w-3.5 h-3.5 text-[#087F8C]" />
+            <Shield className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('بوابة الأندية والاتحادات الرياضية', 'Sports Clubs & Federations Portal')}
           </span>
           <h1>{c.n}</h1>
@@ -108,7 +108,7 @@ export const ClubPortalView = () => {
               <span className="d"></span>
               {L('كشف اللياقة الطبية للاعبي النادي', 'Athletes Medical Clearance Roster')}
             </h3>
-            <span className="text-xs font-semibold text-[#64748B] dark:text-[#87A2B2]">
+            <span className="text-xs font-semibold text-[var(--muted)]">
               {rs.length} {L('رياضي مقيد', 'players')}
             </span>
           </div>
@@ -132,22 +132,22 @@ export const ClubPortalView = () => {
                   return (
                     <tr key={p.id}>
                       <td>
-                        <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block">{p.name}</b>
-                        <span className="text-[11px] text-[#64748B] dark:text-[#87A2B2]">{p.g === 'M' ? L('ذكر', 'Male') : L('أنثى', 'Female')}</span>
+                        <b className="text-xs text-[var(--ink)] block">{p.name}</b>
+                        <span className="text-[11px] text-[var(--muted)]">{p.g === 'M' ? L('ذكر', 'Male') : L('أنثى', 'Female')}</span>
                       </td>
                       <td>
-                        <span className="font-semibold text-xs text-[#243746] dark:text-[#EDF4F7]">
+                        <span className="font-semibold text-xs text-[var(--ink)]">
                           {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]}
                         </span>
                       </td>
                       <td className="font-mono text-xs">{p.age}</td>
                       <td>
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[#DDF4F1] dark:bg-[#143542] text-[#087F8C] dark:text-[#7AD3DC] font-extrabold text-xs">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[var(--primary-50)] text-[var(--primary-700)] font-extrabold text-xs">
                           {p.lv}
                         </span>
                       </td>
                       <td><StatusTag status={p.st} /></td>
-                      <td className="mono font-bold text-xs text-[#087F8C] dark:text-[#7AD3DC]">
+                      <td className="mono font-bold text-xs text-[var(--primary)]">
                         {p.st === 'fit' || p.st === 'exp' || p.st === 'cond' ? p.ct : '—'}
                       </td>
                       <td className="text-end" style={{ whiteSpace: 'nowrap' }}>
@@ -177,7 +177,7 @@ export const ClubPortalView = () => {
           </div>
 
           <div className="nt mt-4 flex items-start gap-2">
-            <span className="text-sm font-bold text-[#087F8C]">🔒</span>
+            <span className="text-sm font-bold text-[var(--primary)]">🔒</span>
             <span className="text-xs">
               {L(
                 'يراعي النظام خصوصية الرياضيين: يرى النادي نتيجة الصلاحية فقط («لائق» أو «لائق بشروط») بعد موافقة اللاعب أو ولي الأمر — ولا تظهر التفاصيل المرضية الدقيقة إلا للفريق الطبي.',
@@ -206,12 +206,12 @@ export const ClubPortalView = () => {
           </p>
 
           <div className="g2">
-            <label className="border-2 border-dashed border-[#DCE5EC] dark:border-[#1D3A4B] hover:border-[#087F8C] bg-[#F4F7FA] dark:bg-[#0E242E] rounded-xl p-5 flex flex-col items-center justify-center text-center cursor-pointer transition-colors">
-              <UploadCloud className="w-8 h-8 text-[#087F8C] mb-2" />
-              <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block">
+            <label className="border-2 border-dashed border-[var(--line)] hover:border-[var(--primary)] bg-[var(--bg)] rounded-xl p-5 flex flex-col items-center justify-center text-center cursor-pointer transition-colors">
+              <UploadCloud className="w-8 h-8 text-[var(--primary)] mb-2" />
+              <b className="text-xs text-[var(--ink)] block">
                 {L('رفع كشف اللاعبين (ملف Excel / CSV)', 'Upload athlete list (Excel / CSV)')}
               </b>
-              <span className="text-[11px] text-[#64748B] block mt-1">
+              <span className="text-[11px] text-[var(--muted)] block mt-1">
                 {L('يتضمن الاسم، الرقم القومي، واللعبة', 'Includes full name, national ID, and sport')}
               </span>
               <input
@@ -232,7 +232,7 @@ export const ClubPortalView = () => {
               </label>
 
               <div>
-                <b className="text-xs font-bold text-[#123B4A] dark:text-[#EDF4F7] block mb-2">
+                <b className="text-xs font-bold text-[var(--ink)] block mb-2">
                   {L('الفترة الزمنية المفضلة للكشف', 'Preferred examination shift')}
                 </b>
                 <div className="chips">
@@ -275,7 +275,7 @@ export const ClubPortalView = () => {
               <span className="d"></span>
               {L('سجل طلبات تفويض الاطلاع المرسلة للاعبين', 'Access Requests Sent to Athletes & Guardians')}
             </h3>
-            <span className="text-xs text-[#64748B] dark:text-[#87A2B2]">
+            <span className="text-xs text-[var(--muted)]">
               {L('تحديث فوري', 'Live status')}
             </span>
           </div>
@@ -300,7 +300,7 @@ export const ClubPortalView = () => {
               ].map((arr, i) => (
                 <tr key={i}>
                   <td>
-                    <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block">{rs[i]?.name}</b>
+                    <b className="text-xs text-[var(--ink)] block">{rs[i]?.name}</b>
                   </td>
                   <td>{L(cfg.scopes[0][0], cfg.scopes[0][1])}</td>
                   <td>{L(cfg.durs[i % 4][0], cfg.durs[i % 4][1])}</td>

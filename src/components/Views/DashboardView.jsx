@@ -4,7 +4,7 @@ import { useSeha } from '../../context/SehaContext';
 import { IC } from '../../data/icons';
 import { StatusTag } from '../Common/StatusTag';
 import { KPICard } from '../Common/KPICard';
-import { Users, Award, ShieldCheck, Activity, Clock, CalendarCheck, BarChart3, Stethoscope, ArrowUpRight, HeartPulse } from 'lucide-react';
+import { Users, Award, ShieldCheck, Activity, Clock, CalendarCheck, HeartPulse, Stethoscope, ArrowUpRight } from 'lucide-react';
 
 export const DashboardView = () => {
   const { isRTL, L } = useLanguage();
@@ -37,7 +37,7 @@ export const DashboardView = () => {
           </span>
           <div className="flex items-center justify-end gap-1.5 w-16 text-end">
             <i className="font-mono text-xs">{val}</i>
-            <span className="text-[10.5px] text-[#64748B] dark:text-[#87A2B2]">({pct}%)</span>
+            <span className="text-[10.5px] text-[var(--muted)]">({pct}%)</span>
           </div>
         </div>
       );
@@ -49,8 +49,8 @@ export const DashboardView = () => {
       {/* Page Header */}
       <div className="ph">
         <div>
-          <span className="lab flex items-center gap-1.5">
-            <Activity className="w-3.5 h-3.5 text-[#087F8C]" />
+          <span className="lab">
+            <Activity className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('لوحة القيادة التشغيلية', 'Command center & operations')}
           </span>
           <h1>{L('لوحة المؤشرات التشغيلية والطبية', 'Sports Healthcare Operations Dashboard')}</h1>
@@ -72,7 +72,7 @@ export const DashboardView = () => {
       {/* KPI Grid */}
       <div className="g6">
         <KPICard
-          variant="brand"
+          variant="primary-700"
           value={stats.total}
           label={L('إجمالي المتقدمين', 'Total applicants')}
           icon={Users}
@@ -86,7 +86,7 @@ export const DashboardView = () => {
           subtext={L('مكتملة وموقعة إلكترونيًا', 'Completed & e-signed')}
         />
         <KPICard
-          variant="emerald"
+          variant="success"
           value={stats.fit}
           label={L('لائق — شهادة سارية', 'Fit — valid')}
           icon={ShieldCheck}
@@ -100,7 +100,7 @@ export const DashboardView = () => {
           subtext={L('لائق بشروط متابعة', 'Conditional with follow-up')}
         />
         <KPICard
-          variant="red"
+          variant="danger"
           value={stats.exp}
           label={L('شهادة تحتاج تجديدًا', 'Due for renewal')}
           icon={Clock}
@@ -145,7 +145,7 @@ export const DashboardView = () => {
               <span className="d"></span>
               {L('الفئات العمرية ومعدل اللياقة الطبية', 'Age bands & fitness clearance rate')}
             </h3>
-            <span className="text-xs font-semibold text-[#087F8C] bg-[#DDF4F1] dark:bg-[#143542] px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-semibold text-[var(--primary-700)] bg-[var(--primary-50)] px-3 py-1 rounded-full border border-[var(--primary-100)]">
               {L('الكود الموحد', 'Unified Code')}
             </span>
           </div>
@@ -156,15 +156,15 @@ export const DashboardView = () => {
             {bands.map((x, i) => (
               <div
                 key={i}
-                className="text-center bg-[#F0F9F8] dark:bg-[#0E242E] border border-[#DCE5EC] dark:border-[#1D3A4B] rounded-xl p-3 transition-transform hover:-translate-y-0.5 shadow-2xs"
+                className="text-center bg-[var(--primary-50)] border border-[var(--line)] rounded-2xl p-3.5 transition-transform hover:-translate-y-0.5 shadow-xs"
               >
-                <b className="text-2xl font-bold text-[#123B4A] dark:text-[#EDF4F7] block font-mono">
+                <b className="text-2xl font-bold text-[var(--ink)] block font-mono">
                   {x.n}
                 </b>
-                <span className="mut text-[11.5px] font-medium block mt-0.5">
+                <span className="mut text-[12px] font-medium block mt-1">
                   {isRTL ? x.lAr : x.lEn}
                 </span>
-                <div className="text-xs font-extrabold text-[#16835F] dark:text-[#20A77A] mt-2 inline-flex items-center gap-1 bg-[#E4F7F2] dark:bg-[#113B35] px-2 py-0.5 rounded-full">
+                <div className="text-xs font-extrabold text-[var(--success-dark)] mt-2 inline-flex items-center gap-1 bg-[var(--success-bg)] px-2.5 py-0.5 rounded-full">
                   {x.pct}% {L('لائق', 'fit')}
                 </div>
               </div>
@@ -178,7 +178,7 @@ export const DashboardView = () => {
               <span className="d"></span>
               {L('برنامج «أشبالنا» — مسار الرعاية والتقييم', 'Ashbalna follow-up track')}
             </h3>
-            <span className="text-xs font-bold text-[#B77912] bg-[#FEF7E8] dark:bg-[#3D2C10] px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-[var(--warning-dark)] bg-[var(--warning-bg)] px-3 py-1 rounded-full border border-[var(--warning)]/20">
               {ash.length} {L('حالة تحت الرعاية', 'active cases')}
             </span>
           </div>
@@ -191,19 +191,19 @@ export const DashboardView = () => {
               return (
                 <div
                   key={i}
-                  className={`text-center rounded-xl p-2.5 border transition-all ${
+                  className={`text-center rounded-2xl p-3 border transition-all ${
                     isLast
-                      ? 'bg-[#E4F7F2] dark:bg-[#113B35] border-[#16A085]/40 shadow-xs'
-                      : 'bg-white dark:bg-[#132631] border-[#DCE5EC] dark:border-[#1D3A4B]'
+                      ? 'bg-[var(--success-bg)] border-[var(--success)]/30 shadow-xs'
+                      : 'bg-[var(--card)] border-[var(--line)]'
                   }`}
                 >
                   <span className="mut text-[10.5px] font-bold uppercase tracking-wider block">
                     {L('المرحلة', 'Stage')} {i + 1}
                   </span>
-                  <b className="text-[11.5px] font-bold block text-[#123B4A] dark:text-[#EDF4F7] my-1 min-h-[30px] line-clamp-2">
+                  <b className="text-[12px] font-bold block text-[var(--ink)] my-1 min-h-[32px] line-clamp-2">
                     {L(st[0], st[1])}
                   </b>
-                  <b className={`text-2xl font-extrabold font-mono block ${isLast ? 'text-[#16835F] dark:text-[#20A77A]' : 'text-[#087F8C] dark:text-[#7AD3DC]'}`}>
+                  <b className={`text-2xl font-extrabold font-mono block ${isLast ? 'text-[var(--success-dark)]' : 'text-[var(--primary)]'}`}>
                     {stg[i]}
                   </b>
                 </div>
@@ -211,7 +211,7 @@ export const DashboardView = () => {
             })}
           </div>
           <div className="nt mt-3 flex items-start gap-2">
-            <span className="text-sm font-bold text-[#087F8C]">ℹ</span>
+            <span className="text-sm font-bold text-[var(--primary)]">ℹ</span>
             <span>
               {L(
                 'النادي يرى النتيجة النهائية فقط («لائق بشروط») حمايةً لخصوصية اللاعب (قانون 151/2020) — ولا يُستبعد أحد دون متابعة ورعاية.',
@@ -231,7 +231,7 @@ export const DashboardView = () => {
               {L('وحدات الطب الرياضي والمستشفيات المعتمدة', 'Accredited Sports Medicine Facilities')}
             </h3>
             <button
-              className="text-xs font-bold text-[#087F8C] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs font-bold text-[var(--primary)] hover:underline flex items-center gap-1 cursor-pointer"
               onClick={() => navigate('hosps')}
             >
               {L('عرض الكل', 'View all')}
@@ -251,12 +251,12 @@ export const DashboardView = () => {
               {hosps.map((h) => (
                 <tr key={h.id}>
                   <td>
-                    <b className="text-[#123B4A] dark:text-[#EDF4F7]">{h.n}</b>
-                    <small className="block text-[11px] text-[#64748B] dark:text-[#87A2B2]">{h.dir}</small>
+                    <b className="text-[var(--ink)]">{h.n}</b>
+                    <small className="block text-[11px] text-[var(--muted)]">{h.dir}</small>
                   </td>
                   <td>
                     <span className="inline-flex items-center gap-1 text-xs">
-                      <Stethoscope className="w-3.5 h-3.5 text-[#087F8C]" />
+                      <Stethoscope className="w-3.5 h-3.5 text-[var(--primary)]" />
                       {L('مستشفى معتمد', 'Hospital')}
                     </span>
                   </td>
@@ -267,8 +267,8 @@ export const DashboardView = () => {
               {clubs.slice(0, 3).map((c) => (
                 <tr key={c.id}>
                   <td>
-                    <b className="text-[#123B4A] dark:text-[#EDF4F7]">{c.n}</b>
-                    <small className="block text-[11px] text-[#64748B] dark:text-[#87A2B2]">{c.mgr}</small>
+                    <b className="text-[var(--ink)]">{c.n}</b>
+                    <small className="block text-[11px] text-[var(--muted)]">{c.mgr}</small>
                   </td>
                   <td><span className="text-xs">{c.type}</span></td>
                   <td>{isRTL ? c.gov : GOV_EN[c.gov] || c.gov}</td>
@@ -285,7 +285,7 @@ export const DashboardView = () => {
               <span className="d"></span>
               {L('سجل العمليات والأحداث الفورية', 'Recent Operational Audit Trail')}
             </h3>
-            <span className="text-[11.5px] font-mono text-[#64748B] dark:text-[#87A2B2]">
+            <span className="text-[11.5px] font-mono text-[var(--muted)]">
               {audit.length} {L('عملية مسجلة', 'events')}
             </span>
           </div>
@@ -300,11 +300,11 @@ export const DashboardView = () => {
             <tbody>
               {audit.slice(0, 8).map((a, i) => (
                 <tr key={i}>
-                  <td className="mono text-xs text-[#087F8C] font-semibold" dir="ltr">{a[0]}</td>
+                  <td className="mono text-xs text-[var(--primary)] font-semibold" dir="ltr">{a[0]}</td>
                   <td>
-                    <span className="font-semibold text-xs text-[#123B4A] dark:text-[#EDF4F7]">{a[1]}</span>
+                    <span className="font-semibold text-xs text-[var(--ink)]">{a[1]}</span>
                   </td>
-                  <td className="text-xs text-[#243746] dark:text-[#EDF4F7]">
+                  <td className="text-xs text-[var(--ink)]">
                     {isRTL ? a[2] : a[3] || a[2]}
                   </td>
                 </tr>

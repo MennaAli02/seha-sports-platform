@@ -38,7 +38,7 @@ export const HospitalPortalView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <Stethoscope className="w-3.5 h-3.5 text-[#087F8C]" />
+            <Stethoscope className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('بوابة وحدات الطب الرياضي والمستشفيات', 'Sports Medicine Units & Hospitals Portal')}
           </span>
           <h1>{h.n}</h1>
@@ -111,7 +111,7 @@ export const HospitalPortalView = () => {
         <div className="card">
           <div className="flex items-center justify-between gap-3 mb-4 np flex-wrap">
             <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-[#64748B] absolute top-1/2 -translate-y-1/2 start-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3 pointer-events-none" />
               <input
                 type="text"
                 placeholder={L('بحث سريع: رقم الحجز / الاسم / الرقم القومي…', 'Search booking code, athlete name, or national ID…')}
@@ -144,20 +144,20 @@ export const HospitalPortalView = () => {
                   const globalIdx = players.indexOf(p);
                   return (
                     <tr key={p.id}>
-                      <td className="mono font-bold text-xs text-[#087F8C] dark:text-[#7AD3DC]">{p.bk}</td>
+                      <td className="mono font-bold text-xs text-[var(--primary)]">{p.bk}</td>
                       <td>
-                        <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block">{p.name}</b>
-                        <span className="text-[11px] text-[#64748B] dark:text-[#87A2B2]">
+                        <b className="text-xs text-[var(--ink)] block">{p.name}</b>
+                        <span className="text-[11px] text-[var(--muted)]">
                           {p.age} {L('سنة', 'y')} · {isRTL ? p.gov : GOV_EN[p.gov] || p.gov}
                         </span>
                       </td>
                       <td>
-                        <span className="font-semibold text-xs text-[#243746] dark:text-[#EDF4F7]">
+                        <span className="font-semibold text-xs text-[var(--ink)]">
                           {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]}
                         </span>
                       </td>
                       <td>
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[#DDF4F1] dark:bg-[#143542] text-[#087F8C] dark:text-[#7AD3DC] font-extrabold text-xs">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[var(--primary-50)] text-[var(--primary-700)] font-extrabold text-xs">
                           {p.lv}
                         </span>
                       </td>
@@ -203,7 +203,7 @@ export const HospitalPortalView = () => {
               <span className="d"></span>
               {L('جداول الفترات ومعدلات الإشغال اليومية', 'Daily Screening Capacity & Slot Utilization')}
             </h3>
-            <span className="text-xs font-semibold text-[#087F8C]">
+            <span className="text-xs font-semibold text-[var(--primary)]">
               {L('تحديث مباشر', 'Live capacity')}
             </span>
           </div>
@@ -227,7 +227,7 @@ export const HospitalPortalView = () => {
                   const pct = Math.round((bVal / s.c) * 100);
                   return (
                     <tr key={i}>
-                      <td><b className="text-xs text-[#123B4A] dark:text-[#EDF4F7]">{s.d}</b></td>
+                      <td><b className="text-xs text-[var(--ink)]">{s.d}</b></td>
                       <td className="mono text-xs font-semibold" dir="ltr">{s.f}</td>
                       <td className="mono text-xs font-semibold" dir="ltr">{s.t}</td>
                       <td className="num font-bold text-xs">{s.c}</td>
@@ -260,7 +260,7 @@ export const HospitalPortalView = () => {
               <span className="d"></span>
               {L('طلبات الكشف الجماعي المقدمة من الأندية', 'Incoming Team Examination Requests from Clubs')}
             </h3>
-            <span className="text-xs font-semibold text-[#64748B] dark:text-[#87A2B2]">
+            <span className="text-xs font-semibold text-[var(--muted)]">
               {clubs.slice(0, 3).length} {L('طلبات بانتظار الرد', 'pending requests')}
             </span>
           </div>
@@ -269,18 +269,18 @@ export const HospitalPortalView = () => {
             {clubs.slice(0, 3).map((c, i) => (
               <div
                 key={c.id}
-                className="flex items-center justify-between gap-4 p-4 rounded-xl border border-[#DCE5EC] dark:border-[#1D3A4B] bg-[#F4F7FA] dark:bg-[#0E242E] flex-wrap"
+                className="flex items-center justify-between gap-4 p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)] flex-wrap"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <b className="text-sm text-[#123B4A] dark:text-[#EDF4F7]">{c.n}</b>
+                    <b className="text-sm text-[var(--ink)]">{c.n}</b>
                     <span className="tag ti font-bold">
                       {[14, 22, 9][i]} {L('رياضيًا', 'athletes')}
                     </span>
                   </div>
                   <span className="mut text-xs block mt-1">
                     {L('الموعد المطلوب: ', 'Requested shift: ')}
-                    <b className="text-[#087F8C]">{cfg.shifts[i]?.d} · {cfg.shifts[i]?.f}</b> · {L('المستوى الطبي: ', 'Medical level: ')} {[2, 3, 2][i]}
+                    <b className="text-[var(--primary)]">{cfg.shifts[i]?.d} · {cfg.shifts[i]?.f}</b> · {L('المستوى الطبي: ', 'Medical level: ')} {[2, 3, 2][i]}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ export const HospitalPortalView = () => {
                     {L('اقتراح موعد بديل', 'Propose slot')}
                   </button>
                   <button
-                    className="btn ghost sm text-[#C2414B] border-[#C2414B]/30"
+                    className="btn ghost sm text-[var(--danger-dark)] border-[var(--danger)]/30"
                     onClick={() => showToast(L('تم الاعتذار عن الطلب لعدم توفر شواغر', 'Request declined due to capacity'))}
                   >
                     {L('اعتذار', 'Decline')}
@@ -374,7 +374,7 @@ export const HospitalPortalView = () => {
             </div>
 
             <div className="nt mt-6 flex items-start gap-2">
-              <span className="text-sm font-bold text-[#087F8C]">⚡</span>
+              <span className="text-sm font-bold text-[var(--primary)]">⚡</span>
               <span className="text-xs">
                 {L(
                   'كفاءة تشغيلية كاملة: يدعم النظام الأجهزة اللوحية (Tablets) والحواسيب عبر المتصفح مباشرة دون الحاجة لأي برمجيات معقدة.',

@@ -34,7 +34,7 @@ export const ConsentGovernanceView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <KeyRound className="w-3.5 h-3.5 text-[#087F8C]" />
+            <KeyRound className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('حوكمة البيانات والامتثال القانوني', 'Data Governance & Legal Compliance')}
           </span>
           <h1>{L('إدارة موافقات وصلاحيات الاطلاع على البيانات', 'Access Consent Management & Privacy Controls')}</h1>
@@ -55,7 +55,7 @@ export const ConsentGovernanceView = () => {
               <span className="d"></span>
               {L('منح تفويض اطلاع جديد', 'Grant new access authorization')}
             </h3>
-            <span className="text-xs font-semibold text-[#087F8C] bg-[#DDF4F1] dark:bg-[#143542] px-2 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-[var(--primary-700)] bg-[var(--primary-50)] px-2.5 py-1 rounded-full">
               {L('قانون 151/2020', 'Law 151/2020')}
             </span>
           </div>
@@ -95,7 +95,7 @@ export const ConsentGovernanceView = () => {
             </label>
           </div>
 
-          <div className="bg-[#F0F9F8] dark:bg-[#0E242E] p-3 rounded-lg border border-[#DCE5EC] dark:border-[#1D3A4B] my-3">
+          <div className="bg-[var(--bg)] p-3 rounded-lg border border-[var(--line)] my-3">
             <label className="chk m-0">
               <input
                 type="checkbox"
@@ -103,7 +103,7 @@ export const ConsentGovernanceView = () => {
                 checked={consentAgreed}
                 onChange={(e) => setConsentAgreed(e.target.checked)}
               />
-              <span className="text-xs font-medium text-[#123B4A] dark:text-[#EDF4F7] leading-relaxed">
+              <span className="text-xs font-medium text-[var(--ink)] leading-relaxed">
                 {L(
                   'أوافق صراحةً وبكامل الأهلية على منح الجهة المذكورة صلاحية الاطلاع على بيانات الشهادة وفق النطاق والمدة المحددين أعلاه، مع علمي بحقي في سحب الموافقة في أي وقت.',
                   'I explicitly consent to granting the requested entity access to certificate data within the stated scope and duration, acknowledging my legal right to revoke this consent at any time.'
@@ -126,7 +126,7 @@ export const ConsentGovernanceView = () => {
                 <span className="d"></span>
                 {L('سجل التفويضات والموافقات السارية', 'Active Authorizations & Consents')}
               </h3>
-              <span className="text-xs font-mono text-[#64748B] dark:text-[#87A2B2]">
+              <span className="text-xs font-mono text-[var(--muted)]">
                 {consents.length} {L('سجل', 'records')}
               </span>
             </div>
@@ -144,7 +144,7 @@ export const ConsentGovernanceView = () => {
                 {consents.map((c, i) => (
                   <tr key={i}>
                     <td>
-                      <b className="text-xs text-[#123B4A] dark:text-[#EDF4F7] block">{c.to}</b>
+                      <b className="text-xs text-[var(--ink)] block">{c.to}</b>
                     </td>
                     <td className="mut text-xs">
                       {L(cfg.scopes[c.sc]?.[0], cfg.scopes[c.sc]?.[1])} · {L(cfg.durs[c.du]?.[0], cfg.durs[c.du]?.[1])}
@@ -155,7 +155,7 @@ export const ConsentGovernanceView = () => {
                     <td className="text-end">
                       {c.st === 'ok' ? (
                         <button
-                          className="btn ghost sm text-xs text-[#C2414B] hover:bg-[#FDECEE] border-[#C2414B]/30"
+                          className="btn ghost sm text-xs text-[var(--danger-dark)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
                           onClick={() => handleRevoke(i)}
                           title={L('سحب الصلاحية فورًا', 'Revoke consent')}
                         >
@@ -163,7 +163,7 @@ export const ConsentGovernanceView = () => {
                           {L('سحب', 'Revoke')}
                         </button>
                       ) : (
-                        <span className="text-[11px] text-[#64748B] font-medium">—</span>
+                        <span className="text-[11px] text-[var(--muted)] font-medium">—</span>
                       )}
                     </td>
                   </tr>
@@ -173,7 +173,7 @@ export const ConsentGovernanceView = () => {
           </div>
 
           <div className="nt mt-4 flex items-start gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#087F8C] flex-none mt-0.5" />
+            <ShieldCheck className="w-4 h-4 text-[var(--primary)] flex-none mt-0.5" />
             <span className="text-xs leading-relaxed">
               {L(
                 'سجل التدقيق الشامل: يتم تدوين هوية كل من اطلع على أي بيان وتوقيت الاطلاع في سجل غير قابل للتعديل ومتاح للاعب وولي الأمر عبر تطبيق المواطن.',

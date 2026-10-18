@@ -42,11 +42,11 @@ export const CertificateDetailView = () => {
         <div className="ph">
           <div>
             <span className="lab flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#087F8C]" />
+              <Clock className="w-3.5 h-3.5 text-[var(--primary)]" />
               {L('الإصدار الرقمي والاعتماد', 'Digital issuance & clearance')}
             </span>
             <h1>{L('شهادة اللياقة الطبية الرياضية', 'Sports Medical Fitness Certificate')}</h1>
-            <p>{p.name} · <span className="mono font-bold text-[#087F8C]">{p.bk}</span></p>
+            <p>{p.name} · <span className="mono font-bold text-[var(--primary)]">{p.bk}</span></p>
           </div>
           <div className="act np">
             <button className="btn ghost" onClick={handleBack}>
@@ -56,10 +56,10 @@ export const CertificateDetailView = () => {
         </div>
 
         <div className="card max-w-xl mx-auto text-center p-8 shadow-md">
-          <div className="w-16 h-16 rounded-2xl bg-[#DDF4F1] dark:bg-[#143542] text-[#087F8C] dark:text-[#7AD3DC] flex items-center justify-center mx-auto mb-4 shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-[var(--primary-50)] text-[var(--primary-700)] flex items-center justify-center mx-auto mb-4 shadow-sm">
             <Calendar className="w-8 h-8" />
           </div>
-          <h3 className="justify-center text-lg text-[#123B4A] dark:text-[#EDF4F7]">
+          <h3 className="justify-center text-lg text-[var(--ink)]">
             {L('لم تصدر الشهادة بعد — حجز مؤكد قائم', 'Certificate not yet issued — active confirmed booking')}
           </h3>
           <p className="mut text-sm max-w-md mx-auto mt-2 leading-relaxed">
@@ -68,16 +68,16 @@ export const CertificateDetailView = () => {
               'A confirmed booking is registered awaiting examination at the Sports Medicine Unit. The digitally signed certificate will be issued automatically upon clinical approval.'
             )}
           </p>
-          <div className="max-w-md mx-auto my-5 border border-[#DCE5EC] dark:border-[#1D3A4B] rounded-xl overflow-hidden bg-[#F4F7FA] dark:bg-[#0E242E]">
+          <div className="max-w-md mx-auto my-5 border border-[var(--line)] rounded-xl overflow-hidden bg-[var(--bg)]">
             <table className="t">
               <tbody>
                 <tr>
                   <td className="mut font-semibold w-1/3">{L('رقم الحجز', 'Booking code')}</td>
-                  <td className="mono font-bold text-[#087F8C]">{p.bk}</td>
+                  <td className="mono font-bold text-[var(--primary)]">{p.bk}</td>
                 </tr>
                 <tr>
                   <td className="mut font-semibold">{L('المستشفى المعين', 'Assigned hospital')}</td>
-                  <td className="font-semibold text-[#123B4A] dark:text-[#EDF4F7]">{h.n}</td>
+                  <td className="font-semibold text-[var(--ink)]">{h.n}</td>
                 </tr>
                 <tr>
                   <td className="mut font-semibold">{L('مستوى الكشف', 'Exam protocol')}</td>
@@ -161,11 +161,11 @@ export const CertificateDetailView = () => {
       <div className="ph">
         <div>
           <span className="lab flex items-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-[#087F8C]" />
+            <Award className="w-3.5 h-3.5 text-[var(--primary)]" />
             {L('الإصدار الرقمي والاعتماد الحكومي', 'Digital issuance & government accreditation')}
           </span>
           <h1>{L('وثيقة شهادة اللياقة الطبية الرياضية', 'Sports Medical Fitness Certificate')}</h1>
-          <p>{p.name} · <span className="mono font-bold text-[#087F8C]">{p.ct}</span></p>
+          <p>{p.name} · <span className="mono font-bold text-[var(--primary)]">{p.ct}</span></p>
         </div>
         <div className="act np">
           <button className="btn ghost" onClick={handleBack}>
@@ -195,9 +195,9 @@ export const CertificateDetailView = () => {
           </div>
           <div className="clg">
             <svg viewBox="0 0 48 48" width="56" height="56" fill="none" aria-label="Seha" style={{ flex: 'none' }}>
-              <rect x="2" y="2" width="44" height="44" rx="12" fill="#123B4A" />
-              <circle cx="24" cy="24" r="15" stroke="#087F8C" strokeWidth="2.2" />
-              <path d="M11 24h5.5l2.5-6 5 12 3.5-9 2 3H37" stroke="#16A085" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
+              <rect x="2" y="2" width="44" height="44" rx="12" fill="var(--primary-600)" />
+              <circle cx="24" cy="24" r="15" stroke="var(--primary-300)" strokeWidth="2.2" />
+              <path d="M11 24h5.5l2.5-6 5 12 3.5-9 2 3H37" stroke="var(--card)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <div>
@@ -222,7 +222,7 @@ export const CertificateDetailView = () => {
           </div>
           <div>
             <span>{L('تاريخ نهاية الصلاحية', 'Valid until')}</span>
-            <b className={expd ? 'text-[#C2414B]' : 'text-[#16835F]'}>
+            <b className={expd ? 'text-[var(--danger-dark)]' : 'text-[var(--success-dark)]'}>
               {fmtDate(p.exp, isRTL ? 'ar' : 'en')}
             </b>
           </div>
@@ -253,7 +253,7 @@ export const CertificateDetailView = () => {
           <div className="cph">
             <div>
               <span className="font-semibold block text-xs">{L('صورة الرياضي', 'Athlete photo')}</span>
-              <span className="text-[10px] text-[#64748B] block mt-1">{L('ملتقطة إلكترونيًا عند الكشف', 'Captured at examination')}</span>
+              <span className="text-[10px] text-[var(--muted)] block mt-1">{L('ملتقطة إلكترونيًا عند الكشف', 'Captured at examination')}</span>
             </div>
           </div>
         </div>
@@ -276,7 +276,7 @@ export const CertificateDetailView = () => {
                 <td>
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
-                      r[2] ? 'bg-[#FEF7E8] text-[#B77912]' : 'bg-[#E4F7F2] text-[#16835F]'
+                      r[2] ? 'bg-[var(--warning-bg)] text-[var(--warning-dark)]' : 'bg-[var(--success-bg)] text-[var(--success-dark)]'
                     }`}
                   >
                     {r[2] ? (
@@ -306,11 +306,11 @@ export const CertificateDetailView = () => {
           </div>
           <div className="cmk">
             {fit ? (
-              <CheckCircle2 className="w-8 h-8 text-[#16835F]" />
+              <CheckCircle2 className="w-8 h-8 text-[var(--success-dark)]" />
             ) : cond ? (
-              <HeartPulse className="w-8 h-8 text-[#B77912]" />
+              <HeartPulse className="w-8 h-8 text-[var(--warning-dark)]" />
             ) : (
-              <XCircle className="w-8 h-8 text-[#64748B]" />
+              <XCircle className="w-8 h-8 text-[var(--muted)]" />
             )}
           </div>
         </div>

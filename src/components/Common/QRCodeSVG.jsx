@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const QRCodeSVG = ({ seed = 'SH-26-004517', size = 86, className = '', darkColor = '#0A2340', lightColor = '#FFFFFF' }) => {
+export const QRCodeSVG = ({ seed = 'SH-26-004517', size = 86, className = '', darkColor = 'var(--ink)', lightColor = 'var(--card)' }) => {
   const seedStr = String(seed || 'SEHA');
   const n = 21;
   let h = 0;
@@ -38,7 +38,7 @@ export const QRCodeSVG = ({ seed = 'SH-26-004517', size = 86, className = '', da
   }
 
   return (
-    <div className={`inline-block p-1.5 rounded-lg border border-[#DCE5EF] bg-white shadow-sm ${className}`}>
+    <div className={`inline-block p-1.5 rounded-lg border border-[var(--line)] bg-[var(--card)] shadow-sm ${className}`}>
       <svg
         width={size}
         height={size}
