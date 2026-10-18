@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
 import { IC, LOGO_SVG } from '../../data/icons';
-import { Menu, PanelLeftClose } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 export const SideNavBar = () => {
   const { isRTL, L } = useLanguage();
@@ -53,11 +53,7 @@ export const SideNavBar = () => {
           title={sidebarExpanded ? (isRTL ? 'طي القائمة' : 'Collapse sidebar') : (isRTL ? 'توسيع القائمة' : 'Expand sidebar')}
           aria-label="Toggle navigation menu"
         >
-          {sidebarExpanded ? (
-            <PanelLeftClose className="w-5 h-5 shrink-0" />
-          ) : (
-            <Menu className="w-5 h-5 shrink-0" />
-          )}
+          <Menu className="w-5 h-5 shrink-0" />
         </button>
 
         {sidebarExpanded && (
