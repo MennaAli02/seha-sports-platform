@@ -37,6 +37,11 @@
   --color-danger: #E25252;
   --color-danger-dark: #B92828;
   --color-danger-bg: #FDECEC;
+
+  --font-heading: "Source Serif 4", "Amiri", Georgia, "Times New Roman", serif;
+  --font-body: "Nunito Sans", "IBM Plex Sans Arabic", -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-serif: var(--font-heading);
+  --font-sans: var(--font-body);
 }
 
 :root {
@@ -44,6 +49,9 @@
      Lavender-Periwinkle SaaS Clinic Design System
      Palette: linear-gradient(45deg, #F7F7FF, #EAE4F2, #D3CCE3, #A6B1E1, #5E60CE)
      ========================================================================== */
+  --font-heading: "Source Serif 4", "Amiri", Georgia, "Times New Roman", serif;
+  --font-body: "Nunito Sans", "IBM Plex Sans Arabic", -apple-system, "Segoe UI", Arial, sans-serif;
+
   --primary: #5E60CE;
   --primary-600: #5354BD;
   --primary-700: #4244A8;
@@ -211,7 +219,7 @@ html, body {
 }
 
 body {
-  font-family: "Poppins", "Montserrat", "IBM Plex Sans Arabic", "Noto Sans Arabic", "Cairo", sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--ink);
   overflow: hidden;
@@ -222,8 +230,118 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-button, input, select, textarea {
+input,
+button,
+select,
+textarea,
+optgroup {
   font-family: inherit;
+}
+
+::placeholder {
+  font-family: inherit;
+  color: var(--placeholder);
+}
+
+/* ============================================================
+   Typography System Rules (Senior UX Refined Scale)
+   ============================================================ */
+h1, .h1 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+h2, .h2 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+h3, .h3 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+h4, h5, h6, .font-headline {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Serif typography reserved for formal certificates & decorative headers */
+.font-serif, .serif-heading, .cert-heading, .ctt {
+  font-family: var(--font-heading) !important;
+}
+
+/* ============================================================
+   Arabic RTL Professional Medical Font Support (Cairo & IBM Plex)
+   ============================================================ */
+[dir="rtl"],
+[dir="rtl"] body,
+[dir="rtl"] button,
+[dir="rtl"] input,
+[dir="rtl"] select,
+[dir="rtl"] textarea,
+.font-arabic {
+  font-family: "IBM Plex Sans Arabic", "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif !important;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] .font-heading,
+.font-arabic h1,
+.font-arabic h2,
+.font-arabic h3,
+.font-arabic h4,
+.font-arabic h5,
+.font-arabic h6 {
+  font-family: "Cairo", "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif !important;
+  letter-spacing: normal !important;
+  font-weight: 700 !important;
+}
+
+/* ============================================================
+   English LTR Professional Medical Font Support (Nunito Sans & Source Serif 4)
+   ============================================================ */
+[dir="ltr"],
+[dir="ltr"] body,
+[dir="ltr"] button,
+[dir="ltr"] input,
+[dir="ltr"] select,
+[dir="ltr"] textarea,
+.font-latin {
+  font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+}
+
+[dir="ltr"] h1,
+[dir="ltr"] h2,
+[dir="ltr"] h3,
+[dir="ltr"] h4,
+[dir="ltr"] h5,
+[dir="ltr"] h6,
+.font-latin h1,
+.font-latin h2,
+.font-latin h3,
+.font-latin h4,
+.font-latin h5,
+.font-latin h6 {
+  font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+}
+
+[dir="ltr"] .font-serif,
+[dir="ltr"] .serif-heading,
+[dir="ltr"] .cert-heading,
+[dir="ltr"] .ctt {
+  font-family: "Source Serif 4", "Amiri", Georgia, "Times New Roman", serif !important;
 }
 
 /* Custom sleek scrollbar */
