@@ -4,7 +4,6 @@ import { useSeha } from '../../context/SehaContext';
 import { CertificateDetailView } from './CertificateDetailView';
 import { StatusTag } from '../Common/StatusTag';
 import { KPICard } from '../Common/KPICard';
-import { IC } from '../../data/icons';
 import { fmtDate } from '../../data/mockData';
 import { Award, ShieldCheck, AlertTriangle, Clock, Search, Filter, FileText, ChevronRight, Check, ChevronDown, X, ChevronLeft } from 'lucide-react';
 
@@ -110,7 +109,7 @@ export const CertificateRegistryView = () => {
         </div>
         <div className="act np">
           <button className="btn" onClick={() => setSelectedCertIndex(0)}>
-            {IC.cert} {L('نموذج الشهادة المعتمدة', 'Sample verified certificate')}
+            <Award className="w-4 h-4" /> {L('نموذج الشهادة المعتمدة', 'Sample verified certificate')}
           </button>
         </div>
       </div>
@@ -149,11 +148,23 @@ export const CertificateRegistryView = () => {
 
       {/* Search Bar & Filter Controls */}
       <div className="card">
-        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 mb-6 np">
+        <div
+          className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 np"
+          style={{ marginBottom: '24px' }}
+        >
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 max-w-2xl w-full">
             {/* Search Input */}
             <div className="relative flex-1 min-w-0 w-full">
-              <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none" />
+              <Search
+                className="w-4 h-4 text-[var(--muted)] pointer-events-none"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  [isRTL ? 'right' : 'left']: '14px',
+                  zIndex: 2
+                }}
+              />
               <input
                 id="cq"
                 type="text"
@@ -163,13 +174,24 @@ export const CertificateRegistryView = () => {
                 )}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                className="w-full ps-10 pe-9 py-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--color-brand-violet)] focus:ring-2 focus:ring-[var(--color-brand-lavender)] transition-all shadow-xs"
+                className="search-input w-full py-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--color-brand-violet)] focus:ring-2 focus:ring-[var(--color-brand-lavender)] transition-all shadow-xs"
+                style={{
+                  [isRTL ? 'paddingRight' : 'paddingLeft']: '44px',
+                  [isRTL ? 'paddingLeft' : 'paddingRight']: '38px'
+                }}
               />
               {q && (
                 <button
                   type="button"
                   onClick={() => setQ('')}
-                  className="absolute top-1/2 -translate-y-1/2 end-3 text-[var(--muted)] hover:text-[var(--ink)] p-0.5 rounded-full hover:bg-[var(--primary-50)] transition-colors cursor-pointer"
+                  className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer"
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    [isRTL ? 'left' : 'right']: '12px',
+                    zIndex: 2
+                  }}
                   title={L('مسح البحث', 'Clear search')}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -288,7 +310,7 @@ export const CertificateRegistryView = () => {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" style={{ marginTop: '22px', marginBottom: '24px' }}>
             <table className="t">
               <thead>
                 <tr>
@@ -343,7 +365,7 @@ export const CertificateRegistryView = () => {
                           onClick={() => setSelectedCertIndex(i)}
                           title={L('فتح الوثيقة والطباعة', 'Open certificate & print')}
                         >
-                          {IC.cert} {L('عرض الشهادة', 'View cert')}
+                          <Award className="w-4 h-4" /> {L('عرض الشهادة', 'View cert')}
                         </button>
                       </td>
                     </tr>
@@ -358,13 +380,14 @@ export const CertificateRegistryView = () => {
         {totalRecords > 0 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-4 border-t border-[var(--line)] np">
             {/* Left / Start: Rows per page selector & range summary */}
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 w-full sm:w-auto">
-              <div className="flex items-center gap-2 text-xs text-[var(--muted)]">
-                <span>{L('عدد الصفوف في الصفحة:', 'Rows per page:')}</span>
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 w-full sm:w-auto shrink-0">
+              <div className="flex items-center gap-2 text-xs text-[var(--muted)] whitespace-nowrap shrink-0">
+                <span className="whitespace-nowrap font-medium">{L('عدد الصفوف في الصفحة:', 'Rows per page:')}</span>
                 <select
                   value={pageSize}
                   onChange={(e) => setPageSize(Number(e.target.value))}
-                  className="w-auto py-1 px-2.5 text-xs bg-[var(--card)] border border-[var(--color-border)] rounded-lg font-mono font-bold cursor-pointer"
+                  className="w-auto shrink-0 py-1 px-2.5 text-xs bg-[var(--card)] border border-[var(--color-border)] rounded-lg font-mono font-bold cursor-pointer"
+                  style={{ width: 'auto' }}
                 >
                   {[5, 10, 20, 50].map((size) => (
                     <option key={size} value={size}>
@@ -374,7 +397,7 @@ export const CertificateRegistryView = () => {
                 </select>
               </div>
 
-              <div className="text-xs text-[var(--muted)]">
+              <div className="text-xs text-[var(--muted)] whitespace-nowrap shrink-0">
                 {L('عرض ', 'Showing ')}
                 <b className="font-mono text-[var(--ink)]">{startIndex + 1}</b>
                 {L(' إلى ', ' to ')}

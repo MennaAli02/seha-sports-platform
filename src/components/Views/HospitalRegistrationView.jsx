@@ -15,7 +15,8 @@ import {
   Search, 
   ShieldCheck,
   Award,
-  Layers
+  Layers,
+  X
 } from 'lucide-react';
 
 export const HospitalRegistrationView = () => {
@@ -294,7 +295,7 @@ export const HospitalRegistrationView = () => {
 
         {/* Current Registry Card */}
         <div className="card" style={{ padding: '22px 20px', borderRadius: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
             <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '16px' }}>
               <span className="d"></span>
               {L('سجل المستشفيات والمراكز المعتمدة', 'Accredited Hospitals Registry')}
@@ -302,24 +303,59 @@ export const HospitalRegistrationView = () => {
             </h3>
 
             {/* Quick Search */}
-            <div style={{ position: 'relative', width: '220px' }}>
-              <Search size={15} style={{ position: 'absolute', top: '10px', [isRTL ? 'right' : 'left']: '10px', color: 'var(--muted)' }} />
+            <div style={{ position: 'relative', width: '230px' }}>
+              <Search
+                size={15}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  [isRTL ? 'right' : 'left']: '11px',
+                  color: 'var(--muted)',
+                  pointerEvents: 'none',
+                  zIndex: 2
+                }}
+              />
               <input
                 type="text"
                 placeholder={L('بحث بالاسم أو الكود…', 'Search name or code…')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
-                  padding: '7px 12px',
-                  [isRTL ? 'paddingRight' : 'paddingLeft']: '32px',
+                  padding: '8px 12px',
+                  [isRTL ? 'paddingRight' : 'paddingLeft']: '36px',
+                  [isRTL ? 'paddingLeft' : 'paddingRight']: searchQuery ? '30px' : '12px',
                   fontSize: '12.5px',
-                  borderRadius: '8px'
+                  borderRadius: '10px'
                 }}
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    [isRTL ? 'left' : 'right']: '8px',
+                    zIndex: 2,
+                    background: 'none',
+                    border: 'none',
+                    padding: '2px',
+                    cursor: 'pointer',
+                    color: 'var(--muted)',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                  title={L('مسح البحث', 'Clear search')}
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div style={{ overflowX: 'auto', marginTop: '18px', marginBottom: '18px' }}>
             <table className="t">
               <thead>
                 <tr>

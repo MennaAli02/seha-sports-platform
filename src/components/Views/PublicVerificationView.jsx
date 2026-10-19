@@ -41,23 +41,24 @@ export const PublicVerificationView = () => {
         </div>
       </div>
 
-      <div className="card max-w-2xl mx-auto text-center p-6 sm:p-8 shadow-sm">
-        <div className="w-14 h-14 rounded-2xl bg-[var(--primary-50)] text-[var(--primary)] flex items-center justify-center mx-auto mb-4 shadow-sm">
+      <div className="card text-start p-6 sm:p-8 shadow-sm">
+        <div className="w-14 h-14 rounded-2xl bg-[var(--primary-50)] text-[var(--primary)] flex items-center justify-center shadow-sm" style={{ marginBottom: '20px' }}>
           <ShieldCheck className="w-7 h-7" />
         </div>
-        <h2 className="text-lg sm:text-xl font-bold text-[var(--ink)] mb-1">
+        <h2 className="text-lg sm:text-xl font-bold text-[var(--ink)] text-start" style={{ marginBottom: '20px' }}>
           {L('أدخل رقم الشهادة أو امسح الرمز (QR)', 'Enter Certificate Number or Scan QR')}
         </h2>
-        <p className="mut text-xs max-w-md mx-auto mb-5">
+        <p className="mut text-xs max-w-xl text-start leading-relaxed" style={{ marginBottom: '20px' }}>
           {L('الصيغة المعتمدة للشهادات الصادرة تبدأ بـ SH متبوعة برقم العام ثم التسلسل الرقمي المعتمد', 'Official certificate format begins with SH followed by year code and sequence')}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-2 justify-center max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row justify-start max-w-md" style={{ gap: '14px', marginBottom: '20px' }}>
           <input
             id="vq"
             type="text"
             dir="ltr"
-            className="mono font-bold text-center text-sm w-full"
+            className="mono font-bold text-sm w-full px-3.5 py-2.5"
+            style={{ textAlign: isRTL ? 'right' : 'left' }}
             placeholder="SH-26-004517"
             value={vq}
             onChange={(e) => setVq(e.target.value)}
@@ -69,7 +70,7 @@ export const PublicVerificationView = () => {
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2.5" style={{ marginTop: '10px', marginBottom: '12px' }}>
+        <div className="flex flex-wrap items-center justify-start gap-2.5" style={{ marginTop: '12px', marginBottom: '16px' }}>
           <button
             className="chip text-xs"
             onClick={() => {
@@ -165,7 +166,7 @@ export const PublicVerificationView = () => {
                 </div>
               </>
             ) : (
-              <div className="text-center py-3 text-xs text-[var(--danger-dark)] leading-relaxed">
+              <div className="text-start py-3 text-xs text-[var(--danger-dark)] leading-relaxed">
                 <p className="font-semibold mb-1">
                   {L(
                     'تنبيه: هذا الرقم لا يطابق أي شهادة صادرة عن منظومة «صحة» الرسمية.',

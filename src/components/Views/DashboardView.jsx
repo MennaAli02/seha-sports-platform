@@ -1,10 +1,9 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { IC } from '../../data/icons';
 import { StatusTag } from '../Common/StatusTag';
 import { KPICard } from '../Common/KPICard';
-import { Users, Award, ShieldCheck, Activity, Clock, CalendarCheck, HeartPulse, Stethoscope, ArrowUpRight } from 'lucide-react';
+import { Users, Award, ShieldCheck, Activity, Clock, CalendarCheck, HeartPulse, Stethoscope, ArrowUpRight, FileText, Info } from 'lucide-react';
 
 export const DashboardView = () => {
   const { isRTL, L } = useLanguage();
@@ -61,10 +60,10 @@ export const DashboardView = () => {
             className="btn sec"
             onClick={() => navigate('reports', { report: 'exec' })}
           >
-            {IC.rep} {L('التقرير التنفيذي', 'Executive report')}
+            <FileText className="w-4 h-4" /> {L('التقرير التنفيذي', 'Executive report')}
           </button>
           <button className="btn" onClick={() => navigate('cert')}>
-            {IC.cert} {L('سجل الشهادات', 'Certificates registry')}
+            <Award className="w-4 h-4" /> {L('سجل الشهادات', 'Certificates registry')}
           </button>
         </div>
       </div>
@@ -149,10 +148,10 @@ export const DashboardView = () => {
               {L('الكود الموحد', 'Unified Code')}
             </span>
           </div>
-          <p className="mut mb-3">
+          <p className="mut" style={{ marginBottom: 0 }}>
             {L('نسب اللياقة المستخرجة بعد الفحص السريري وتخطيط القلب حسب المرحلة العمرية', 'Clearance percentages per clinical exam and ECG categorized by youth and senior bands')}
           </p>
-          <div className="g5">
+          <div className="g5" style={{ marginTop: '16px' }}>
             {bands.map((x, i) => (
               <div
                 key={i}
@@ -182,10 +181,10 @@ export const DashboardView = () => {
               {ash.length} {L('حالة تحت الرعاية', 'active cases')}
             </span>
           </div>
-          <p className="mut mb-3">
+          <p className="mut" style={{ marginBottom: 0 }}>
             {L('مسار طبي مخصص للحالات ذات الملاحظات الإكلينيكية لإعادة التأهيل دون استبعاد قسري', 'Dedicated medical track for athletes with clinical findings ensuring continuous care and re-evaluation')}
           </p>
-          <div className="g5">
+          <div className="g5" style={{ marginTop: '16px', marginBottom: '16px' }}>
             {cfg.stages.map((st, i) => {
               const isLast = i === 4;
               return (
@@ -210,8 +209,8 @@ export const DashboardView = () => {
               );
             })}
           </div>
-          <div className="nt flex items-start gap-2" style={{ marginTop: '10px' }}>
-            <span className="text-sm font-bold text-[var(--primary)]">ℹ</span>
+          <div className="nt flex items-start gap-2">
+            <Info className="w-4 h-4 text-[var(--primary)] flex-none mt-0.5" />
             <span>
               {L(
                 'النادي يرى النتيجة النهائية فقط («لائق بشروط») حمايةً لخصوصية اللاعب (قانون 151/2020) — ولا يُستبعد أحد دون متابعة ورعاية.',

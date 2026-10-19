@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { IC } from '../../data/icons';
 import { StatusTag } from '../Common/StatusTag';
 import { KPICard } from '../Common/KPICard';
-import { Shield, Users, Award, Clock, AlertTriangle, UploadCloud, FileText, CheckCircle2 } from 'lucide-react';
+import { Shield, Users, Award, Clock, AlertTriangle, UploadCloud, FileText, CheckCircle2, Lock, Info, Printer } from 'lucide-react';
 
 export const ClubPortalView = () => {
   const { isRTL, L } = useLanguage();
@@ -49,7 +48,7 @@ export const ClubPortalView = () => {
         </div>
         <div className="act np">
           <button className="btn sec" onClick={() => navigate('reports', { report: 'club' })}>
-            {IC.print} {L('تقرير قائمة اللاعبين', 'Roster report')}
+            <Printer className="w-4 h-4" /> {L('تقرير قائمة اللاعبين', 'Roster report')}
           </button>
           <button className="btn" onClick={() => setClubTab('bulk')}>
             <UploadCloud className="w-4 h-4" />
@@ -166,7 +165,7 @@ export const ClubPortalView = () => {
                               navigate('cert');
                             }}
                           >
-                            {IC.cert} {L('الشهادة', 'Certificate')}
+                            <Award className="w-4 h-4" /> {L('الشهادة', 'Certificate')}
                           </button>
                         )}{' '}
                         <button
@@ -184,7 +183,7 @@ export const ClubPortalView = () => {
           </div>
 
           <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
-            <span className="text-sm font-bold text-[var(--primary)]">🔒</span>
+            <Lock className="w-4 h-4 text-[var(--primary)] flex-none mt-0.5" />
             <span className="text-xs">
               {L(
                 'يراعي النظام خصوصية الرياضيين: يرى النادي نتيجة الصلاحية فقط («لائق» أو «لائق بشروط») بعد موافقة اللاعب أو ولي الأمر — ولا تظهر التفاصيل المرضية الدقيقة إلا للفريق الطبي.',
@@ -257,11 +256,14 @@ export const ClubPortalView = () => {
             </div>
           </div>
 
-          <div className="nt" style={{ marginTop: '20px' }}>
-            {L(
-              'إجراءات الحجز الجماعي: تؤكد وحدة الطب الرياضي الموعد أو تقترح بديلاً خلال 24 ساعة؛ وتصل رسالة نصية (SMS) فورية بالموعد لولي أمر كل لاعب مسجل.',
-              'Booking workflow: Hospital unit confirms or reschedules within 24 hours; an automated SMS confirmation with preparation guidelines is sent to each athlete/guardian.'
-            )}
+          <div className="nt flex items-start gap-2" style={{ marginTop: '20px' }}>
+            <Info className="w-4 h-4 text-[var(--primary)] flex-none mt-0.5" />
+            <span className="text-xs">
+              {L(
+                'إجراءات الحجز الجماعي: تؤكد وحدة الطب الرياضي الموعد أو تقترح بديلاً خلال 24 ساعة؛ وتصل رسالة نصية (SMS) فورية بالموعد لولي أمر كل لاعب مسجل.',
+                'Booking workflow: Hospital unit confirms or reschedules within 24 hours; an automated SMS confirmation with preparation guidelines is sent to each athlete/guardian.'
+              )}
+            </span>
           </div>
 
           <button

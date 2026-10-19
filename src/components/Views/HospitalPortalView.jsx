@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { IC } from '../../data/icons';
 import { StatusTag } from '../Common/StatusTag';
 import { KPICard } from '../Common/KPICard';
-import { Stethoscope, Calendar, Clock, CheckCircle2, UserCheck, Search, QrCode, FileText, Check, ArrowRight } from 'lucide-react';
+import { Stethoscope, Calendar, Clock, CheckCircle2, UserCheck, Search, QrCode, FileText, Check, ArrowRight, Printer, Award, Zap, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 export const HospitalPortalView = () => {
   const { isRTL, L } = useLanguage();
@@ -22,6 +21,8 @@ export const HospitalPortalView = () => {
 
   const [hospTab, setHospTab] = useState('today'); // today, sched, bulk, issue
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
 
   const h = hosps[0];
   const a = players.filter(p => p.hs === 0 && (p.st === 'fit' || p.st === 'cond')).slice(0, 8);
@@ -31,6 +32,33 @@ export const HospitalPortalView = () => {
   const filteredLs = query.trim()
     ? ls.filter(p => p.bk.toLowerCase().includes(query.toLowerCase()) || p.name.includes(query) || p.nid.includes(query))
     : ls;
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, pageSize, hospTab]);
+
+  const totalRecords = filteredLs.length;
+  const totalPages = Math.max(1, Math.ceil(totalRecords / pageSize));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const startIndex = (safePage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalRecords);
+  const paginatedLs = filteredLs.slice(startIndex, endIndex);
+
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (safePage <= 3) {
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (safePage >= totalPages - 2) {
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', safePage - 1, safePage, safePage + 1, '...', totalPages);
+      }
+    }
+    return pages;
+  };
 
   return (
     <div className="space-y-4">
@@ -56,10 +84,10 @@ export const HospitalPortalView = () => {
         </div>
         <div className="act np">
           <button className="btn sec" onClick={() => navigate('reports', { report: 'hosp' })}>
-            {IC.print} {L('تقرير تشغيل اليوم', 'Daily operational report')}
+            <Printer className="w-4 h-4" /> {L('تقرير تشغيل اليوم', 'Daily operational report')}
           </button>
           <button className="btn" onClick={() => navigate('doctor')}>
-            {IC.steth} {L('شاشة الطبيب المعاين', 'Physician examination')}
+            <Stethoscope className="w-4 h-4" /> {L('شاشة الطبيب المعاين', 'Physician examination')}
           </button>
         </div>
       </div>
@@ -117,89 +145,227 @@ export const HospitalPortalView = () => {
       {/* Tab 1: Today's list */}
       {hospTab === 'today' && (
         <div className="card">
-          <div className="flex items-center justify-between gap-3 mb-4 np flex-wrap">
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-[var(--muted)] absolute top-1/2 -translate-y-1/2 start-3 pointer-events-none" />
+          <div
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 np"
+            style={{ marginBottom: '24px' }}
+          >
+            <div className="relative flex-1 max-w-md w-full">
+              <Search
+                className="w-4 h-4 text-[var(--muted)] pointer-events-none"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  [isRTL ? 'right' : 'left']: '14px',
+                  zIndex: 2
+                }}
+              />
               <input
                 type="text"
                 placeholder={L('بحث سريع: رقم الحجز / الاسم / الرقم القومي…', 'Search booking code, athlete name, or national ID…')}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="ps-9 pe-3 py-2 text-sm"
+                className="search-input w-full py-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-100)] transition-all shadow-xs"
+                style={{
+                  [isRTL ? 'paddingRight' : 'paddingLeft']: '44px',
+                  [isRTL ? 'paddingLeft' : 'paddingRight']: query ? '38px' : '14px'
+                }}
               />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer"
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    [isRTL ? 'left' : 'right']: '12px',
+                    zIndex: 2
+                  }}
+                  title={L('مسح البحث', 'Clear search')}
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-            <button className="btn sec sm" onClick={() => navigate('doctor')}>
+            <button className="btn sec sm shrink-0 self-start sm:self-auto" onClick={() => navigate('doctor')}>
               <QrCode className="w-4 h-4" />
               {L('مسح رمز الحجز الإلكتروني', 'Scan athlete QR ticket')}
             </button>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="t">
-              <thead>
-                <tr>
-                  <th>{L('رمز الحجز', 'Booking')}</th>
-                  <th>{L('الرياضي وبيانات القيد', 'Athlete details')}</th>
-                  <th>{L('اللعبة الرياضية', 'Sport')}</th>
-                  <th>{L('المستوى', 'Level')}</th>
-                  <th>{L('موعد الكشف', 'Time slot')}</th>
-                  <th>{L('الحالة الحالية', 'Current status')}</th>
-                  <th className="text-end">{L('الإجراء الطبي', 'Clinical action')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredLs.map((p, i) => {
-                  const globalIdx = players.indexOf(p);
-                  return (
-                    <tr key={p.id}>
-                      <td className="mono font-bold text-xs text-[var(--primary)]">{p.bk}</td>
-                      <td>
-                        <b className="text-xs text-[var(--ink)] block">{p.name}</b>
-                        <span className="text-[11px] text-[var(--muted)]">
-                          {p.age} {L('سنة', 'y')} · {isRTL ? p.gov : GOV_EN[p.gov] || p.gov}
+          {totalRecords === 0 ? (
+            <div className="text-center py-10 border border-dashed border-[var(--line)] rounded-xl my-4">
+              <FileText className="w-10 h-10 text-[var(--muted)] mx-auto mb-2 opacity-50" />
+              <b className="text-sm text-[var(--ink)] block">
+                {L('لم يتم العثور على رياضيين مطابقين للبحث', 'No matching athlete records found')}
+              </b>
+              <p className="mut text-xs mt-1">
+                {L('جرّب تعديل كلمات البحث للعثور على حجز الرياضي', 'Try adjusting your search terms')}
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto" style={{ marginTop: '22px', marginBottom: '24px' }}>
+              <table className="t">
+                <thead>
+                  <tr>
+                    <th>{L('رمز الحجز', 'Booking')}</th>
+                    <th>{L('الرياضي وبيانات القيد', 'Athlete details')}</th>
+                    <th>{L('اللعبة الرياضية', 'Sport')}</th>
+                    <th>{L('المستوى', 'Level')}</th>
+                    <th>{L('موعد الكشف', 'Time slot')}</th>
+                    <th>{L('الحالة الحالية', 'Current status')}</th>
+                    <th className="text-end">{L('الإجراء الطبي', 'Clinical action')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedLs.map((p, idx) => {
+                    const actualIdx = startIndex + idx;
+                    const globalIdx = players.indexOf(p);
+                    return (
+                      <tr key={p.id}>
+                        <td className="mono font-bold text-xs text-[var(--primary)]">{p.bk}</td>
+                        <td>
+                          <b className="text-xs text-[var(--ink)] block">{p.name}</b>
+                          <span className="text-[11px] text-[var(--muted)]">
+                            {p.age} {L('سنة', 'y')} · {isRTL ? p.gov : GOV_EN[p.gov] || p.gov}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="font-semibold text-xs text-[var(--ink)]">
+                            {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[var(--primary-50)] text-[var(--primary-700)] font-extrabold text-xs">
+                            {p.lv}
+                          </span>
+                        </td>
+                        <td className="mono text-xs font-semibold" dir="ltr">
+                          {9 + Math.floor(actualIdx / 2)}:{actualIdx % 2 ? '30' : '00'} {actualIdx < 6 ? 'ص' : 'م'}
+                        </td>
+                        <td><StatusTag status={p.st} /></td>
+                        <td className="text-end" style={{ whiteSpace: 'nowrap' }}>
+                          {p.st === 'book' ? (
+                            <button
+                              className="btn sm"
+                              onClick={() => navigate('doctor')}
+                            >
+                              <Stethoscope className="w-3.5 h-3.5" />
+                              {L('بدء الفحص الطبي', 'Start exam')}
+                            </button>
+                          ) : (
+                            <button
+                              className="btn sec sm"
+                              onClick={() => {
+                                setSelectedCertIndex(globalIdx);
+                                navigate('cert');
+                              }}
+                            >
+                              <Award className="w-4 h-4" /> {L('عرض الشهادة', 'View cert')}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Pagination Footer */}
+          {totalRecords > 0 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 mt-4 border-t border-[var(--line)] np">
+              {/* Left / Start: Rows per page selector & range summary */}
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 w-full sm:w-auto shrink-0">
+                <div className="flex items-center gap-2 text-xs text-[var(--muted)] whitespace-nowrap shrink-0">
+                  <span className="whitespace-nowrap font-medium">{L('عدد الصفوف في الصفحة:', 'Rows per page:')}</span>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => setPageSize(Number(e.target.value))}
+                    className="w-auto shrink-0 py-1 px-2.5 text-xs bg-[var(--card)] border border-[var(--color-border)] rounded-lg font-mono font-bold cursor-pointer"
+                    style={{ width: 'auto' }}
+                  >
+                    {[5, 10, 20, 50].map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="text-xs text-[var(--muted)] whitespace-nowrap shrink-0">
+                  {L('عرض ', 'Showing ')}
+                  <b className="font-mono text-[var(--ink)]">{startIndex + 1}</b>
+                  {L(' إلى ', ' to ')}
+                  <b className="font-mono text-[var(--ink)]">{endIndex}</b>
+                  {L(' من أصل ', ' of ')}
+                  <b className="font-mono text-[var(--ink)]">{totalRecords}</b>
+                  {L(' سجل', ' records')}
+                </div>
+              </div>
+
+              {/* Right / End: Pagination controls */}
+              <div className="flex items-center justify-center sm:justify-end gap-1.5 w-full sm:w-auto">
+                <button
+                  type="button"
+                  disabled={safePage === 1}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  className={`p-1.5 rounded-lg border text-xs font-semibold flex items-center justify-center transition-all ${
+                    safePage === 1
+                      ? 'opacity-40 cursor-not-allowed border-[var(--line)] text-[var(--muted)]'
+                      : 'cursor-pointer hover:bg-[var(--primary-50)] border-[var(--color-border)] text-[var(--ink)]'
+                  }`}
+                  title={L('الصفحة السابقة', 'Previous page')}
+                >
+                  {isRTL ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+                </button>
+
+                <div className="flex items-center gap-1">
+                  {getPageNumbers().map((num, idx) => {
+                    if (num === '...') {
+                      return (
+                        <span key={`ellipsis-${idx}`} className="px-2 text-xs text-[var(--muted)] font-mono">
+                          …
                         </span>
-                      </td>
-                      <td>
-                        <span className="font-semibold text-xs text-[var(--ink)]">
-                          {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]}
-                        </span>
-                      </td>
-                      <td>
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[var(--primary-50)] text-[var(--primary-700)] font-extrabold text-xs">
-                          {p.lv}
-                        </span>
-                      </td>
-                      <td className="mono text-xs font-semibold" dir="ltr">
-                        {9 + Math.floor(i / 2)}:{i % 2 ? '30' : '00'} {i < 6 ? 'ص' : 'م'}
-                      </td>
-                      <td><StatusTag status={p.st} /></td>
-                      <td className="text-end" style={{ whiteSpace: 'nowrap' }}>
-                        {p.st === 'book' ? (
-                          <button
-                            className="btn sm"
-                            onClick={() => navigate('doctor')}
-                          >
-                            <Stethoscope className="w-3.5 h-3.5" />
-                            {L('بدء الفحص الطبي', 'Start exam')}
-                          </button>
-                        ) : (
-                          <button
-                            className="btn sec sm"
-                            onClick={() => {
-                              setSelectedCertIndex(globalIdx);
-                              navigate('cert');
-                            }}
-                          >
-                            {IC.cert} {L('عرض الشهادة', 'View cert')}
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      );
+                    }
+                    const isCurrent = safePage === num;
+                    return (
+                      <button
+                        key={`page-${num}`}
+                        type="button"
+                        onClick={() => setPage(num)}
+                        className={`min-w-[32px] h-8 px-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                          isCurrent
+                            ? 'bg-[var(--primary)] text-white shadow-xs'
+                            : 'bg-[var(--card)] border border-[var(--color-border)] text-[var(--ink)] hover:bg-[var(--primary-50)]'
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={safePage === totalPages}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  className={`p-1.5 rounded-lg border text-xs font-semibold flex items-center justify-center transition-all ${
+                    safePage === totalPages
+                      ? 'opacity-40 cursor-not-allowed border-[var(--line)] text-[var(--muted)]'
+                      : 'cursor-pointer hover:bg-[var(--primary-50)] border-[var(--color-border)] text-[var(--ink)]'
+                  }`}
+                  title={L('الصفحة التالية', 'Next page')}
+                >
+                  {isRTL ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -375,14 +541,14 @@ export const HospitalPortalView = () => {
                   key={i}
                   className={`s ${i < 2 ? 'done' : i === 2 ? 'on' : ''}`}
                 >
-                  <div className="dot">{i < 2 ? '✓' : i + 1}</div>
+                  <div className="dot flex items-center justify-center">{i < 2 ? <Check className="w-3.5 h-3.5" /> : i + 1}</div>
                   <span>{s}</span>
                 </div>
               ))}
             </div>
 
             <div className="nt mt-6 flex items-start gap-2">
-              <span className="text-sm font-bold text-[var(--primary)]">⚡</span>
+              <Zap className="w-4 h-4 text-[var(--primary)] flex-none mt-0.5" />
               <span className="text-xs">
                 {L(
                   'كفاءة تشغيلية كاملة: يدعم النظام الأجهزة اللوحية (Tablets) والحواسيب عبر المتصفح مباشرة دون الحاجة لأي برمجيات معقدة.',

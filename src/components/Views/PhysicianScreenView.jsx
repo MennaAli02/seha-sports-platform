@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { IC } from '../../data/icons';
-import { Stethoscope, QrCode, CheckCircle2, HeartPulse, XCircle, Camera, ArrowLeft, ArrowRight, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Stethoscope, QrCode, CheckCircle2, HeartPulse, XCircle, Camera, ArrowLeft, ArrowRight, ShieldCheck, AlertTriangle, Check } from 'lucide-react';
 
 export const PhysicianScreenView = () => {
   const { isRTL, L } = useLanguage();
@@ -77,7 +76,7 @@ export const PhysicianScreenView = () => {
             }}
             style={{ cursor: examStep > i + 1 ? 'pointer' : 'default' }}
           >
-            <div className="dot">{examStep > i + 1 ? '✓' : i + 1}</div>
+            <div className="dot flex items-center justify-center">{examStep > i + 1 ? <Check className="w-3.5 h-3.5" /> : i + 1}</div>
             <span>{s}</span>
           </div>
         ))}
@@ -86,26 +85,30 @@ export const PhysicianScreenView = () => {
       {/* Step 1: Scan & ID Match */}
       {examStep === 1 && (
         <div className="card max-w-2xl">
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2" style={{ marginBottom: '20px' }}>
             <QrCode className="w-5 h-5 text-[var(--primary)]" />
             <h3 className="m-0 text-base">{L('التحقق من تذكرة الحجز ومطابقة هوية الرياضي', 'Booking Verification & Biometric ID Match')}</h3>
           </div>
-          <p className="mut text-xs mb-4">
+          <p className="mut text-xs" style={{ marginBottom: '20px' }}>
             {L(
               'امسح رمز الاستجابة السريعة (QR) من هاتف المواطن أو اكتب كود الحجز للتأكد من سداد الرسوم ومطابقة الرقم القومي',
               'Scan the digital QR ticket from the citizen app or enter the booking code to verify identity and payment status'
             )}
           </p>
 
-          <label className="f">
-            <span>{L('رمز الحجز الإلكتروني', 'Electronic booking ticket code')}</span>
-            <input
-              id="d_bk"
-              dir="ltr"
-              className="mono font-bold text-sm max-w-xs"
-              defaultValue={p.bk}
-            />
-          </label>
+          <div style={{ marginBottom: '20px' }}>
+            <label className="f" style={{ display: 'block', margin: 0 }}>
+              <span style={{ display: 'block', marginBottom: '10px' }}>
+                {L('رمز الحجز الإلكتروني', 'Electronic booking ticket code')}
+              </span>
+              <input
+                id="d_bk"
+                dir="ltr"
+                className="mono font-bold text-sm max-w-xs"
+                defaultValue={p.bk}
+              />
+            </label>
+          </div>
 
           <button className="btn sec" onClick={() => setDshow(true)}>
             <QrCode className="w-4 h-4" />
@@ -119,8 +122,9 @@ export const PhysicianScreenView = () => {
                 <div className="text-xs leading-relaxed">
                   <b className="text-sm text-[var(--ink)] block">{p.name}</b>
                   <span>{p.age} {L('سنة', 'y')} · {isRTL ? cfg.sports[p.sp] : SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp]} · {L(lv.ar, lv.en)}</span>
-                  <div className="mt-1 font-semibold text-[var(--success-dark)]">
-                    {L('✓ مطابقة الهوية: ناجحة · الدفع الإلكتروني: مسدد · إقرار ولي الأمر: موقع رسميًا', '✓ ID Match: OK · Payment: Settled · Guardian Declaration: Signed')}
+                  <div className="mt-1 font-semibold text-[var(--success-dark)] flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[var(--success-dark)] flex-none" />
+                    <span>{L('مطابقة الهوية: ناجحة · الدفع الإلكتروني: مسدد · إقرار ولي الأمر: موقع رسميًا', 'ID Match: OK · Payment: Settled · Guardian Declaration: Signed')}</span>
                   </div>
                 </div>
               </div>
@@ -136,7 +140,7 @@ export const PhysicianScreenView = () => {
       {/* Step 2: Record Exams */}
       {examStep === 2 && (
         <div className="card max-w-2xl">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between" style={{ marginBottom: '20px' }}>
             <h3 className="m-0 text-base">
               <span className="d"></span>
               {L(lv.ar, lv.en)}
@@ -146,14 +150,14 @@ export const PhysicianScreenView = () => {
             </span>
           </div>
 
-          <p className="mut text-xs mb-4">
+          <p className="mut text-xs" style={{ marginBottom: '20px' }}>
             {L(
               'تسجيل فوري بنقرة واحدة لكل فحص: طبيعي / غير طبيعي — مع إمكانية إرفاق صورة تخطيط القلب أو الإيكو مباشرة',
               'Single-tap recording for each test: Normal or Abnormal — attach ECG strips or Echo captures via camera'
             )}
           </p>
 
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2" style={{ marginBottom: '20px' }}>
             {lv.ex.map((e, i) => {
               const v = examRes[i] == null ? 1 : examRes[i];
               return (
@@ -198,8 +202,8 @@ export const PhysicianScreenView = () => {
             })}
           </div>
 
-          <label className="f">
-            <span>{L('ملاحظات إكلينيكية وتوصيات الطبيب (سرية ومشفرة)', 'Clinical notes & confidential recommendations')}</span>
+          <label className="f" style={{ marginBottom: '20px', display: 'block' }}>
+            <span style={{ display: 'block', marginBottom: '8px' }}>{L('ملاحظات إكلينيكية وتوصيات الطبيب (سرية ومشفرة)', 'Clinical notes & confidential recommendations')}</span>
             <textarea placeholder={L('اكتب أي ملاحظات أو قياسات سريرية دقيقة…', 'Enter confidential clinical remarks or measurements…')}></textarea>
           </label>
 
@@ -218,13 +222,13 @@ export const PhysicianScreenView = () => {
       {/* Step 3: Medical Decision */}
       {examStep === 3 && (
         <div className="card max-w-2xl">
-          <h3 className="mb-2">
+          <h3 style={{ marginBottom: '20px' }}>
             <span className="d"></span>
             {L('القرار الطبي الإكلينيكي للياقة الرياضية', 'Final Clinical Fitness Determination')}
           </h3>
 
           {abn > 0 ? (
-            <div className="nt wr flex items-start gap-2 mb-4">
+            <div className="nt wr flex items-start gap-2" style={{ marginBottom: '20px' }}>
               <AlertTriangle className="w-5 h-5 text-[var(--warning-dark)] flex-none mt-0.5" />
               <div className="text-xs">
                 <b>{L('تنبيه: تم رصد نتائج غير طبيعية بالفحص', 'Warning: Abnormal clinical findings detected')}</b>
@@ -234,12 +238,12 @@ export const PhysicianScreenView = () => {
               </div>
             </div>
           ) : (
-            <p className="mut text-xs mb-4">
+            <p className="mut text-xs" style={{ marginBottom: '20px' }}>
               {L('جميع الفحوصات الإكلينيكية ضمن الحدود الطبيعية. اختر القرار المناسب للاعتماد.', 'All clinical tests within normal limits. Choose determination for sign-off.')}
             </p>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ marginBottom: '20px' }}>
             <button
               className="p-4 rounded-xl border-2 border-[var(--success)] bg-[var(--success-bg)] text-[var(--success-dark)] font-bold text-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all cursor-pointer"
               onClick={() => docDo('fit')}

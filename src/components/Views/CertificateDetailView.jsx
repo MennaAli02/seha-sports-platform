@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { IC } from '../../data/icons';
 import { QRCodeSVG } from '../Common/QRCodeSVG';
 import { fmtDate } from '../../data/mockData';
 import { Award, ArrowLeft, Printer, ShieldCheck, Calendar, Clock, CheckCircle2, HeartPulse, XCircle } from 'lucide-react';
@@ -50,7 +49,7 @@ export const CertificateDetailView = () => {
           </div>
           <div className="act np">
             <button className="btn ghost" onClick={handleBack}>
-              {IC.back} {L('سجل الشهادات', 'Certificate registry')}
+              <ArrowLeft className="w-4 h-4" /> {L('سجل الشهادات', 'Certificate registry')}
             </button>
           </div>
         </div>
@@ -169,7 +168,7 @@ export const CertificateDetailView = () => {
         </div>
         <div className="act np">
           <button className="btn ghost" onClick={handleBack}>
-            {IC.back} {L('سجل الشهادات', 'Certificate registry')}
+            <ArrowLeft className="w-4 h-4" /> {L('سجل الشهادات', 'Certificate registry')}
           </button>
           <button className="btn sec" onClick={() => window.print()}>
             <Printer className="w-4 h-4" />

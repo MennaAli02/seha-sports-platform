@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
 import { IC, LOGO_SVG } from '../../data/icons';
-import { Menu } from 'lucide-react';
+import { Menu, LogOut } from 'lucide-react';
 
 export const SideNavBar = () => {
   const { isRTL, L } = useLanguage();
-  const { currentRoute, navigate, sidebarExpanded, toggleSidebar, cfg } = useSeha();
+  const { currentRoute, navigate, sidebarExpanded, toggleSidebar, cfg, showToast } = useSeha();
 
   // Close drawer on ESC key on mobile/tablet
   useEffect(() => {
@@ -22,6 +22,14 @@ export const SideNavBar = () => {
   const handleNavClick = (routeKey) => {
     navigate(routeKey);
     // On mobile/tablet, close drawer after navigation
+    if (sidebarExpanded && typeof window !== 'undefined' && window.innerWidth < 1024) {
+      toggleSidebar();
+    }
+  };
+
+  const handleLogout = () => {
+    showToast(L('تم تسجيل الخروج بنجاح من المنظومة', 'Logged out successfully from the platform'));
+    navigate('dash');
     if (sidebarExpanded && typeof window !== 'undefined' && window.innerWidth < 1024) {
       toggleSidebar();
     }
@@ -94,8 +102,8 @@ export const SideNavBar = () => {
                 {LOGO_SVG}
               </div>
               <div className="side-brand-text min-w-0 flex-1">
-                <b className="block leading-tight text-[13.5px] font-extrabold text-white">{L(cfg.org.ar, cfg.org.en)}</b>
-                <small className="block leading-snug text-[11px] text-white/85 mt-0.5">{L(cfg.org.sub.ar, cfg.org.sub.en)}</small>
+                <b className="block leading-tight text-[13px] font-bold text-white">{L(cfg.org.ar, cfg.org.en)}</b>
+                <small className="block leading-snug text-[10.5px] text-white/80 mt-0.5">{L(cfg.org.sub.ar, cfg.org.sub.en)}</small>
               </div>
             </div>
           )}
@@ -133,6 +141,23 @@ export const SideNavBar = () => {
               })}
             </React.Fragment>
           ))}
+        </div>
+        {/* Bottom Footer: Log out */}
+        <div className="side-footer">
+          <button
+            type="button"
+            className="side-logout-btn"
+            onClick={handleLogout}
+            title={L('تسجيل الخروج', 'Log out')}
+            aria-label={L('تسجيل الخروج', 'Log out')}
+          >
+            <LogOut className="w-5 h-5 shrink-0" />
+            {sidebarExpanded && (
+              <span className="truncate flex-1 select-none font-semibold">
+                {L('تسجيل الخروج', 'Log out')}
+              </span>
+            )}
+          </button>
         </div>
       </aside>
     </>
