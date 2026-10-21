@@ -17,8 +17,8 @@ export const SehaProvider = ({ children }) => {
 
   // Authentication & Role State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState('super_admin');
-  const [currentUser, setCurrentUser] = useState(mockPersonas.super_admin);
+  const [userRole, setUserRole] = useState('guardian');
+  const [currentUser, setCurrentUser] = useState(mockPersonas.guardian);
 
   // Default screen is role_select per user specification
   const [currentRoute, setCurrentRoute] = useState('role_select');
@@ -47,9 +47,23 @@ export const SehaProvider = ({ children }) => {
   }, []);
 
   const login = useCallback((role, credentials = {}) => {
-    const targetPersona = mockPersonas[role] || mockPersonas.super_admin;
+    const basePersona = mockPersonas[role] || mockPersonas.guardian;
+    const personaName = credentials.name || basePersona.name;
+    const personaNationalId = credentials.national_id || credentials.nationalId || credentials.identifier || basePersona.nationalId;
+    const personaEmail = credentials.email || basePersona.email;
+
+    const userPersona = {
+      ...basePersona,
+      name: personaName,
+      nationalId: personaNationalId,
+      email: personaEmail,
+      phone: credentials.phone || basePersona.phone,
+      athlete: credentials.athlete,
+      guardian: credentials.guardian,
+    };
+
     setUserRole(role);
-    setCurrentUser(targetPersona);
+    setCurrentUser(userPersona);
     setIsAuthenticated(true);
 
     const isCitizenType = role === 'citizen' || role === 'athlete' || role === 'guardian';
@@ -59,14 +73,52 @@ export const SehaProvider = ({ children }) => {
     if (role === 'guardian') {
       // For guardian, start with first child (index 1: Maryam)
       setSelectedPlayerIndex(1);
-      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول كولي أمر (حساب عائلي)`);
+      showToast(`مرحبًا ${personaName} — تم تسجيل الدخول كولي أمر (حساب عائلي)`);
     } else if (role === 'athlete' || role === 'citizen') {
-      setSelectedPlayerIndex(0);
-      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول كرياضي (حساب فردي)`);
+      // If logging in as an athlete, match the player by National ID
+      const targetNid = String(personaNationalId).trim();
+      const existingIdx = players.findIndex(p => String(p.nid).trim() === targetNid);
+      if (existingIdx !== -1) {
+        setSelectedPlayerIndex(existingIdx);
+      } else {
+        // Newly registered athlete: create profile in players list
+        const newPlayer = {
+          id: credentials.athlete?.code || ('P-' + (1000 + players.length)),
+          nid: targetNid,
+          name: personaName,
+          g: credentials.gender === 'female' ? 'F' : 'M',
+          age: 18,
+          gov: "القاهرة",
+          sp: 0,
+          lv: 1,
+          bk: "BK-26-" + Math.floor(100000 + Math.random() * 900000),
+          st: "fit",
+          ct: "SH-26-" + Math.floor(100000 + Math.random() * 900000),
+          ch: "app",
+          hs: 0,
+          cl: 0,
+          gd: "—",
+          rel: { ar: "الرياضي (حساب فردي)", en: "Athlete (Individual)", isPrimary: true },
+          iss: { y: 2026, m: 10, d: 21 },
+          exp: { y: 2027, m: 10, d: 20 },
+          dobm: 1,
+          dobd: 1,
+          doby: 2005,
+          bp: "120/80",
+          hr: 70,
+          fp: "5B9C 81D2 1F3A 44C0",
+          tm: "09:00",
+          verificationStatus: "verified",
+          medicalHistory: []
+        };
+        setPlayers(prev => [newPlayer, ...prev]);
+        setSelectedPlayerIndex(0);
+      }
+      showToast(`مرحبًا ${personaName} — تم تسجيل الدخول كرياضي (حساب فردي)`);
     } else {
-      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول بصلاحيات مسؤول المنظومة`);
+      showToast(`مرحبًا ${personaName} — تم تسجيل الدخول بصلاحيات مسؤول المنظومة`);
     }
-  }, [showToast]);
+  }, [players, showToast]);
 
   const logout = useCallback(() => {
     setIsAuthenticated(false);
@@ -89,7 +141,7 @@ export const SehaProvider = ({ children }) => {
       const updated = [...players];
       updated[existingIndex] = {
         ...updated[existingIndex],
-        gd: currentUser?.name || 'أحمد يوسف السيد',
+        gd: currentUser?.name || 'يوسف عبدالله السيد',
         rel: {
           ar: `${childData.relationship || 'ابن'} (تابع موثق)`,
           en: `${childData.relationship || 'Child'} (Verified Dependent)`,

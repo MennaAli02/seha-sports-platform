@@ -6,6 +6,7 @@ import { StatusTag } from '../../Common/StatusTag';
 import {
   Calendar,
   CheckCircle2,
+  Check,
   CreditCard,
   Building2,
   QrCode,
@@ -268,7 +269,7 @@ export const CitizenBookingsTab = () => {
             /* Multi-Step Wizard */
             <div className="card max-w-2xl mx-auto">
               {/* Stepper matching CSS .steps */}
-              <div className="steps" style={{ margin: '4px 0 16px' }}>
+              <div className="steps mb-5">
                 {[
                   { n: 1, label: L('الهوية', 'Identity') },
                   { n: 2, label: L('المستوى', 'Level') },
@@ -280,10 +281,16 @@ export const CitizenBookingsTab = () => {
                   return (
                     <div
                       key={s.n}
-                      className={`stp ${isDone ? 'done' : ''} ${isCur ? 'cur' : ''}`}
-                      data-n={s.n}
+                      className={`s ${isDone ? 'done' : isCur ? 'on' : ''}`}
+                      onClick={() => {
+                        if (isDone) setStep(s.n);
+                      }}
+                      style={{ cursor: isDone ? 'pointer' : 'default' }}
                     >
-                      {s.label}
+                      <div className="dot flex items-center justify-center">
+                        {isDone ? <Check className="w-3.5 h-3.5" /> : s.n}
+                      </div>
+                      <span>{s.label}</span>
                     </div>
                   );
                 })}
@@ -415,7 +422,7 @@ export const CitizenBookingsTab = () => {
                   </div>
 
                   {/* Level preview box */}
-                  <div className="p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/50 my-3 text-xs">
+                  <div className="p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/50 my-[10px] text-xs">
                     <div className="flex justify-between items-center mb-1.5">
                       <b className="text-[var(--ink)] text-sm">{isRTL ? levelObj.ar : levelObj.en}</b>
                       <span className="font-bold text-[var(--primary-700)] bg-[var(--primary-50)] px-2 py-0.5 rounded">
@@ -521,7 +528,7 @@ export const CitizenBookingsTab = () => {
                     {L('إقرار ما قبل الكشف وسداد الرسوم', 'Pre-Exam Declaration & Payment')}
                   </h3>
 
-                  <div className="p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40 mb-3 space-y-2">
+                  <div className="p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40 my-[10px] space-y-2">
                     <label className="chk">
                       <input
                         type="checkbox"

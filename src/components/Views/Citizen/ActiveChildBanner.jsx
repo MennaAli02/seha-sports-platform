@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useSeha } from '../../../context/SehaContext';
+import { SP_EN } from '../../../data/mockData';
 import {
   Users,
   UserCheck,
@@ -20,8 +21,7 @@ export const ActiveChildBanner = () => {
     cfg,
     navigate,
     userRole,
-    showToast,
-    SP_EN
+    showToast
   } = useSeha();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -43,8 +43,8 @@ export const ActiveChildBanner = () => {
     return null;
   }
 
-  const currentChild = players[selectedPlayerIndex] || players[1] || players[0];
-  const familyChildren = players.slice(1);
+  const currentChild = players[selectedPlayerIndex] || players[0];
+  const familyChildren = players;
 
   const handleSelect = (idx) => {
     setSelectedPlayerIndex(idx);
@@ -114,7 +114,7 @@ export const ActiveChildBanner = () => {
                 </div>
                 <div className="space-y-1 max-h-56 overflow-y-auto">
                   {familyChildren.map((ch, idx) => {
-                    const actualIdx = idx + 1;
+                    const actualIdx = idx;
                     const isSelected = selectedPlayerIndex === actualIdx;
                     return (
                       <div

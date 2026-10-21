@@ -57,8 +57,8 @@ export const CitizenFamilyTab = () => {
   const [newChildAge, setNewChildAge] = useState(11);
   const [newChildSport, setNewChildSport] = useState(0);
 
-  // All connected family children: players[1..4] and any dynamically added players
-  const familyChildren = players.slice(1);
+  // All connected family children: son and daughter
+  const familyChildren = players;
   const currentChild = players[selectedPlayerIndex] || familyChildren[0] || players[0];
 
   const handleSelectChild = (idx) => {
@@ -301,9 +301,9 @@ export const CitizenFamilyTab = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
           {familyChildren.map((child, fIdx) => {
-            const actualIndex = fIdx + 1;
+            const actualIndex = fIdx;
             const isActive = selectedPlayerIndex === actualIndex;
             const isPending = child.verificationStatus === 'pending';
 

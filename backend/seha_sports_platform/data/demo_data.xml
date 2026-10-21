@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
     <!-- Demo Contact: Guardian Youssef Abdullah -->
     <record id="partner_demo_guardian" model="res.partner">
         <field name="name">يوسف عبدالله السيد</field>
@@ -8,10 +8,24 @@
         <field name="is_company">False</field>
     </record>
 
+    <!-- Demo Portal User 1: Guardian -->
+    <record id="user_demo_guardian" model="res.users">
+        <field name="name">يوسف عبدالله السيد</field>
+        <field name="login">guardian@seha.gov.eg</field>
+        <field name="password">guardian2026</field>
+        <field name="email">guardian@seha.gov.eg</field>
+        <field name="partner_id" ref="partner_demo_guardian"/>
+    </record>
+
+    <record id="seha_sports_platform.group_seha_guardian" model="res.groups">
+        <field name="user_ids" eval="[(4, ref('user_demo_guardian'))]"/>
+    </record>
+
     <!-- Demo Guardian Record -->
     <record id="parent_demo_youssef" model="seha.parent">
         <field name="name">يوسف عبدالله السيد</field>
         <field name="partner_id" ref="partner_demo_guardian"/>
+        <field name="user_id" ref="user_demo_guardian"/>
         <field name="national_id">27501010104829</field>
         <field name="phone">01012345678</field>
         <field name="email">guardian@seha.gov.eg</field>
@@ -27,10 +41,24 @@
         <field name="is_company">False</field>
     </record>
 
+    <!-- Demo Portal User 2: Athlete 1 Ahmad (Son) -->
+    <record id="user_demo_athlete" model="res.users">
+        <field name="name">أحمد يوسف السيد</field>
+        <field name="login">athlete@seha.gov.eg</field>
+        <field name="password">athlete2026</field>
+        <field name="email">athlete@seha.gov.eg</field>
+        <field name="partner_id" ref="partner_demo_player_ahmad"/>
+    </record>
+
+    <record id="seha_sports_platform.group_seha_athlete" model="res.groups">
+        <field name="user_ids" eval="[(4, ref('user_demo_athlete'))]"/>
+    </record>
+
     <!-- Demo Athlete 1: Ahmad Youssef -->
     <record id="player_demo_ahmad" model="seha.player">
         <field name="name">أحمد يوسف السيد</field>
         <field name="partner_id" ref="partner_demo_player_ahmad"/>
+        <field name="user_id" ref="user_demo_athlete"/>
         <field name="national_id">30408150104829</field>
         <field name="dob">2010-05-12</field>
         <field name="gender">male</field>
@@ -51,10 +79,25 @@
         <field name="is_company">False</field>
     </record>
 
+    <!-- Demo Portal User 3: Athlete 2 Maryam (Daughter) -->
+    <record id="user_demo_player_maryam" model="res.users">
+        <field name="name">مريم أحمد يوسف</field>
+        <field name="login">maryam@seha.gov.eg</field>
+        <field name="password">athlete2026</field>
+        <field name="email">maryam@seha.gov.eg</field>
+        <field name="partner_id" ref="partner_demo_player_maryam"/>
+    </record>
+
+    <!-- Add Maryam to athlete group -->
+    <record id="seha_sports_platform.group_seha_athlete" model="res.groups">
+        <field name="user_ids" eval="[(4, ref('user_demo_player_maryam'))]"/>
+    </record>
+
     <!-- Demo Athlete 2: Maryam Ahmad -->
     <record id="player_demo_maryam" model="seha.player">
         <field name="name">مريم أحمد يوسف</field>
         <field name="partner_id" ref="partner_demo_player_maryam"/>
+        <field name="user_id" ref="user_demo_player_maryam"/>
         <field name="national_id">30806120104829</field>
         <field name="dob">2012-08-20</field>
         <field name="gender">female</field>

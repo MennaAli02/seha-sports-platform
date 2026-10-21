@@ -73,6 +73,28 @@ export const mockPersonas = {
     phone: '01012345678',
     nationalId: '27501010104829',
     childrenCount: 2,
+    children: [
+      {
+        name: 'أحمد يوسف السيد',
+        relation: 'الابن (حساب رياضي)',
+        relationEn: 'Son (Athlete Profile)',
+        age: 16,
+        sport: 'كرة القدم',
+        nationalId: '30408150104829',
+        certNumber: 'SH-26-004517',
+        bookingCode: 'BK-26-018245'
+      },
+      {
+        name: 'مريم أحمد يوسف',
+        relation: 'الابنة (تابع عائلي)',
+        relationEn: 'Daughter (Dependent)',
+        age: 14,
+        sport: 'ألعاب القوى',
+        nationalId: '30806120104829',
+        certNumber: 'SH-26-004518',
+        bookingCode: 'BK-26-018246'
+      }
+    ],
     childrenNames: ['أحمد يوسف السيد', 'مريم أحمد يوسف'],
     scopeDescriptionAr: 'متابعة وإدارة الملفات الطبية للأبناء الرياضيين، حجز الكشوفات لهم، والتبديل المباشر بين ملفاتهم',
     scopeDescriptionEn: 'Manage connected athlete children profiles, book examinations, and switch between profiles seamlessly',
@@ -86,38 +108,9 @@ export const mockPersonas = {
       { ar: 'حجز كشوفات للأبناء', en: 'Book for Children' },
       { ar: 'السجل الطبي للتابعين', en: 'Children Medical Records' }
     ]
-  },
-  // Citizen role alias preserved for backwards compatibility
-  citizen: {
-    id: 'citizen',
-    role: 'citizen',
-    name: 'أحمد يوسف السيد',
-    nameEn: 'Ahmad Youssef El-Sayed',
-    titleAr: 'الرياضي (حساب فردي)',
-    titleEn: 'Athlete (Individual Account)',
-    subBadgeAr: 'خدمات الرياضي الفردي',
-    subBadgeEn: 'Individual Athlete Services',
-    email: 'athlete@seha.gov.eg',
-    phone: '01099887766',
-    nationalId: '30408150104829',
-    clubAr: 'نادي المستقبل الرياضي · القاهرة',
-    clubEn: 'Al-Mostakbal Sports Club · Cairo',
-    sportAr: 'كرة القدم (المستوى الثالث)',
-    sportEn: 'Football (Level 3)',
-    guardianNameAr: 'يوسف عبدالله السيد',
-    guardianNameEn: 'Youssef Abdullah El-Sayed',
-    scopeDescriptionAr: 'خدمات الرياضي: الحجز الإلكتروني، السجل الطبي، الشهادات الطبية، وموافقات الاطلاع',
-    scopeDescriptionEn: 'Athlete services: e-Booking, medical history, certificates, and access consents',
-    allowedRoutes: ['citizen-home', 'citizen-bookings', 'citizen-certs', 'citizen-history', 'citizen-consents', 'cert', 'verify'],
-    avatarLetter: 'أ',
-    defaultRoute: 'citizen-home',
-    defaultPassword: 'athlete2026',
-    featureTags: [
-      { ar: 'الرئيسية والملف الشخصي', en: 'Home & Profile' },
-      { ar: 'حجز كشف طبي', en: 'Medical Booking' },
-      { ar: 'السجل الطبي', en: 'Medical History' },
-      { ar: 'الشهادات الطبية الموثقة', en: 'Verified Certs' }
-    ]
   }
 };
 
+// Aliases for backward safety
+mockPersonas.parent = mockPersonas.guardian;
+mockPersonas.citizen = mockPersonas.athlete;

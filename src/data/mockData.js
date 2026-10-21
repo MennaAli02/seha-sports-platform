@@ -174,256 +174,176 @@ function quota(pairs) {
 }
 
 export function generateSeedData() {
-  _s = 20261015;
-  const players = [];
-  const clubs = [];
-  const hosps = [];
-  const consents = [];
-  const audit = [];
-  const ash = [];
-
-  const fm = ["أحمد", "محمد", "عمر", "كريم", "مصطفى", "يوسف", "مالك", "زياد", "حمزة", "سلمى", "فاطمة", "جنى", "ملك", "هنا", "مريم", "نور"];
-  const ln = ["السيد", "إبراهيم", "حسن", "عادل", "خليل", "فرج", "رمضان", "صبري", "عبدالله", "منصور"];
-
-  const govs = quota([
-    ["القاهرة", 71], ["الجيزة", 44], ["الإسكندرية", 29], ["القليوبية", 17],
-    ["الدقهلية", 11], ["أسيوط", 8], ["الشرقية", 6], ["الغربية", 5],
-    ["المنوفية", 5], ["البحيرة", 4]
-  ]);
-
-  const sports = quota([
-    [0, 70], [1, 26], [2, 18], [3, 17], [4, 16],
-    [5, 15], [6, 12], [7, 10], [8, 9], [9, 7]
-  ]);
-
-  const ages = quota([["a", 60], ["b", 55], ["c", 48], ["d", 27], ["e", 10]]);
-  const gender = quota([["M", 135], ["F", 65]]);
-  const status = quota([["fit", 128], ["cond", 29], ["exp", 28], ["book", 15]]);
-  const chan = quota([["app", 100], ["club", 100]]);
-
-  for (let i = 0; i < 200; i++) {
-    const band = ages[i];
-    const a = band === "a" ? 9 + rnd(4) : band === "b" ? 13 + rnd(3) : band === "c" ? 16 + rnd(3) : band === "d" ? 19 + rnd(5) : 24 + rnd(8);
-    const g = gender[i];
-    const name = (g === "M" ? fm[rnd(9)] : fm[9 + rnd(7)]) + " " + ln[rnd(ln.length)] + " " + ln[rnd(ln.length)];
-    const padded = String(4000 + i).padStart(6, '0');
-    
-    players.push({
-      id: "P-" + (1001 + i),
-      nid: "3" + String(1000000000000 + rnd(899999999) * 1000 + rnd(999)),
-      name: name,
-      g: g,
-      age: a,
-      gov: govs[i],
-      sp: sports[i],
-      lv: a < 13 ? 2 : (rnd(10) < 6 ? 3 : 2),
-      bk: "BK-26-" + (10000 + rnd(89999)),
-      st: status[i],
-      ct: "SH-26-" + padded,
-      ch: chan[i],
-      hs: rnd(4)
-    });
-  }
-
-  players.forEach((p, i) => {
-    const nm = p.name.split(" ");
-    p.gd = nm[1] + " " + nm[2] + " " + ln[rnd(ln.length)];
-    p.cl = rnd(5);
-    p.hs = rnd(4);
-    const y = p.st === "exp" ? 2025 : 2026;
-    const m = p.st === "exp" ? 5 + rnd(5) : 6 + rnd(5);
-    const d = 1 + rnd(28);
-    p.iss = { y: y, m: m, d: d };
-    p.exp = { y: y + 1, m: m, d: d };
-    p.dobm = 1 + rnd(12);
-    p.dobd = 1 + rnd(28);
-    p.doby = 2026 - p.age;
-    p.bp = (108 + rnd(16)) + "/" + (66 + rnd(14));
-    p.hr = 58 + rnd(24);
-
-    let h = 0;
-    const t = p.ct + p.nid;
-    for (let k = 0; k < t.length; k++) h = (h * 33 + t.charCodeAt(k)) >>> 0;
-    let fp = ("0000000" + h.toString(16)).slice(-8).toUpperCase();
-    p.fp = fp.slice(0, 4) + " " + fp.slice(4) + " " + ("000" + (h % 4096).toString(16)).slice(-4).toUpperCase() + " " + ("000" + ((h >> 5) % 4096).toString(16)).slice(-4).toUpperCase();
-    p.tm = (9 + rnd(5)) + ":" + ("0" + rnd(60)).slice(-2);
-    if (p.st === "cond") p.rf = rnd(6);
-    p.verificationStatus = "verified";
-
-    // Deterministic Medical History
-    p.medicalHistory = [
-      {
-        id: "MH-" + p.id + "-1",
-        date: "15/10/2026",
-        dateEn: "15 Oct 2026",
-        season: "2026 / 2027",
-        level: p.lv || 2,
-        levelNameAr: CFG.levels[(p.lv || 2) - 1]?.ar || "المستوى الثاني",
-        levelNameEn: CFG.levels[(p.lv || 2) - 1]?.en || "Level 2",
-        hospitalAr: "مستشفى هليوبوليس التخصصي",
-        hospitalEn: "Heliopolis Specialized Hospital",
-        doctorAr: "د. طارق محمود المنشاوي · استشاري طب القلب الرياضي",
-        doctorEn: "Dr. Tarek El-Menshawy · Sports Cardiology Consultant",
-        status: p.st === "cond" ? "cond" : "fit",
-        statusLabelAr: p.st === "cond" ? "لائق بشروط ومتابعة" : "لائق طبيًا للمنافسات",
-        statusLabelEn: p.st === "cond" ? "Conditionally Fit" : "Medically Fit for Sports",
-        vitals: {
-          bp: p.bp || "118/76",
-          hr: p.hr || 68,
-          bmi: "21.2",
-          height: 165,
-          weight: 58
-        },
-        tests: [
-          { nameAr: "الفحص السريري والباطني الشامل", nameEn: "Clinical & Internal Exam", resultAr: "سليم تمامًا دون لغط قلبي أو تضخم", resultEn: "Normal clinical evaluation", normal: true },
-          { nameAr: "تخطيط رسم القلب الكهربائي (Resting ECG)", nameEn: "Resting ECG", resultAr: "نظم جيبي طبيعي سليم (Sinus Rhythm) - التوصيل سليم", resultEn: "Normal Sinus Rhythm", normal: true },
-          { nameAr: "الموجات الصوتية للقلب (ECHO)", nameEn: "Echocardiogram (ECHO)", resultAr: "كفاءة العضلة 64% والصمامات طبيعية دون عيوب خلقية", resultEn: "Normal EF 64%, no valvular defects", normal: true },
-          { nameAr: "تحليل صورة الدم الكاملة (CBC)", nameEn: "Complete Blood Count (CBC)", resultAr: "الهيموجلوبين 14.2 g/dL وكرات الدم بالحدود الطبيعية", resultEn: "Hemoglobin 14.2 g/dL, normal parameters", normal: true }
-        ],
-        notesAr: "تم الفحص واعتماد الشهادة بنجاح؛ الرياضي مؤهل تمامًا للمشاركة الرياضية والتنافسية المعتمدة.",
-        notesEn: "Exam completed and certified; athlete is cleared for competitive sports participation.",
-        digitalSign: "SHA256-SEHA-MED-2026-" + p.id
-      },
-      {
-        id: "MH-" + p.id + "-2",
-        date: "10/10/2025",
-        dateEn: "10 Oct 2025",
-        season: "2025 / 2026",
-        level: 2,
-        levelNameAr: "المستوى الثاني — الأكاديميات",
-        levelNameEn: "Level 2 — Academies",
-        hospitalAr: "مستشفى النيل بدر",
-        hospitalEn: "Nile Badr Hospital",
-        doctorAr: "د. سحر عبدالمجيد · أخصائي الطب الرياضي",
-        doctorEn: "Dr. Sahar Abdelmageed · Sports Medicine Specialist",
-        status: "fit",
-        statusLabelAr: "لائق طبيًا (مؤرشف)",
-        statusLabelEn: "Medically Fit (Archived)",
-        vitals: {
-          bp: "116/74",
-          hr: 70,
-          bmi: "20.6",
-          height: 160,
-          weight: 53
-        },
-        tests: [
-          { nameAr: "فحص الجهاز الدوري والقلب", nameEn: "Cardiovascular Exam", resultAr: "طبيعي وسليم", resultEn: "Normal", normal: true },
-          { nameAr: "رسم القلب الكهربائي ECG", nameEn: "Resting ECG", resultAr: "طبيعي وسليم", resultEn: "Normal", normal: true },
-          { nameAr: "الفحوصات المعملية", nameEn: "Lab investigations", resultAr: "ضمن المعدلات الطبيعية", resultEn: "Within normal limits", normal: true }
-        ],
-        notesAr: "فحص سنوي معتمد للموسم السابق — التقرير معتمد ومؤرشف رسميًا.",
-        notesEn: "Certified annual examination for previous season — archived.",
-        digitalSign: "SHA256-SEHA-MED-2025-ARCHIVED"
-      }
-    ];
-  });
-
-  // Deterministic Family Group anchor (Youssef Abdullah El-Sayed: 2 Connected Children: Ahmad & Maryam)
-  players[0].name = "أحمد يوسف السيد";
-  players[0].g = "M";
-  players[0].gd = "يوسف عبدالله السيد";
-  players[0].rel = { ar: "الابن (حساب رياضي)", en: "Son (Athlete Profile)", isPrimary: true };
-  players[0].cl = 0;
-  players[0].hs = 0;
-  players[0].iss = { y: 2026, m: 10, d: 15 };
-  players[0].exp = { y: 2027, m: 10, d: 14 };
-  players[0].doby = 2010;
-  players[0].dobm = 5;
-  players[0].dobd = 12;
-  players[0].st = "fit";
-  players[0].sp = 0; // كرة القدم
-  players[0].age = 16;
-  players[0].lv = 3;
-  players[0].ct = "SH-26-004517";
-  players[0].bk = "BK-26-018245";
-  players[0].gov = "القاهرة";
-  players[0].nid = "30408150104829";
-  players[0].verificationStatus = "verified";
-
-  // Connected Child 2 (Maryam Ahmad Youssef - Daughter under Guardian Youssef Abdullah)
-  if (players[1]) {
-    players[1].name = "مريم أحمد يوسف";
-    players[1].g = "F";
-    players[1].gd = "يوسف عبدالله السيد";
-    players[1].rel = { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false };
-    players[1].age = 14;
-    players[1].sp = 4; // ألعاب القوى
-    players[1].st = "fit";
-    players[1].lv = 2;
-    players[1].ct = "SH-26-004518";
-    players[1].bk = "BK-26-018246";
-    players[1].gov = "القاهرة";
-    players[1].nid = "30806120104829";
-    players[1].verificationStatus = "verified";
-  }
-
-  const cn = [
-    { ar: "نادي المستقبل الرياضي", en: "Al-Mostakbal Sports Club", typeAr: "نادي", typeEn: "Club", mgrAr: "م. خالد حمدي", mgrEn: "Eng. Khaled Hamdi" },
-    { ar: "أكاديمية النيل لكرة القدم", en: "Nile Football Academy", typeAr: "أكاديمية", typeEn: "Academy", mgrAr: "أ. منى عبدالرحمن", mgrEn: "Ms. Mona Abdulrahman" },
-    { ar: "نادي الصيد", en: "Shooting Club (Al-Seid)", typeAr: "نادي", typeEn: "Club", mgrAr: "ك. طارق سعيد", mgrEn: "Coach Tarek Saeed" },
-    { ar: "مركز شباب سموحة", en: "Smouha Youth Center", typeAr: "مركز شباب", typeEn: "Youth Center", mgrAr: "أ. هاني فتحي", mgrEn: "Mr. Hany Fathy" },
-    { ar: "أكاديمية الأهرام للسباحة", en: "Al-Ahram Swimming Academy", typeAr: "أكاديمية", typeEn: "Academy", mgrAr: "د. ريم عاطف", mgrEn: "Dr. Reem Atef" }
+  const players = [
+    {
+      id: "P-1001",
+      nid: "30408150104829",
+      name: "أحمد يوسف السيد",
+      g: "M",
+      age: 16,
+      gov: "القاهرة",
+      sp: 0, // كرة القدم
+      lv: 3,
+      bk: "BK-26-018245",
+      st: "fit",
+      ct: "SH-26-004517",
+      ch: "app",
+      hs: 0,
+      cl: 0,
+      gd: "يوسف عبدالله السيد",
+      rel: { ar: "الابن (حساب رياضي)", en: "Son (Athlete Profile)", isPrimary: true },
+      iss: { y: 2026, m: 10, d: 15 },
+      exp: { y: 2027, m: 10, d: 14 },
+      dobm: 5,
+      dobd: 12,
+      doby: 2010,
+      bp: "118/74",
+      hr: 68,
+      fp: "4A8B 90C1 0E2F 33B9",
+      tm: "10:30",
+      verificationStatus: "verified",
+      medicalHistory: [
+        {
+          id: "MH-P-1001-1",
+          date: "15/10/2026",
+          dateEn: "15 Oct 2026",
+          season: "2026 / 2027",
+          level: 3,
+          levelNameAr: "المستوى الثالث — بطولات الجمهورية",
+          levelNameEn: "Level 3 — National Championships",
+          hospitalAr: "مستشفى هليوبوليس التخصصي",
+          hospitalEn: "Heliopolis Specialized Hospital",
+          doctorAr: "د. طارق محمود المنشاوي · استشاري طب القلب الرياضي",
+          doctorEn: "Dr. Tarek El-Menshawy · Sports Cardiology Consultant",
+          status: "fit",
+          statusLabelAr: "لائق طبيًا للمنافسات",
+          statusLabelEn: "Medically Fit for Sports",
+          vitals: {
+            bp: "118/74",
+            hr: 68,
+            bmi: "21.2",
+            height: 165,
+            weight: 58
+          },
+          tests: [
+            { nameAr: "الفحص السريري والباطني الشامل", nameEn: "Clinical & Internal Exam", resultAr: "سليم تمامًا دون لغط قلبي أو تضخم", resultEn: "Normal clinical evaluation", normal: true },
+            { nameAr: "تخطيط رسم القلب الكهربائي (Resting ECG)", nameEn: "Resting ECG", resultAr: "نظم جيبي طبيعي سليم (Sinus Rhythm) - التوصيل سليم", resultEn: "Normal Sinus Rhythm", normal: true },
+            { nameAr: "الموجات الصوتية للقلب (ECHO)", nameEn: "Echocardiogram (ECHO)", resultAr: "كفاءة العضلة 64% والصمامات طبيعية دون عيوب خلقية", resultEn: "Normal EF 64%, no valvular defects", normal: true },
+            { nameAr: "تحليل صورة الدم الكاملة (CBC)", nameEn: "Complete Blood Count (CBC)", resultAr: "الهيموجلوبين 14.2 g/dL وكرات الدم بالحدود الطبيعية", resultEn: "Hemoglobin 14.2 g/dL, normal parameters", normal: true }
+          ],
+          notesAr: "تم الفحص واعتماد الشهادة بنجاح؛ الرياضي مؤهل تمامًا للمشاركة الرياضية والتنافسية المعتمدة.",
+          notesEn: "Exam completed and certified; athlete is cleared for competitive sports participation.",
+          digitalSign: "SHA256-SEHA-MED-2026-P-1001"
+        }
+      ]
+    },
+    {
+      id: "P-1002",
+      nid: "30806120104829",
+      name: "مريم أحمد يوسف",
+      g: "F",
+      age: 14,
+      gov: "القاهرة",
+      sp: 4, // ألعاب القوى
+      lv: 2,
+      bk: "BK-26-018246",
+      st: "fit",
+      ct: "SH-26-004518",
+      ch: "app",
+      hs: 0,
+      cl: 0,
+      gd: "يوسف عبدالله السيد",
+      rel: { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false },
+      iss: { y: 2026, m: 10, d: 18 },
+      exp: { y: 2027, m: 10, d: 17 },
+      dobm: 8,
+      dobd: 20,
+      doby: 2012,
+      bp: "112/70",
+      hr: 72,
+      fp: "7B2C 11D4 2F9A 88E1",
+      tm: "11:15",
+      verificationStatus: "verified",
+      medicalHistory: [
+        {
+          id: "MH-P-1002-1",
+          date: "18/10/2026",
+          dateEn: "18 Oct 2026",
+          season: "2026 / 2027",
+          level: 2,
+          levelNameAr: "المستوى الثاني — الأكاديميات",
+          levelNameEn: "Level 2 — Academies",
+          hospitalAr: "مستشفى هليوبوليس التخصصي",
+          hospitalEn: "Heliopolis Specialized Hospital",
+          doctorAr: "د. سارة كامل · استشاري الطب الرياضي",
+          doctorEn: "Dr. Sarah Kamel · Sports Medicine Consultant",
+          status: "fit",
+          statusLabelAr: "لائق طبيًا للمنافسات",
+          statusLabelEn: "Medically Fit for Sports",
+          vitals: {
+            bp: "112/70",
+            hr: 72,
+            bmi: "19.8",
+            height: 158,
+            weight: 49
+          },
+          tests: [
+            { nameAr: "الفحص الإكلينيكي الشامل", nameEn: "Clinical Exam", resultAr: "سليم ولائق للمنافسات", resultEn: "Normal", normal: true },
+            { nameAr: "رسم القلب الكهربائي ECG", nameEn: "Resting ECG", resultAr: "نظم جيبي طبيعي سليم", resultEn: "Normal Sinus Rhythm", normal: true },
+            { nameAr: "تحاليل معملية وصورة دم", nameEn: "CBC Lab", resultAr: "ضمن المعدلات الطبيعية", resultEn: "Normal", normal: true }
+          ],
+          notesAr: "فحص طبي رياضي معتمد لألعاب القوى للناشئين؛ لائقة تمامًا.",
+          notesEn: "Approved sports medical examination for youth athletics.",
+          digitalSign: "SHA256-SEHA-MED-2026-P-1002"
+        }
+      ]
+    }
   ];
-  cn.forEach((c, i) => {
-    clubs.push({
-      id: "CL-" + (101 + i),
-      n: c.ar,
-      nEn: c.en,
-      type: c.typeAr,
-      typeEn: c.typeEn,
-      gov: CFG.govs[i % 4],
-      ph: "010" + (10000000 + rnd(89999999)),
-      mgr: c.mgrAr,
-      mgrEn: c.mgrEn,
-      players: [42, 38, 27, 22, 19][i],
-      st: i < 4 ? "on" : "pend"
-    });
-  });
 
-  const hn = [
-    { ar: "مستشفى هليوبوليس التخصصي", en: "Heliopolis Specialized Hospital", gov: "القاهرة", lv: [2, 3, 4], cap: 40, dirAr: "د. سارة كامل", dirEn: "Dr. Sarah Kamel" },
-    { ar: "مستشفى النيل بدر", en: "Nile Badr Hospital", gov: "القاهرة", lv: [2, 3], cap: 30, dirAr: "د. وليد منير", dirEn: "Dr. Walid Mounir" },
-    { ar: "وحدة الطب الرياضي — المعادي", en: "Sports Medicine Unit — Maadi", gov: "القاهرة", lv: [2, 3, 4], cap: 36, dirAr: "د. ياسر الشافعي", dirEn: "Dr. Yasser El-Shafei" },
-    { ar: "مستشفى الإسكندرية الدولي", en: "Alexandria International Hospital", gov: "الإسكندرية", lv: [2, 3], cap: 28, dirAr: "د. نهى رشاد", dirEn: "Dr. Noha Rashad" }
+  const clubs = [
+    {
+      id: "CL-101",
+      n: "نادي المستقبل الرياضي",
+      nEn: "Al-Mostakbal Sports Club",
+      type: "نادي",
+      typeEn: "Club",
+      gov: "القاهرة",
+      ph: "01012345678",
+      mgr: "م. خالد حمدي",
+      mgrEn: "Eng. Khaled Hamdi",
+      players: 2,
+      st: "on"
+    }
   ];
-  hn.forEach((h, i) => {
-    hosps.push({
-      id: "HS-" + (201 + i),
-      n: h.ar,
-      nEn: h.en,
-      gov: h.gov,
-      lv: h.lv,
-      cap: h.cap,
-      dir: h.dirAr,
-      dirEn: h.dirEn,
-      ph: "02-2" + (1000000 + rnd(8999999)),
-      st: i < 3 ? "on" : "pend"
-    });
-  });
 
-  consents.push(
+  const hosps = [
+    {
+      id: "HS-201",
+      n: "مستشفى هليوبوليس التخصصي",
+      nEn: "Heliopolis Specialized Hospital",
+      gov: "القاهرة",
+      lv: [2, 3, 4],
+      cap: 40,
+      dir: "د. سارة كامل",
+      dirEn: "Dr. Sarah Kamel",
+      ph: "02-22446688",
+      st: "on"
+    }
+  ];
+
+  const consents = [
     { p: players[0], to: "نادي المستقبل الرياضي", sc: 0, du: 3, st: "ok" },
-    { p: players[3], to: "الاتحاد المصري لكرة القدم", sc: 0, du: 2, st: "ok" },
-    { p: players[6], to: "أكاديمية النيل لكرة القدم", sc: 1, du: 0, st: "rej" }
-  );
+    { p: players[1], to: "نادي المستقبل الرياضي", sc: 0, du: 3, st: "ok" }
+  ];
 
-  audit.push(
-    ["09:12", "HS-201", "مسح حجز BK-26-018245 ومطابقة الهوية", "Scanned BK-26-018245 & matched ID"],
-    ["09:40", "د. سارة كامل", "اعتماد نتيجة: لائق — SH-26-004517", "Approved: Fit — SH-26-004517"],
-    ["10:05", "CL-101", "طلب حجز جماعي — 22 لاعبًا", "Bulk booking request — 22 players"],
-    ["10:31", "مواطن", "منح موافقة اطلاع — 30 يومًا", "Access consent granted — 30 days"]
-  );
+  const audit = [
+    ["09:12", "HS-201", "مسح حجز BK-26-018245 ومطابقة هوية أحمد يوسف السيد", "Scanned BK-26-018245 & matched ID"],
+    ["09:40", "د. سارة كامل", "اعتماد نتيجة: لائق — SH-26-004517 (أحمد يوسف السيد)", "Approved: Fit — SH-26-004517"],
+    ["10:15", "ولي الأمر", "الاطلاع على الملف الطبي المعتمد لمريم أحمد يوسف", "Viewed certified medical profile for Maryam"],
+    ["10:30", "نظام صحة", "إصدار شهادة SH-26-004518 وتوثيقها بختم إلكتروني", "Issued e-signed certificate SH-26-004518"]
+  ];
 
-  const reasons = quota([[0, 8], [1, 5], [2, 5], [3, 5], [4, 4], [5, 2]]);
-  const stages = quota([[0, 8], [1, 5], [2, 4], [3, 5], [4, 7]]);
-  players.filter(p => p.st === "cond").forEach((p, i) => {
-    ash.push({
-      p: p,
-      r: reasons[i],
-      s: stages[i],
-      d: "2026-" + (9 + rnd(2)) + "-" + (10 + rnd(18))
-    });
-  });
+  const ash = [];
 
   return { players, clubs, hosps, consents, audit, ash, cfg: JSON.parse(JSON.stringify(CFG)) };
 }

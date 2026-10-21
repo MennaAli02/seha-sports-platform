@@ -22,12 +22,12 @@
     <!-- Athlete Portal Group -->
     <record id="group_seha_athlete" model="res.groups">
         <field name="name">Seha Athlete Portal User</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="implied_ids" eval="[(4, ref('group_seha_user'))]"/>
     </record>
 
     <!-- Guardian Portal Group -->
     <record id="group_seha_guardian" model="res.groups">
         <field name="name">Seha Guardian Portal User</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="implied_ids" eval="[(4, ref('group_seha_user'))]"/>
     </record>
 </odoo>

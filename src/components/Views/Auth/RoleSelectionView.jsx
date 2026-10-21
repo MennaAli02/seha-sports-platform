@@ -193,8 +193,8 @@ export const RoleSelectionView = ({
         </header>
 
         {/* Center Heading (Clean & Minimal without redundant subtitle) */}
-        <div className="text-center my-5 sm:my-6">
-          <h1 className="text-xl sm:text-2xl font-extrabold text-[#003366] dark:text-[#F2F6FB] tracking-tight">
+        <div className="text-center my-[10px]">
+          <h1 className="mt-[10px] text-xl sm:text-2xl font-extrabold text-[#003366] dark:text-[#F2F6FB] tracking-tight">
             {L('اختر نوع الحساب للمتابعة', 'Select Your Platform Role')}
           </h1>
         </div>
@@ -203,7 +203,7 @@ export const RoleSelectionView = ({
         <div
           role="radiogroup"
           aria-label={L('خيارات نوع الحساب', 'Account type options')}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 w-full my-3"
+          className="grid grid-cols-1 md:grid-cols-3 gap-[10px] w-full my-[10px]"
         >
           {roles.map((item) => {
             const isSelected = selectedRole === item.id;
@@ -239,13 +239,13 @@ export const RoleSelectionView = ({
                 </div>
 
                 {/* Consistent Illustration Area */}
-                <div className="w-full h-24 sm:h-28 flex items-center justify-center p-1 mb-2">
+                <div className="w-full h-24 sm:h-28 flex items-center justify-center p-1 mb-[10px]">
                   <Illustration isSelected={isSelected} />
                 </div>
 
                 {/* Role Details */}
                 <div className="text-center flex-1 flex flex-col justify-between">
-                  <div className="mt-1 mb-2">
+                  <div className="my-[10px]">
                     <h2
                       className={`text-base font-extrabold transition-colors ${
                         isSelected
@@ -258,7 +258,7 @@ export const RoleSelectionView = ({
                   </div>
 
                   {/* Feature Chips (Limited to exactly 3 chips per card, >=12px text, AA contrast) */}
-                  <div className="flex flex-wrap justify-center gap-1.5 mt-3 pt-3 border-t border-[#DCE4EC]/70 dark:border-[#1E426F]/70">
+                  <div className="flex flex-wrap justify-center gap-[10px] mt-[10px] pt-[10px] border-t border-[#DCE4EC]/70 dark:border-[#1E426F]/70">
                     {item.features.map((feat, fIdx) => (
                       <span
                         key={fIdx}

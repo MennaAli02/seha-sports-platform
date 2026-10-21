@@ -196,14 +196,28 @@ export const CitizenMedicalHistoryTab = () => {
           
           {/* Search box */}
           <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 absolute top-1/2 -translate-y-1/2 inset-inline-start-3 text-[var(--muted)] pointer-events-none" />
+            <Search className="w-4 h-4 absolute top-1/2 -translate-y-1/2 inset-inline-start-3 text-[var(--muted)] pointer-events-none z-10" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={L('بحث بالمستشفى أو اسم الطبيب...', 'Search hospital or doctor...')}
-              className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl py-1.5 ps-9 pe-3 text-xs text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--primary)]"
+              className="w-full bg-[var(--bg)] border border-[var(--line)] rounded-xl py-2 text-xs text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--primary)] pl-9 pr-3 rtl:pr-9 rtl:pl-3"
+              style={{
+                paddingInlineStart: '36px',
+                paddingInlineEnd: searchQuery ? '32px' : '12px'
+              }}
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer absolute top-1/2 -translate-y-1/2 inset-inline-end-2.5 z-10"
+                title={L('مسح البحث', 'Clear search')}
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
           {/* Level Filter chips */}

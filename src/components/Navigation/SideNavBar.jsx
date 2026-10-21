@@ -160,17 +160,6 @@ export const SideNavBar = () => {
         </div>
         {/* Bottom Footer: Log out */}
         <div className="side-footer">
-          {sidebarExpanded && currentUser && (
-            <div className="px-2.5 py-1.5 mb-2 rounded-xl bg-white/10 text-white flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-white/20 flex items-center justify-center font-bold text-[11px] shrink-0">
-                {currentUser.avatarLetter || 'م'}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-[11px] font-bold truncate leading-tight">{currentUser.name}</div>
-                <div className="text-[9.5px] text-white/75 truncate">{L(currentUser.titleAr, currentUser.titleEn)}</div>
-              </div>
-            </div>
-          )}
           <button
             type="button"
             className="side-logout-btn"

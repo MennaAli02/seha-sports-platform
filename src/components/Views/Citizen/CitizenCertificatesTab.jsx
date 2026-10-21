@@ -153,7 +153,7 @@ export const CitizenCertificatesTab = () => {
 
       {/* Primary Certificate Hero Showcase */}
       <div className="card">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-[10px]">
           <h3>
             <span className="d"></span>
             {L('الشهادة الطبية الرقمية المعتمدة (السارية)', 'Accredited Sports Medical Certificate (Current)')}
@@ -165,7 +165,7 @@ export const CitizenCertificatesTab = () => {
         </div>
 
         {/* Demographics Summary Row */}
-        <div className="g4 text-xs mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[10px] text-xs my-[10px]">
           <div className="p-2.5 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40">
             <span className="mut block">{L('اسم الرياضي:', 'Athlete Name:')}</span>
             <b className="text-[var(--ink)] text-sm">{p.name}</b>
@@ -185,7 +185,7 @@ export const CitizenCertificatesTab = () => {
         </div>
 
         {/* Clinical Exams Table */}
-        <table className="t mb-3">
+        <table className="t mb-[10px]">
           <thead>
             <tr>
               <th>{L('الفحص الطبي', 'Clinical Examination')}</th>
@@ -218,7 +218,7 @@ export const CitizenCertificatesTab = () => {
         </table>
 
         {/* Result banner & QR */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40 mt-[10px]">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-full bg-[var(--success-bg)] text-[var(--success-dark)] flex items-center justify-center shrink-0 mt-0.5">
               <CheckCircle2 className="w-6 h-6" />
@@ -236,7 +236,7 @@ export const CitizenCertificatesTab = () => {
 
           <div className="flex items-center gap-3 shrink-0">
             <QRCodeSVG seed={p.ct} size={76} />
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-[10px]">
               <button
                 type="button"
                 className="btn sm w-full justify-center"

@@ -46,20 +46,9 @@ export const LoginView = ({
   // Mode: 'login' | 'register'
   const [authMode, setAuthMode] = useState('login');
 
-  // Security: In production builds, fields MUST start empty. In dev mode only, allow prefill for testing.
-  const [identifier, setIdentifier] = useState(() => {
-    if (IS_DEV) {
-      return selectedRole === 'super_admin' ? activePersona.email : activePersona.nationalId;
-    }
-    return '';
-  });
+  const [identifier, setIdentifier] = useState('');
 
-  const [password, setPassword] = useState(() => {
-    if (IS_DEV) {
-      return activePersona.defaultPassword || 'seha2026';
-    }
-    return '';
-  });
+  const [password, setPassword] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
@@ -118,16 +107,22 @@ export const LoginView = ({
   };
 
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     if (e) e.preventDefault();
     setLocalError(null);
 
-    // Validate 14 digits if National ID
+    // Validate identifier format
+    const cleanId = selectedRole === 'super_admin' ? identifier.trim() : normalizeDigits(identifier);
+
     if (selectedRole !== 'super_admin') {
-      const cleanId = normalizeDigits(identifier);
       if (cleanId.length !== 14) {
         setIdError(L('الرقم القومي غير مكتمل (مطلوب 14 رقمًا)', 'National ID must be exactly 14 digits'));
         setLocalError(L('يرجى إدخال رقم قومي صحيح مكون من 14 رقمًا', 'Please enter a valid 14-digit National ID'));
+        return;
+      }
+    } else {
+      if (!cleanId || !cleanId.includes('@')) {
+        setLocalError(L('يرجى إدخال بريد إلكتروني صحيح', 'Please enter a valid official email address'));
         return;
       }
     }
@@ -138,24 +133,68 @@ export const LoginView = ({
     }
 
     setLocalIsSubmitting(true);
-    if (onLogin) {
-      const result = onLogin(selectedRole, {
-        identifier,
-        password,
-        persona: activePersona,
-        rememberMe
-      });
-      if (result && typeof result.finally === 'function') {
-        result.finally(() => setLocalIsSubmitting(false));
-      } else {
-        setTimeout(() => setLocalIsSubmitting(false), 400);
+
+    try {
+      const payload = {
+        login: cleanId,
+        password: password,
+        role: selectedRole
+      };
+
+      let res;
+      try {
+        res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (proxyErr) {
+        res = await fetch('http://localhost:8019/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
       }
-    } else {
-      setTimeout(() => setLocalIsSubmitting(false), 300);
+
+      const result = await res.json();
+
+      if (!res.ok || result.status !== 'success') {
+        setLocalIsSubmitting(false);
+        setLocalError(
+          result.message ||
+          (selectedRole === 'super_admin'
+            ? L('البريد الإلكتروني أو كلمة المرور غير صحيحة.', 'Invalid official email or password.')
+            : L('الرقم القومي أو كلمة المرور غير صحيحة.', 'Invalid National ID or password.'))
+        );
+        return;
+      }
+
+      // Backend authenticated successfully!
+      const authData = result.data || {};
+      const effectiveRole = authData.primary_role || selectedRole;
+
+      if (onLogin) {
+        onLogin(effectiveRole, {
+          identifier: cleanId,
+          password,
+          name: authData.name,
+          email: authData.email,
+          national_id: authData.national_id || cleanId,
+          athlete: authData.athlete,
+          guardian: authData.guardian,
+          rememberMe
+        });
+      }
+      setLocalIsSubmitting(false);
+    } catch (err) {
+      setLocalIsSubmitting(false);
+      setLocalError(
+        L('تعذر الاتصال بخادم المنظومة. يرجى التأكد من تشغيل الخادم وإعادة المحاولة.', 'Unable to connect to Seha backend server.')
+      );
     }
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     if (e) e.preventDefault();
     setLocalError(null);
 
@@ -186,27 +225,72 @@ export const LoginView = ({
     }
 
     setLocalIsSubmitting(true);
-    setSuccessMessage(
-      selectedRole === 'guardian'
-        ? L('تم إنشاء حساب ولي الأمر بنجاح! جاري تحويلك لبوابة العائلة...', 'Guardian account created successfully! Redirecting...')
-        : L('تم تسجيل حساب الرياضي بنجاح! جاري تحويلك للملف الطبي...', 'Athlete account registered successfully! Redirecting...')
-    );
 
-    setTimeout(() => {
-      if (onLogin) {
-        onLogin(selectedRole, {
-          identifier: cleanId,
-          password: regPassword,
-          persona: {
-            ...activePersona,
-            name: regFullName.trim(),
-            nationalId: cleanId,
-            phone: regPhone || activePersona.phone
-          }
+    try {
+      const payload = {
+        role: selectedRole,
+        name: regFullName.trim(),
+        national_id: cleanId,
+        password: regPassword,
+        phone: regPhone || '',
+        email: regEmail || '',
+        dob: regDob || '',
+        sport_id: regSport !== undefined ? (regSport + 1) : 1
+      };
+
+      let res;
+      try {
+        res = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (proxyErr) {
+        res = await fetch('http://localhost:8019/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
       }
+
+      const result = await res.json();
+
+      if (!res.ok || result.status !== 'success') {
+        setLocalIsSubmitting(false);
+        setLocalError(
+          result.message || L('فشل تسجيل الحساب الجديد في المنظومة.', 'Failed to register new account in backend.')
+        );
+        return;
+      }
+
+      const regData = result.data || {};
+      setSuccessMessage(
+        selectedRole === 'guardian'
+          ? L('تم إنشاء وحفظ حساب ولي الأمر بنجاح في المنظومة! جاري تحويلك لبوابة العائلة...', 'Guardian account registered and saved in backend successfully!')
+          : L('تم إنشاء وحفظ حساب الرياضي بنجاح في المنظومة! جاري تحويلك للملف الطبي...', 'Athlete account registered and saved in backend successfully!')
+      );
+
+      setTimeout(() => {
+        if (onLogin) {
+          onLogin(selectedRole, {
+            identifier: cleanId,
+            password: regPassword,
+            name: regFullName.trim(),
+            national_id: cleanId,
+            phone: regPhone,
+            isNewRegistration: true,
+            ...regData
+          });
+        }
+        setLocalIsSubmitting(false);
+      }, 700);
+
+    } catch (err) {
       setLocalIsSubmitting(false);
-    }, 700);
+      setLocalError(
+        L('تعذر الاتصال بخادم المنظومة لحفظ الحساب. يرجى التأكد من تشغيل الخادم.', 'Unable to connect to Seha backend server.')
+      );
+    }
   };
 
   // Neutral Role Icon (No green verified badge)
@@ -291,10 +375,10 @@ export const LoginView = ({
               {getRoleIcon()}
             </div>
 
-            <h1 className="text-lg sm:text-xl font-extrabold text-[#003366] dark:text-[#F2F6FB] tracking-tight text-center mt-3 mb-1">
+            <h1 className="text-lg sm:text-xl font-extrabold text-[#003366] dark:text-[#F2F6FB] tracking-tight text-center mt-[10px] mb-[10px]">
               {roleTitle}
             </h1>
-            <p className="text-xs sm:text-sm text-[#4A607A] dark:text-[#ABC7E8] text-center mb-4">
+            <p className="text-xs sm:text-sm text-[#4A607A] dark:text-[#ABC7E8] text-center mb-[10px]">
               {getRoleSubtitle()}
             </p>
           </div>
@@ -382,17 +466,17 @@ export const LoginView = ({
               role="tabpanel"
               aria-labelledby="tab-login"
               onSubmit={handleLoginSubmit}
-              className="space-y-5"
+              className="flex flex-col gap-[10px]"
             >
               {/* National ID / Email Group */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-col gap-[10px]">
+                <div className="flex items-center justify-between">
                   <label
                     htmlFor="login-identifier"
                     className="block text-sm font-bold text-[#003366] dark:text-[#F2F6FB]"
                   >
                     {selectedRole === 'super_admin'
-                      ? L('البريد الإلكتروني المؤسسي *', 'Official Email Address *')
+                       ? L('البريد الإلكتروني المؤسسي *', 'Official Email Address *')
                       : selectedRole === 'guardian'
                       ? L('الرقم القومي لولي الأمر (14 رقم) *', 'Guardian National ID (14 digits) *')
                       : L('الرقم القومي للرياضي (14 رقم) *', 'Athlete National ID (14 digits) *')}
@@ -443,7 +527,7 @@ export const LoginView = ({
                 {/* Helper / Error text */}
                 <p
                   id={idError ? 'id-error' : 'id-helper'}
-                  className={`text-xs mt-1.5 ${
+                  className={`text-xs ${
                     idError ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-[#4A607A] dark:text-[#94B0D0]'
                   }`}
                 >
@@ -456,8 +540,8 @@ export const LoginView = ({
               </div>
 
               {/* Password Group */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-col gap-[10px]">
+                <div className="flex items-center justify-between">
                   <label
                     htmlFor="login-password"
                     className="block text-sm font-bold text-[#003366] dark:text-[#F2F6FB]"
@@ -500,7 +584,7 @@ export const LoginView = ({
 
                 {/* Caps Lock Warning Banner */}
                 {capsLockActive && (
-                  <div className="flex items-center gap-1.5 mt-2 text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 p-2 rounded-lg border border-amber-200 dark:border-amber-800" role="status">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 p-2 rounded-lg border border-amber-200 dark:border-amber-800" role="status">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{L('تنبيه: زر الحروف الكبيرة (Caps Lock) مفعل على لوحة المفاتيح', 'Warning: Caps Lock is turned on')}</span>
                   </div>
@@ -508,7 +592,7 @@ export const LoginView = ({
               </div>
 
               {/* Checkbox & Forgot Password Row (Non-wrapping, 20px checkbox, real link) */}
-              <div className="flex items-center justify-between gap-4 pt-1">
+              <div className="flex items-center justify-between gap-4">
                 <label className="inline-flex items-center gap-2.5 cursor-pointer whitespace-nowrap text-sm text-[#003366] dark:text-[#ABC7E8] select-none">
                   <input
                     type="checkbox"
@@ -535,7 +619,7 @@ export const LoginView = ({
                 type="submit"
                 disabled={isSubmitting}
                 aria-busy={isSubmitting}
-                className="w-full h-12 bg-[#003366] hover:bg-[#002244] dark:bg-[#4B6F9A] dark:hover:bg-[#3D5E85] active:bg-[#001833] text-white font-bold text-sm sm:text-base rounded-[14px] shadow-md shadow-[#003366]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#4B6F9A] mt-5"
+                className="w-full h-12 bg-[#003366] hover:bg-[#002244] dark:bg-[#4B6F9A] dark:hover:bg-[#3D5E85] active:bg-[#001833] text-white font-bold text-sm sm:text-base rounded-[14px] shadow-md shadow-[#003366]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#4B6F9A]"
               >
                 {isSubmitting ? (
                   <>

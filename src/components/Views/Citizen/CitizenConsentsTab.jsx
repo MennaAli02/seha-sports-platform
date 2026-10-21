@@ -211,7 +211,7 @@ export const CitizenConsentsTab = () => {
               </label>
             </div>
 
-            <div className="p-2.5 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40 text-xs">
+            <div className="p-2.5 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40 text-xs my-[10px]">
               <b className="block mb-0.5 text-[var(--ink)]">
                 {selectedScope === 0
                   ? L('نطاق الخصوصية العالي (مُوصى به):', 'High-Privacy Scope (Recommended):')
@@ -299,7 +299,7 @@ export const CitizenConsentsTab = () => {
             </table>
           </div>
 
-          <div className="nt text-xs mt-3 flex items-center gap-2 mb-0">
+          <div className="nt text-xs mt-[10px] flex items-center gap-2 mb-0">
             <Lock className="w-4 h-4 text-[var(--primary)] shrink-0" />
             <span>
               {L(

@@ -428,9 +428,9 @@ export const CitizenHomeTab = () => {
       </div>
 
       {/* =========================================================================
-          SECTION 6: TWO-COLUMN GRID (Timeline & Clinical Vitals, gap: var(--card-gap))
+          SECTION 6: TWO-COLUMN GRID (Timeline & Clinical Vitals, gap: 10px)
           ========================================================================= */}
-      <div className="g2">
+      <div className="g2 gap-2.5" style={{ gap: '10px' }}>
         
         {/* COLUMN 1: Operational Timeline of Athlete Actions */}
         <div className="card card-lg flex flex-col justify-between">
@@ -438,9 +438,11 @@ export const CitizenHomeTab = () => {
             <SectionHeader
               title={L('سجل العمليات والخط الزمني للفحص', 'Operational Timeline')}
               badge={L('مكتمل ومعتمد', 'Completed & Verified')}
+              className="mb-2.5"
+              style={{ marginBottom: '10px' }}
             />
 
-            <div className="space-y-[var(--space-3)]">
+            <div className="flex flex-col gap-2.5" style={{ gap: '10px' }}>
               {/* Event 1: Booking */}
               <div className="flex items-start gap-[var(--space-3)] p-3.5 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 hover:bg-[var(--bg)] transition-colors">
                 <div className="w-8 h-8 rounded-lg bg-emerald-100/70 dark:bg-emerald-950/60 text-[var(--success)] flex items-center justify-center shrink-0 mt-0.5">
@@ -531,92 +533,96 @@ export const CitizenHomeTab = () => {
             <SectionHeader
               title={L('المؤشرات الحيوية وبيانات الاتصال', 'Clinical Vitals & Contacts')}
               badge={L('سري ومحمي', 'Confidential')}
+              className="mb-2.5"
+              style={{ marginBottom: '10px' }}
             />
 
-            {/* Vitals Dual-Box using g2 with var(--card-gap) */}
-            <div className="g2 mb-[var(--space-4)]">
-              <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 text-center">
-                <span className="block text-xs font-semibold text-[var(--muted)] mb-1">
-                  {L('ضغط الدم الأخير', 'Last Blood Pressure')}
-                </span>
-                <b className="text-2xl font-mono text-[var(--primary-700)] block my-1">
-                  {p.bp}
-                </b>
-                <span className="inline-block text-xs text-[var(--success)] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40">
-                  {L('طبيعي (120/80)', 'Normal (120/80)')}
-                </span>
-              </div>
+            <div className="flex flex-col gap-2.5" style={{ gap: '10px' }}>
+              {/* Vitals Dual-Box using 2-column grid with 10px gap */}
+              <div className="grid grid-cols-2 gap-2.5" style={{ gap: '10px' }}>
+                <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 text-center">
+                  <span className="block text-xs font-semibold text-[var(--muted)] mb-1">
+                    {L('ضغط الدم الأخير', 'Last Blood Pressure')}
+                  </span>
+                  <b className="text-2xl font-mono text-[var(--primary-700)] block my-1">
+                    {p.bp}
+                  </b>
+                  <span className="inline-block text-xs text-[var(--success)] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40">
+                    {L('طبيعي (120/80)', 'Normal (120/80)')}
+                  </span>
+                </div>
 
-              <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 text-center">
-                <span className="block text-xs font-semibold text-[var(--muted)] mb-1">
-                  {L('معدل نبضات القلب', 'Resting Heart Rate')}
-                </span>
-                <b className="text-2xl font-mono text-[var(--primary-700)] block my-1">
-                  {p.hr} <small className="text-xs font-normal text-[var(--muted)]">bpm</small>
-                </b>
-                <span className="inline-block text-xs text-[var(--success)] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40">
-                  {L('نظم جيبي سليم', 'Sinus Rhythm')}
-                </span>
-              </div>
-            </div>
-
-            {/* Profile & Registered Unit Information */}
-            <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 space-y-[var(--space-3)] text-xs sm:text-sm mb-[var(--space-4)]">
-              <div className="flex items-center justify-between">
-                <span className="text-[var(--muted)] flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-[var(--primary)]" />
-                  {p.age < 18 ? L('اسم ولي الأمر:', 'Guardian Name:') : L('جهة العمل / النادي:', 'Club / Affiliate:')}
-                </span>
-                <b className="text-[var(--ink)] font-bold">
-                  {p.age < 18 ? p.gd : (isRTL ? c.n : c.nEn || c.n)}
-                </b>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-[var(--muted)] flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-[var(--primary)]" />
-                  {L('هاتف التواصل المسجل:', 'Contact Phone:')}
-                </span>
-                <b className="font-mono text-[var(--ink)] font-bold" dir="ltr">
-                  01012345678
-                </b>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-[var(--muted)] flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[var(--primary)]" />
-                  {L('المحافظة السكنية:', 'Governorate:')}
-                </span>
-                <b className="text-[var(--ink)] font-bold">
-                  {isRTL ? p.gov : GOV_EN[p.gov] || p.gov}
-                </b>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-[var(--muted)] flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5 text-[var(--primary)]" />
-                  {L('جهة الفحص المعتمدة:', 'Accredited Unit:')}
-                </span>
-                <b className="text-[var(--ink)] font-bold">
-                  {isRTL ? h.n : h.nEn || h.n}
-                </b>
-              </div>
-            </div>
-
-            {/* Annual Renewal Reminder Callout */}
-            <div className="p-4 rounded-xl border border-[var(--primary-100)] bg-[var(--primary-50)] text-xs sm:text-sm text-[var(--primary-700)] flex flex-col sm:flex-row sm:items-center justify-between gap-[var(--space-3)]">
-              <div className="flex items-center gap-2.5">
-                <Clock className="w-4.5 h-4.5 text-[var(--primary)] shrink-0" />
-                <div>
-                  <b className="block font-bold">{L('موعد التجديد السنوي القادم', 'Next Annual Renewal Due')}</b>
-                  <span className="text-xs text-[var(--muted)] block mt-0.5">
-                    {L('يُوصى بالحجز قبل شهر من تاريخ الانتهاء لضمان استمرار اللياقة', 'Book 1 month before expiry to ensure active clearance')}
+                <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 text-center">
+                  <span className="block text-xs font-semibold text-[var(--muted)] mb-1">
+                    {L('معدل نبضات القلب', 'Resting Heart Rate')}
+                  </span>
+                  <b className="text-2xl font-mono text-[var(--primary-700)] block my-1">
+                    {p.hr} <small className="text-xs font-normal text-[var(--muted)]">bpm</small>
+                  </b>
+                  <span className="inline-block text-xs text-[var(--success)] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40">
+                    {L('نظم جيبي سليم', 'Sinus Rhythm')}
                   </span>
                 </div>
               </div>
-              <b className="font-mono text-sm font-bold shrink-0 self-end sm:self-center bg-white dark:bg-[#1B355A] px-3 py-1.5 rounded-lg border border-[var(--primary-100)] text-[var(--primary-700)]">
-                {fmtDate(p.exp, isRTL ? 'ar' : 'en')}
-              </b>
+
+              {/* Profile & Registered Unit Information */}
+              <div className="p-4 rounded-xl border border-[var(--line)] bg-[var(--bg)]/50 flex flex-col gap-2.5 text-xs sm:text-sm" style={{ gap: '10px' }}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--muted)] flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    {p.age < 18 ? L('اسم ولي الأمر:', 'Guardian Name:') : L('جهة العمل / النادي:', 'Club / Affiliate:')}
+                  </span>
+                  <b className="text-[var(--ink)] font-bold">
+                    {p.age < 18 ? p.gd : (isRTL ? c.n : c.nEn || c.n)}
+                  </b>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--muted)] flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    {L('هاتف التواصل المسجل:', 'Contact Phone:')}
+                  </span>
+                  <b className="font-mono text-[var(--ink)] font-bold" dir="ltr">
+                    01012345678
+                  </b>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--muted)] flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    {L('المحافظة السكنية:', 'Governorate:')}
+                  </span>
+                  <b className="text-[var(--ink)] font-bold">
+                    {isRTL ? p.gov : GOV_EN[p.gov] || p.gov}
+                  </b>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--muted)] flex items-center gap-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-[var(--primary)]" />
+                    {L('جهة الفحص المعتمدة:', 'Accredited Unit:')}
+                  </span>
+                  <b className="text-[var(--ink)] font-bold">
+                    {isRTL ? h.n : h.nEn || h.n}
+                  </b>
+                </div>
+              </div>
+
+              {/* Annual Renewal Reminder Callout */}
+              <div className="p-4 rounded-xl border border-[var(--primary-100)] bg-[var(--primary-50)] text-xs sm:text-sm text-[var(--primary-700)] flex flex-col sm:flex-row sm:items-center justify-between gap-[var(--space-3)]">
+                <div className="flex items-center gap-2.5">
+                  <Clock className="w-4.5 h-4.5 text-[var(--primary)] shrink-0" />
+                  <div>
+                    <b className="block font-bold">{L('موعد التجديد السنوي القادم', 'Next Annual Renewal Due')}</b>
+                    <span className="text-xs text-[var(--muted)] block mt-0.5">
+                      {L('يُوصى بالحجز قبل شهر من تاريخ الانتهاء لضمان استمرار اللياقة', 'Book 1 month before expiry to ensure active clearance')}
+                    </span>
+                  </div>
+                </div>
+                <b className="font-mono text-sm font-bold shrink-0 self-end sm:self-center bg-white dark:bg-[#1B355A] px-3 py-1.5 rounded-lg border border-[var(--primary-100)] text-[var(--primary-700)]">
+                  {fmtDate(p.exp, isRTL ? 'ar' : 'en')}
+                </b>
+              </div>
             </div>
           </div>
         </div>
@@ -626,3 +632,4 @@ export const CitizenHomeTab = () => {
     </div>
   );
 };
+

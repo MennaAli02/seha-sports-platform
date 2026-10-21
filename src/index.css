@@ -129,7 +129,8 @@
   /* Layout Gutters & Spacing System Tokens */
   --page-gutter: 24px;
   --section-gap: 20px;
-  --card-gap: 20px;
+  --gap-section: 20px;
+  --card-gap: 10px;
   --card-padding: 20px;
   --card-padding-lg: 24px;
   --control-gap: 8px;
@@ -851,8 +852,12 @@ h4, h5, h6, .font-headline {
 .page-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--section-gap);
+  gap: var(--gap-section, var(--section-gap, 20px));
   width: 100%;
+}
+
+.gap-section {
+  gap: var(--gap-section, 20px);
 }
 
 .page-stack > * {

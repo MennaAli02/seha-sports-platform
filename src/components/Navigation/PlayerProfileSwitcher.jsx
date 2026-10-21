@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
+import { SP_EN } from '../../data/mockData';
 import {
   UserCheck,
   ChevronDown,
@@ -122,8 +123,17 @@ export const PlayerProfileSwitcher = () => {
   };
 
   // Group players into Primary vs Family Dependents
+  // Group players into Primary vs Family Dependents
   const primaryPlayer = players[0];
   const familyDependents = players.filter((p, idx) => idx > 0 && (p.rel || idx < 5));
+
+  const getSportName = (spIdx) => {
+    const arName = cfg?.sports?.[spIdx] || '';
+    if (!isRTL && SP_EN && SP_EN[arName]) {
+      return SP_EN[arName];
+    }
+    return arName || (isRTL ? 'كرة القدم' : 'Football');
+  };
 
   return (
     <div className="relative" ref={dropdownRef} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
@@ -148,9 +158,14 @@ export const PlayerProfileSwitcher = () => {
           )}
         </div>
 
-        <span className="text-xs sm:text-sm font-bold text-[#0D2444] dark:text-white truncate max-w-[140px] xs:max-w-[180px] sm:max-w-[240px]">
-          {currentPlayer?.name} ({currentPlayer?.age} {L('سنة', 'y')})
-        </span>
+        <div className="flex items-center gap-1.5 min-w-0 max-w-[200px] xs:max-w-[260px] sm:max-w-[320px]">
+          <bdi className="text-xs sm:text-sm font-bold text-[#0D2444] dark:text-white truncate">
+            {currentPlayer?.name}
+          </bdi>
+          <span className="text-[11px] font-medium text-[#4A607A] dark:text-[#94B0D0] shrink-0" dir="ltr">
+            ({currentPlayer?.age} {L('سنة', 'y')})
+          </span>
+        </div>
 
         <ChevronDown
           className={`w-4 h-4 text-[#1E427B] dark:text-[#7EB0E8] group-hover:text-[#0D2444] dark:group-hover:text-white transition-transform duration-200 shrink-0 ${
@@ -163,21 +178,21 @@ export const PlayerProfileSwitcher = () => {
       {isOpen && (
         <div
           className={`absolute top-full mt-2 ${
-            isRTL ? 'left-0 sm:right-0 sm:left-auto' : 'right-0 sm:left-0 sm:right-auto'
-          } z-50 w-76 sm:w-84 rounded-2xl bg-[var(--card)] border border-[var(--line)] shadow-xl p-2.5 text-start animate-in fade-in zoom-in-95 duration-150`}
+            isRTL ? 'left-0 right-auto' : 'right-0 left-auto'
+          } z-50 w-[320px] xs:w-[360px] sm:w-[400px] max-w-[calc(100vw-24px)] rounded-2xl bg-[var(--card)] border border-[var(--line)] shadow-xl p-3 text-start animate-in fade-in zoom-in-95 duration-150`}
         >
           {/* Menu Header */}
-          <div className="p-2 pb-2.5 mb-1.5 border-b border-[var(--line)]">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 font-bold text-xs text-[var(--ink)]">
-                <Users className="w-4 h-4 text-[var(--primary)]" />
-                <span>{L('الملفات العائلية المرتبطة', 'Connected Family Profiles')}</span>
+          <div className="p-2 pb-2.5 mb-2 border-b border-[var(--line)]">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 font-bold text-xs text-[var(--ink)] min-w-0">
+                <Users className="w-4 h-4 text-[var(--primary)] shrink-0" />
+                <span className="truncate">{L('الملفات العائلية المرتبطة', 'Connected Family Profiles')}</span>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--primary-50)] text-[var(--primary)] font-bold">
-                {1 + familyDependents.length} {L('ملفات', 'Profiles')}
+              <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[var(--primary-50)] text-[var(--primary)] font-bold whitespace-nowrap shrink-0 border border-[var(--primary-100)]">
+                {players.length} {L('ملفات', 'Profiles')}
               </span>
             </div>
-            <p className="text-[10.5px] text-[var(--muted)] mt-0.5">
+            <p className="text-[11px] text-[var(--muted)] mt-1 leading-snug">
               {L(
                 'اختر الملف الرياضي لإظهار شهاداته وحجوزاته وموافقاته الموثقة.',
                 'Select profile to view verified certificates, bookings, and consents.'
@@ -185,34 +200,36 @@ export const PlayerProfileSwitcher = () => {
             </p>
           </div>
 
-          <div className="max-h-64 overflow-y-auto space-y-1 pr-0.5">
+          <div className="max-h-72 overflow-y-auto flex flex-col gap-[10px] pr-0.5">
             {/* Primary Profile */}
             {primaryPlayer && (
               <div>
-                <div className="text-[10px] font-bold text-[var(--muted)] px-2 py-1 uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-[var(--muted)] px-2 pb-1.5 uppercase tracking-wider">
                   {L('الحساب الرئيسي', 'Primary Profile')}
                 </div>
                 <div
                   onClick={() => handleSelect(0)}
-                  className={`flex items-center justify-between p-2 rounded-xl cursor-pointer transition-all ${
+                  className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
                     selectedPlayerIndex === 0
-                      ? 'bg-[var(--primary-50)] border border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold'
-                      : 'hover:bg-[var(--primary-50)]/60 text-[var(--ink)]'
+                      ? 'bg-[var(--primary-50)] border-2 border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold shadow-xs'
+                      : 'hover:bg-[var(--primary-50)]/60 border border-[var(--line)] text-[var(--ink)]'
                   }`}
                 >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="w-7 h-7 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xs shrink-0">
-                      {primaryPlayer.name.charAt(0)}
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                      {primaryPlayer?.name?.charAt(0) || 'أ'}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold truncate">{primaryPlayer.name}</span>
-                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#16845B]/15 text-[#16845B] font-bold">
+                        <bdi className="text-xs font-bold truncate text-[var(--ink)]">{primaryPlayer?.name}</bdi>
+                        <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[#16845B]/15 text-[#16845B] font-bold whitespace-nowrap">
                           {L('الأساسي', 'Main')}
                         </span>
                       </div>
-                      <div className="text-[10px] text-[var(--muted)] truncate">
-                        {cfg.sports[primaryPlayer.sp] || 'كرة القدم'} · {primaryPlayer.age} {L('سنة', 'years')}
+                      <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-0.5">
+                        <bdi className="font-semibold text-[var(--ink)]">{getSportName(primaryPlayer?.sp)}</bdi>
+                        <span className="opacity-40">·</span>
+                        <span>{primaryPlayer?.age} {L('سنة', 'years')}</span>
                       </div>
                     </div>
                   </div>
@@ -225,11 +242,11 @@ export const PlayerProfileSwitcher = () => {
 
             {/* Family Dependents */}
             {familyDependents.length > 0 && (
-              <div className="pt-1.5">
-                <div className="text-[10px] font-bold text-[var(--muted)] px-2 py-1 uppercase tracking-wider flex items-center justify-between">
-                  <span>{L('التابعون وأفراد العائلة', 'Family Dependents')}</span>
-                  <span className="text-[9.5px] text-[var(--primary)] font-normal">
-                    {L('تحت ولاية الحساب', 'Under Guardian')}
+              <div className="pt-1 flex flex-col gap-[10px]">
+                <div className="text-[10px] font-bold text-[var(--muted)] px-2 pb-1 uppercase tracking-wider flex items-center justify-between gap-2">
+                  <span className="whitespace-nowrap">{L('التابعون وأفراد العائلة', 'Family Dependents')}</span>
+                  <span className="text-[10px] text-[var(--primary)] font-semibold whitespace-nowrap">
+                    {L('تحت ولاية الحساب', 'Under Guardianship')}
                   </span>
                 </div>
                 {familyDependents.map((pl) => {
@@ -239,25 +256,27 @@ export const PlayerProfileSwitcher = () => {
                     <div
                       key={pl.id || actualIdx}
                       onClick={() => handleSelect(actualIdx)}
-                      className={`flex items-center justify-between p-2 rounded-xl cursor-pointer transition-all ${
+                      className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
                         isCurrent
-                          ? 'bg-[var(--primary-50)] border border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold'
-                          : 'hover:bg-[var(--primary-50)]/60 text-[var(--ink)]'
+                          ? 'bg-[var(--primary-50)] border-2 border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold shadow-xs'
+                          : 'hover:bg-[var(--primary-50)]/60 border border-[var(--line)] text-[var(--ink)]'
                       }`}
                     >
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <div className="w-7 h-7 rounded-lg bg-[#0066CC]/15 text-[#0066CC] dark:text-[#ABC7E8] flex items-center justify-center font-bold text-xs shrink-0">
-                          {pl.name.charAt(0)}
+                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div className="w-8 h-8 rounded-lg bg-[#0066CC]/15 text-[#0066CC] dark:text-[#ABC7E8] flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                          {pl?.name?.charAt(0) || 'أ'}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold truncate">{pl.name}</span>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[var(--line)] text-[var(--muted)]">
+                            <bdi className="text-xs font-bold truncate text-[var(--ink)]">{pl?.name}</bdi>
+                            <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[var(--line)] text-[var(--muted)] whitespace-nowrap">
                               {pl.rel ? L(pl.rel.ar, pl.rel.en) : L('تابع', 'Dependent')}
                             </span>
                           </div>
-                          <div className="text-[10px] text-[var(--muted)] truncate">
-                            {cfg.sports[pl.sp] || 'رياضة'} · {pl.age} {L('سنة', 'years')}
+                          <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-0.5">
+                            <bdi className="font-semibold text-[var(--ink)]">{getSportName(pl?.sp)}</bdi>
+                            <span className="opacity-40">·</span>
+                            <span>{pl?.age} {L('سنة', 'years')}</span>
                           </div>
                         </div>
                       </div>
@@ -272,7 +291,7 @@ export const PlayerProfileSwitcher = () => {
           </div>
 
           {/* Action buttons at bottom */}
-          <div className="pt-2 mt-1.5 border-t border-[var(--line)] space-y-1.5">
+          <div className="pt-2.5 mt-2 border-t border-[var(--line)] space-y-1.5">
             {userRole === 'guardian' && (
               <button
                 type="button"
