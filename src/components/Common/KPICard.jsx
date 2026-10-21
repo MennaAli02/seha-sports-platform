@@ -88,7 +88,7 @@ export const KPICard = ({
 
       <div className="flex items-start justify-between gap-2.5">
         <div className="min-w-0">
-          <b className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-none block font-mono text-[var(--ink)] truncate">
+          <b className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-none block text-[var(--ink)] truncate tabular-nums">
             {value}
           </b>
           <span className="text-xs font-semibold text-[var(--muted)] mt-1.5 block leading-snug">

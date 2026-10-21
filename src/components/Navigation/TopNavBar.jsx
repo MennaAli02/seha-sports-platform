@@ -3,11 +3,12 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
 import { Sun, Moon, HelpCircle, Menu, Bell, Globe } from 'lucide-react';
+import { PlayerProfileSwitcher } from './PlayerProfileSwitcher';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const { toggleLanguage, isRTL, L } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
-  const { currentRoute, toggleSidebar } = useSeha();
+  const { currentRoute, toggleSidebar, currentUser, userRole } = useSeha();
 
   // Keyboard shortcut Ctrl+K or Cmd+K for search
   useEffect(() => {
@@ -24,6 +25,10 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const getRouteTitle = () => {
     switch (currentRoute) {
       case 'dash': return isRTL ? 'لوحة المؤشرات' : 'Dashboard';
+      case 'citizen-home': return isRTL ? 'خدمات المواطن — الرئيسية' : 'Citizen — Home';
+      case 'citizen-bookings': return isRTL ? 'خدمات المواطن — حجز كشف' : 'Citizen — Bookings';
+      case 'citizen-certs': return isRTL ? 'خدمات المواطن — الشهادات' : 'Citizen — Certificates';
+      case 'citizen-consents': return isRTL ? 'خدمات المواطن — الموافقات' : 'Citizen — Consents';
       case 'consent': return isRTL ? 'موافقات الاطلاع' : 'Access consents';
       case 'cert': return isRTL ? 'سجل الشهادات' : 'Certificates';
       case 'verify': return isRTL ? 'التحقق العام' : 'Public verification';
@@ -84,7 +89,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
           {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
         </button>
 
-        {/* Language toggle icon placed to the left of platform admin */}
+        {/* Language toggle icon placed to the left */}
         <div className="flex items-center gap-1.5 sm:gap-2" style={{ direction: 'ltr' }}>
           <button
             className="p-2 text-[var(--muted)] hover:text-[var(--primary)] hover:bg-[var(--primary-50)] rounded-full border border-[var(--line)] transition-all cursor-pointer flex items-center justify-center"
@@ -95,11 +100,18 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
             <Globe className="w-4 h-4" />
           </button>
 
-          {/* User profile capsule */}
-          <div className="user" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
-            <div className="av">{isRTL ? 'أ' : 'A'}</div>
-            <b className="hidden md:inline">{L('مسؤول المنظومة', 'Platform admin')}</b>
-          </div>
+          {/* User profile capsule OR Player/Family Switcher Dropdown */}
+          {userRole === 'citizen' || currentRoute.startsWith('citizen-') ? (
+            <PlayerProfileSwitcher />
+          ) : (
+            <div className="user" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+              <div className="av">{currentUser?.avatarLetter || (isRTL ? 'أ' : 'A')}</div>
+              <div className="hidden md:flex flex-col text-start">
+                <b className="leading-tight text-xs">{currentUser?.name || L('مسؤول المنظومة', 'Platform admin')}</b>
+                <span className="text-[10px] text-[var(--muted)] leading-tight">{L(currentUser?.titleAr, currentUser?.titleEn)}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

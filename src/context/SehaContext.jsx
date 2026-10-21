@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { generateSeedData, CFG, GOV_EN, SP_EN } from '../data/mockData';
+import { mockPersonas } from '../data/mockPersonas';
 
 const SehaContext = createContext(undefined);
 
@@ -14,7 +15,13 @@ export const SehaProvider = ({ children }) => {
   const [ash, setAsh] = useState(initialData.ash);
   const [cfg, setCfg] = useState(initialData.cfg);
 
-  const [currentRoute, setCurrentRoute] = useState('dash');
+  // Authentication & Role State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState('super_admin');
+  const [currentUser, setCurrentUser] = useState(mockPersonas.super_admin);
+
+  // Default screen is role_select per user specification
+  const [currentRoute, setCurrentRoute] = useState('role_select');
   const [selectedPlayerIndex, setSelectedPlayerIndex] = useState(0);
   const [selectedCertIndex, setSelectedCertIndex] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
@@ -30,7 +37,7 @@ export const SehaProvider = ({ children }) => {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(prev => (prev === msg ? null : prev));
-    }, 2500);
+    }, 2800);
   }, []);
 
   const logAudit = useCallback((by, event) => {
@@ -39,11 +46,53 @@ export const SehaProvider = ({ children }) => {
     setAudit(prev => [[time, by, event, event], ...prev]);
   }, []);
 
+  const login = useCallback((role, credentials = {}) => {
+    const targetPersona = mockPersonas[role] || mockPersonas.super_admin;
+    setUserRole(role);
+    setCurrentUser(targetPersona);
+    setIsAuthenticated(true);
+
+    const targetRoute = role === 'citizen' ? 'citizen-home' : 'dash';
+    setCurrentRoute(targetRoute);
+
+    if (role === 'citizen') {
+      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول لبوابة المواطن`);
+    } else {
+      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول بصلاحيات مسؤول المنظومة`);
+    }
+  }, [showToast]);
+
+  const logout = useCallback(() => {
+    setIsAuthenticated(false);
+    setCurrentRoute('role_select');
+    showToast('تم تسجيل الخروج بنجاح من المنظومة / Logged out');
+  }, [showToast]);
+
   const navigate = useCallback((route, meta = {}) => {
-    const targetRoute = (!route || route === 'mobile') ? 'dash' : route;
+    let targetRoute = !route ? 'dash' : route;
+    if (targetRoute === 'mobile' || targetRoute === 'citizen') {
+      targetRoute = 'citizen-home';
+    }
+
+    // Role boundary guard: citizens can access citizen screens, the certificate A4 view, and public verification
+    const citizenAllowedRoutes = [
+      'citizen-home',
+      'citizen-bookings',
+      'citizen-certs',
+      'citizen-consents',
+      'cert',
+      'verify'
+    ];
+    if (isAuthenticated && userRole === 'citizen' && !citizenAllowedRoutes.includes(targetRoute)) {
+      showToast('هذه الشاشة مقصورة على مسؤول المنظومة / Screen restricted to Super Admin');
+      targetRoute = 'citizen-home';
+    }
+
     setCurrentRoute(targetRoute);
     if (meta.certIndex !== undefined) {
       setSelectedCertIndex(meta.certIndex);
+    } else if (targetRoute === 'cert' && userRole === 'citizen') {
+      setSelectedCertIndex((prev) => (prev !== null ? prev : (selectedPlayerIndex ?? 0)));
     }
     if (meta.report !== undefined) {
       setSelectedReport(meta.report);
@@ -54,7 +103,7 @@ export const SehaProvider = ({ children }) => {
       setVerifyQuery(meta.verifyQ);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [isAuthenticated, userRole, showToast]);
 
   const resetDemoData = useCallback(() => {
     const fresh = generateSeedData();
@@ -151,8 +200,15 @@ export const SehaProvider = ({ children }) => {
     countBy,
     bands,
     sidebarExpanded,
-    setSidebarExpanded,
     toggleSidebar,
+    isAuthenticated,
+    setIsAuthenticated,
+    userRole,
+    setUserRole,
+    currentUser,
+    setCurrentUser,
+    login,
+    logout,
     GOV_EN,
     SP_EN
   };

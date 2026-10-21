@@ -6,7 +6,7 @@ import { Menu, LogOut } from 'lucide-react';
 
 export const SideNavBar = () => {
   const { isRTL, L } = useLanguage();
-  const { currentRoute, navigate, sidebarExpanded, toggleSidebar, cfg, showToast } = useSeha();
+  const { currentRoute, navigate, sidebarExpanded, toggleSidebar, cfg, showToast, userRole, currentUser, logout } = useSeha();
 
   // Close drawer on ESC key on mobile/tablet
   useEffect(() => {
@@ -28,8 +28,7 @@ export const SideNavBar = () => {
   };
 
   const handleLogout = () => {
-    showToast(L('تم تسجيل الخروج بنجاح من المنظومة', 'Logged out successfully from the platform'));
-    navigate('dash');
+    logout();
     if (sidebarExpanded && typeof window !== 'undefined' && window.innerWidth < 1024) {
       toggleSidebar();
     }
@@ -43,6 +42,15 @@ export const SideNavBar = () => {
         { k: 'consent', ic: 'shield', t: ['موافقات الاطلاع', 'Access consents'] },
         { k: 'cert', ic: 'cert', t: ['سجل الشهادات', 'Certificates'] },
         { k: 'verify', ic: 'scan', t: ['التحقق العام', 'Public verification'] }
+      ]
+    },
+    {
+      title: ['المواطن', 'Citizen'],
+      routes: [
+        { k: 'citizen-home', ic: 'home', t: ['الرئيسية', 'Home'] },
+        { k: 'citizen-bookings', ic: 'cal', t: ['حجز كشف', 'Bookings'] },
+        { k: 'citizen-certs', ic: 'cert', t: ['الشهادات', 'Certificates'] },
+        { k: 'citizen-consents', ic: 'shield', t: ['الموافقات', 'Consents'] }
       ]
     },
     {
@@ -63,6 +71,10 @@ export const SideNavBar = () => {
       ]
     }
   ];
+
+  const visibleSections = userRole === 'citizen'
+    ? sections.filter(sec => sec.title[1] === 'Citizen')
+    : sections;
 
   return (
     <>
@@ -94,7 +106,7 @@ export const SideNavBar = () => {
 
           {sidebarExpanded && (
             <div
-              onClick={() => handleNavClick('dash')}
+              onClick={() => handleNavClick(userRole === 'citizen' ? 'citizen-home' : 'dash')}
               className="side-brand cursor-pointer group"
               title={L(cfg.org.ar, cfg.org.en)}
             >
@@ -111,7 +123,7 @@ export const SideNavBar = () => {
 
         {/* Nav Content */}
         <div className="side-nav-content">
-          {sections.map((sec, secIdx) => (
+          {visibleSections.map((sec, secIdx) => (
             <React.Fragment key={`sec-${secIdx}`}>
               {secIdx > 0 && <div className="sep" />}
               {sidebarExpanded && (
@@ -120,7 +132,7 @@ export const SideNavBar = () => {
                 </div>
               )}
               {sec.routes.map((r) => {
-                const isOn = currentRoute === r.k;
+                const isOn = currentRoute === r.k || (userRole === 'citizen' && r.k === 'citizen-certs' && currentRoute === 'cert');
                 const title = L(r.t[0], r.t[1]);
                 return (
                   <button
@@ -144,6 +156,17 @@ export const SideNavBar = () => {
         </div>
         {/* Bottom Footer: Log out */}
         <div className="side-footer">
+          {sidebarExpanded && currentUser && (
+            <div className="px-2.5 py-1.5 mb-2 rounded-xl bg-white/10 text-white flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-white/20 flex items-center justify-center font-bold text-[11px] shrink-0">
+                {currentUser.avatarLetter || 'م'}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[11px] font-bold truncate leading-tight">{currentUser.name}</div>
+                <div className="text-[9.5px] text-white/75 truncate">{L(currentUser.titleAr, currentUser.titleEn)}</div>
+              </div>
+            </div>
+          )}
           <button
             type="button"
             className="side-logout-btn"

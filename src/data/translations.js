@@ -14,6 +14,11 @@ export const translations = {
     // Navigation items
     navDashboard: "لوحة المؤشرات",
     navCitizenApp: "تطبيق المواطن",
+    navCitizenCategory: "المواطن",
+    navCitizenHome: "الرئيسية",
+    navCitizenBookings: "حجز كشف",
+    navCitizenCertificates: "الشهادات",
+    navCitizenConsents: "الموافقات",
     navConsents: "موافقات الاطلاع",
     navCertificates: "سجل الشهادات",
     navPublicVerify: "التحقق العام",
@@ -155,6 +160,11 @@ export const translations = {
     // Navigation items
     navDashboard: "Dashboard",
     navCitizenApp: "Citizen App",
+    navCitizenCategory: "Citizen",
+    navCitizenHome: "Home",
+    navCitizenBookings: "Bookings",
+    navCitizenCertificates: "Certificates",
+    navCitizenConsents: "Consents",
     navConsents: "Access Consents",
     navCertificates: "Certificates",
     navPublicVerify: "Public Verify",

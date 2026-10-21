@@ -62,6 +62,9 @@ export const DashboardView = () => {
           >
             <FileText className="w-4 h-4" /> {L('التقرير التنفيذي', 'Executive report')}
           </button>
+          <button className="btn sec" onClick={() => navigate('citizen-home')}>
+            <Users className="w-4 h-4" /> {L('بوابة المواطن', 'Citizen portal')}
+          </button>
           <button className="btn" onClick={() => navigate('cert')}>
             <Award className="w-4 h-4" /> {L('سجل الشهادات', 'Certificates registry')}
           </button>

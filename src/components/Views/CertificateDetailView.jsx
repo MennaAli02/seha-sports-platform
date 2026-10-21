@@ -11,6 +11,8 @@ export const CertificateDetailView = () => {
     players,
     selectedCertIndex,
     setSelectedCertIndex,
+    selectedPlayerIndex,
+    userRole,
     hosps,
     clubs,
     cfg,
@@ -20,13 +22,17 @@ export const CertificateDetailView = () => {
     SP_EN
   } = useSeha();
 
-  const p = players[selectedCertIndex ?? 0] || players[0];
+  const targetIndex = userRole === 'citizen' ? (selectedCertIndex ?? selectedPlayerIndex ?? 0) : (selectedCertIndex ?? 0);
+  const p = players[targetIndex] || players[0];
   const h = hosps[p.hs] || hosps[0];
   const c = clubs[p.cl] || clubs[0];
   const lv = cfg.levels[p.lv - 1] || cfg.levels[0];
 
   const handleBack = () => {
     setSelectedCertIndex(null);
+    if (userRole === 'citizen') {
+      navigate('citizen-certs');
+    }
   };
 
   const handleVerify = () => {
@@ -49,7 +55,7 @@ export const CertificateDetailView = () => {
           </div>
           <div className="act np">
             <button className="btn ghost" onClick={handleBack}>
-              <ArrowLeft className="w-4 h-4" /> {L('سجل الشهادات', 'Certificate registry')}
+              <ArrowLeft className="w-4 h-4" /> {userRole === 'citizen' ? L('الرجوع لسجل شهاداتي', 'Back to My Certificates') : L('سجل الشهادات', 'Certificate registry')}
             </button>
           </div>
         </div>
@@ -85,9 +91,15 @@ export const CertificateDetailView = () => {
               </tbody>
             </table>
           </div>
-          <button className="btn px-6 py-2.5 shadow-sm" onClick={() => navigate('doctor')}>
-            {L('فتح شاشة الطبيب لإجراء الفحص', 'Open physician screen for examination')}
-          </button>
+          {userRole === 'citizen' ? (
+            <button className="btn px-6 py-2.5 shadow-sm" onClick={() => navigate('citizen-bookings')}>
+              {L('إدارة ومتابعة الحجز', 'Manage Booking')}
+            </button>
+          ) : (
+            <button className="btn px-6 py-2.5 shadow-sm" onClick={() => navigate('doctor')}>
+              {L('فتح شاشة الطبيب لإجراء الفحص', 'Open physician screen for examination')}
+            </button>
+          )}
         </div>
       </div>
     );
@@ -168,7 +180,7 @@ export const CertificateDetailView = () => {
         </div>
         <div className="act np">
           <button className="btn ghost" onClick={handleBack}>
-            <ArrowLeft className="w-4 h-4" /> {L('سجل الشهادات', 'Certificate registry')}
+            <ArrowLeft className="w-4 h-4" /> {userRole === 'citizen' ? L('الرجوع لسجل الشهادات', 'Back to My Certificates') : L('سجل الشهادات', 'Certificate registry')}
           </button>
           <button className="btn sec" onClick={() => window.print()}>
             <Printer className="w-4 h-4" />

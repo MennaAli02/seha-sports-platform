@@ -250,10 +250,11 @@ export function generateSeedData() {
     if (p.st === "cond") p.rf = rnd(6);
   });
 
-  // Deterministic Player 0 anchor (Ahmad Youssef El-Sayed)
+  // Deterministic Family Group anchor (Ahmad Youssef El-Sayed & Family Dependents)
   players[0].name = "أحمد يوسف السيد";
   players[0].g = "M";
   players[0].gd = "يوسف عبدالله السيد";
+  players[0].rel = { ar: "الحساب الرئيسي", en: "Primary Profile", isPrimary: true };
   players[0].cl = 0;
   players[0].hs = 0;
   players[0].iss = { y: 2026, m: 10, d: 15 };
@@ -262,12 +263,68 @@ export function generateSeedData() {
   players[0].dobm = 5;
   players[0].dobd = 12;
   players[0].st = "fit";
-  players[0].sp = 0;
+  players[0].sp = 0; // كرة القدم
   players[0].age = 16;
   players[0].lv = 3;
   players[0].ct = "SH-26-004517";
   players[0].bk = "BK-26-018245";
   players[0].gov = "القاهرة";
+
+  // Family Dependent 1 (Daughter - Gymnastics)
+  if (players[1]) {
+    players[1].name = "مريم أحمد يوسف";
+    players[1].g = "F";
+    players[1].gd = "أحمد يوسف السيد";
+    players[1].rel = { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false };
+    players[1].age = 12;
+    players[1].sp = 4; // جمباز
+    players[1].st = "fit";
+    players[1].lv = 2;
+    players[1].ct = "SH-26-004518";
+    players[1].bk = "BK-26-018246";
+  }
+
+  // Family Dependent 2 (Son - Taekwondo)
+  if (players[2]) {
+    players[2].name = "عمر أحمد يوسف";
+    players[2].g = "M";
+    players[2].gd = "أحمد يوسف السيد";
+    players[2].rel = { ar: "الابن (تابع عائلي)", en: "Son (Dependent)", isPrimary: false };
+    players[2].age = 14;
+    players[2].sp = 3; // تايكوندو
+    players[2].st = "fit";
+    players[2].lv = 2;
+    players[2].ct = "SH-26-004519";
+    players[2].bk = "BK-26-018247";
+  }
+
+  // Family Dependent 3 (Son - Swimming)
+  if (players[3]) {
+    players[3].name = "ياسين أحمد يوسف";
+    players[3].g = "M";
+    players[3].gd = "أحمد يوسف السيد";
+    players[3].rel = { ar: "الابن (تابع عائلي)", en: "Son (Dependent)", isPrimary: false };
+    players[3].age = 10;
+    players[3].sp = 2; // سباحة
+    players[3].st = "cond";
+    players[3].lv = 1;
+    players[3].ct = "SH-26-004520";
+    players[3].bk = "BK-26-018248";
+  }
+
+  // Family Dependent 4 (Daughter - Karate)
+  if (players[4]) {
+    players[4].name = "نور أحمد يوسف";
+    players[4].g = "F";
+    players[4].gd = "أحمد يوسف السيد";
+    players[4].rel = { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false };
+    players[4].age = 8;
+    players[4].sp = 5; // كاراتيه
+    players[4].st = "fit";
+    players[4].lv = 1;
+    players[4].ct = "SH-26-004521";
+    players[4].bk = "BK-26-018249";
+  }
 
   const cn = [
     { ar: "نادي المستقبل الرياضي", en: "Al-Mostakbal Sports Club", typeAr: "نادي", typeEn: "Club", mgrAr: "م. خالد حمدي", mgrEn: "Eng. Khaled Hamdi" },

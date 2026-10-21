@@ -15,6 +15,7 @@ export const CertificateRegistryView = () => {
     setSelectedCertIndex,
     stats,
     cfg,
+    userRole,
     SP_EN,
     GOV_EN
   } = useSeha();
@@ -53,8 +54,8 @@ export const CertificateRegistryView = () => {
   ];
   const activeOption = filterOptions.find(o => o.key === f) || filterOptions[0];
 
-  // If a certificate is currently selected, render the detail view
-  if (selectedCertIndex !== null) {
+  // If a certificate is currently selected or user is citizen, render the detail view
+  if (selectedCertIndex !== null || userRole === 'citizen') {
     return <CertificateDetailView />;
   }
 
