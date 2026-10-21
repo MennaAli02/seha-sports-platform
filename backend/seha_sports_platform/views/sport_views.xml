@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="view_seha_sport_list" model="ir.ui.view">
+        <field name="name">seha.sport.list</field>
+        <field name="model">seha.sport</field>
+        <field name="arch" type="xml">
+            <list string="Sports Disciplines">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="name_en"/>
+                <field name="code"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_seha_sport_form" model="ir.ui.view">
+        <field name="name">seha.sport.form</field>
+        <field name="model">seha.sport</field>
+        <field name="arch" type="xml">
+            <form string="Sport / Discipline">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="name_en"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description or requirements for this athletic discipline..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_seha_sport" model="ir.actions.act_window">
+        <field name="name">Sports Disciplines / الألعاب والرياضات</field>
+        <field name="res_model">seha.sport</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

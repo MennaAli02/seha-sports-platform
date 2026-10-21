@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Seha Sports Platform Backend',
+    'version': '19.0.1.0.0',
+    'summary': 'Sports-Medical Platform: Athlete & Parent Accounts, Certificates, and Citizen Portal API',
+    'category': 'Healthcare/Sports',
+    'author': 'Seha Platform Team',
+    'website': 'https://seha.gov.eg',
+    'license': 'LGPL-3',
+    'depends': [
+        'base',
+        'web',
+    ],
+    'data': [
+        'security/res_groups.xml',
+        'security/ir.model.access.csv',
+        'security/ir_rule.xml',
+        'data/ir_sequence_data.xml',
+        'data/seha_sport_data.xml',
+        'views/sport_views.xml',
+        'views/certificate_views.xml',
+        'views/player_views.xml',
+        'views/parent_views.xml',
+        'views/menu_views.xml',
+    ],
+    'demo': [
+        'data/demo_data.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

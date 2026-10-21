@@ -248,13 +248,81 @@ export function generateSeedData() {
     p.fp = fp.slice(0, 4) + " " + fp.slice(4) + " " + ("000" + (h % 4096).toString(16)).slice(-4).toUpperCase() + " " + ("000" + ((h >> 5) % 4096).toString(16)).slice(-4).toUpperCase();
     p.tm = (9 + rnd(5)) + ":" + ("0" + rnd(60)).slice(-2);
     if (p.st === "cond") p.rf = rnd(6);
+    p.verificationStatus = "verified";
+
+    // Deterministic Medical History
+    p.medicalHistory = [
+      {
+        id: "MH-" + p.id + "-1",
+        date: "15/10/2026",
+        dateEn: "15 Oct 2026",
+        season: "2026 / 2027",
+        level: p.lv || 2,
+        levelNameAr: CFG.levels[(p.lv || 2) - 1]?.ar || "المستوى الثاني",
+        levelNameEn: CFG.levels[(p.lv || 2) - 1]?.en || "Level 2",
+        hospitalAr: "مستشفى هليوبوليس التخصصي",
+        hospitalEn: "Heliopolis Specialized Hospital",
+        doctorAr: "د. طارق محمود المنشاوي · استشاري طب القلب الرياضي",
+        doctorEn: "Dr. Tarek El-Menshawy · Sports Cardiology Consultant",
+        status: p.st === "cond" ? "cond" : "fit",
+        statusLabelAr: p.st === "cond" ? "لائق بشروط ومتابعة" : "لائق طبيًا للمنافسات",
+        statusLabelEn: p.st === "cond" ? "Conditionally Fit" : "Medically Fit for Sports",
+        vitals: {
+          bp: p.bp || "118/76",
+          hr: p.hr || 68,
+          bmi: "21.2",
+          height: 165,
+          weight: 58
+        },
+        tests: [
+          { nameAr: "الفحص السريري والباطني الشامل", nameEn: "Clinical & Internal Exam", resultAr: "سليم تمامًا دون لغط قلبي أو تضخم", resultEn: "Normal clinical evaluation", normal: true },
+          { nameAr: "تخطيط رسم القلب الكهربائي (Resting ECG)", nameEn: "Resting ECG", resultAr: "نظم جيبي طبيعي سليم (Sinus Rhythm) - التوصيل سليم", resultEn: "Normal Sinus Rhythm", normal: true },
+          { nameAr: "الموجات الصوتية للقلب (ECHO)", nameEn: "Echocardiogram (ECHO)", resultAr: "كفاءة العضلة 64% والصمامات طبيعية دون عيوب خلقية", resultEn: "Normal EF 64%, no valvular defects", normal: true },
+          { nameAr: "تحليل صورة الدم الكاملة (CBC)", nameEn: "Complete Blood Count (CBC)", resultAr: "الهيموجلوبين 14.2 g/dL وكرات الدم بالحدود الطبيعية", resultEn: "Hemoglobin 14.2 g/dL, normal parameters", normal: true }
+        ],
+        notesAr: "تم الفحص واعتماد الشهادة بنجاح؛ الرياضي مؤهل تمامًا للمشاركة الرياضية والتنافسية المعتمدة.",
+        notesEn: "Exam completed and certified; athlete is cleared for competitive sports participation.",
+        digitalSign: "SHA256-SEHA-MED-2026-" + p.id
+      },
+      {
+        id: "MH-" + p.id + "-2",
+        date: "10/10/2025",
+        dateEn: "10 Oct 2025",
+        season: "2025 / 2026",
+        level: 2,
+        levelNameAr: "المستوى الثاني — الأكاديميات",
+        levelNameEn: "Level 2 — Academies",
+        hospitalAr: "مستشفى النيل بدر",
+        hospitalEn: "Nile Badr Hospital",
+        doctorAr: "د. سحر عبدالمجيد · أخصائي الطب الرياضي",
+        doctorEn: "Dr. Sahar Abdelmageed · Sports Medicine Specialist",
+        status: "fit",
+        statusLabelAr: "لائق طبيًا (مؤرشف)",
+        statusLabelEn: "Medically Fit (Archived)",
+        vitals: {
+          bp: "116/74",
+          hr: 70,
+          bmi: "20.6",
+          height: 160,
+          weight: 53
+        },
+        tests: [
+          { nameAr: "فحص الجهاز الدوري والقلب", nameEn: "Cardiovascular Exam", resultAr: "طبيعي وسليم", resultEn: "Normal", normal: true },
+          { nameAr: "رسم القلب الكهربائي ECG", nameEn: "Resting ECG", resultAr: "طبيعي وسليم", resultEn: "Normal", normal: true },
+          { nameAr: "الفحوصات المعملية", nameEn: "Lab investigations", resultAr: "ضمن المعدلات الطبيعية", resultEn: "Within normal limits", normal: true }
+        ],
+        notesAr: "فحص سنوي معتمد للموسم السابق — التقرير معتمد ومؤرشف رسميًا.",
+        notesEn: "Certified annual examination for previous season — archived.",
+        digitalSign: "SHA256-SEHA-MED-2025-ARCHIVED"
+      }
+    ];
   });
 
-  // Deterministic Family Group anchor (Ahmad Youssef El-Sayed & Family Dependents)
+  // Deterministic Family Group anchor (Youssef Abdullah El-Sayed: 2 Connected Children: Ahmad & Maryam)
   players[0].name = "أحمد يوسف السيد";
   players[0].g = "M";
   players[0].gd = "يوسف عبدالله السيد";
-  players[0].rel = { ar: "الحساب الرئيسي", en: "Primary Profile", isPrimary: true };
+  players[0].rel = { ar: "الابن (حساب رياضي)", en: "Son (Athlete Profile)", isPrimary: true };
   players[0].cl = 0;
   players[0].hs = 0;
   players[0].iss = { y: 2026, m: 10, d: 15 };
@@ -269,61 +337,24 @@ export function generateSeedData() {
   players[0].ct = "SH-26-004517";
   players[0].bk = "BK-26-018245";
   players[0].gov = "القاهرة";
+  players[0].nid = "30408150104829";
+  players[0].verificationStatus = "verified";
 
-  // Family Dependent 1 (Daughter - Gymnastics)
+  // Connected Child 2 (Maryam Ahmad Youssef - Daughter under Guardian Youssef Abdullah)
   if (players[1]) {
     players[1].name = "مريم أحمد يوسف";
     players[1].g = "F";
-    players[1].gd = "أحمد يوسف السيد";
+    players[1].gd = "يوسف عبدالله السيد";
     players[1].rel = { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false };
-    players[1].age = 12;
-    players[1].sp = 4; // جمباز
+    players[1].age = 14;
+    players[1].sp = 4; // ألعاب القوى
     players[1].st = "fit";
     players[1].lv = 2;
     players[1].ct = "SH-26-004518";
     players[1].bk = "BK-26-018246";
-  }
-
-  // Family Dependent 2 (Son - Taekwondo)
-  if (players[2]) {
-    players[2].name = "عمر أحمد يوسف";
-    players[2].g = "M";
-    players[2].gd = "أحمد يوسف السيد";
-    players[2].rel = { ar: "الابن (تابع عائلي)", en: "Son (Dependent)", isPrimary: false };
-    players[2].age = 14;
-    players[2].sp = 3; // تايكوندو
-    players[2].st = "fit";
-    players[2].lv = 2;
-    players[2].ct = "SH-26-004519";
-    players[2].bk = "BK-26-018247";
-  }
-
-  // Family Dependent 3 (Son - Swimming)
-  if (players[3]) {
-    players[3].name = "ياسين أحمد يوسف";
-    players[3].g = "M";
-    players[3].gd = "أحمد يوسف السيد";
-    players[3].rel = { ar: "الابن (تابع عائلي)", en: "Son (Dependent)", isPrimary: false };
-    players[3].age = 10;
-    players[3].sp = 2; // سباحة
-    players[3].st = "cond";
-    players[3].lv = 1;
-    players[3].ct = "SH-26-004520";
-    players[3].bk = "BK-26-018248";
-  }
-
-  // Family Dependent 4 (Daughter - Karate)
-  if (players[4]) {
-    players[4].name = "نور أحمد يوسف";
-    players[4].g = "F";
-    players[4].gd = "أحمد يوسف السيد";
-    players[4].rel = { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false };
-    players[4].age = 8;
-    players[4].sp = 5; // كاراتيه
-    players[4].st = "fit";
-    players[4].lv = 1;
-    players[4].ct = "SH-26-004521";
-    players[4].bk = "BK-26-018249";
+    players[1].gov = "القاهرة";
+    players[1].nid = "30806120104829";
+    players[1].verificationStatus = "verified";
   }
 
   const cn = [

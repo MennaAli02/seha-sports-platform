@@ -29,7 +29,7 @@ export const ConsentGovernanceView = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>

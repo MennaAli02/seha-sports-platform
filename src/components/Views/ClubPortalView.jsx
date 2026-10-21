@@ -26,7 +26,7 @@ export const ClubPortalView = () => {
   const rs = players.slice(0, 10);
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -58,7 +58,7 @@ export const ClubPortalView = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div className="g4" style={{ marginBottom: '10px' }}>
+      <div className="g4">
         <KPICard
           variant="brand"
           value={rs.length}

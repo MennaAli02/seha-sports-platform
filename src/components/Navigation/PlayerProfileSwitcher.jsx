@@ -22,7 +22,8 @@ export const PlayerProfileSwitcher = () => {
     setSelectedPlayerIndex,
     cfg,
     showToast,
-    userRole
+    userRole,
+    navigate
   } = useSeha();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -122,8 +123,7 @@ export const PlayerProfileSwitcher = () => {
 
   // Group players into Primary vs Family Dependents
   const primaryPlayer = players[0];
-  const familyDependents = players.slice(1, 5);
-  const otherPlayers = players.slice(5, 8);
+  const familyDependents = players.filter((p, idx) => idx > 0 && (p.rel || idx < 5));
 
   return (
     <div className="relative" ref={dropdownRef} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
@@ -131,15 +131,24 @@ export const PlayerProfileSwitcher = () => {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 bg-white dark:bg-[#131f33] hover:bg-slate-50 dark:hover:bg-[#1a2b45] border border-[#2B5C8F]/75 hover:border-[#1E427B] dark:border-[#4B80BD] px-2.5 sm:px-3 py-1.5 rounded-lg shadow-2xs hover:shadow-xs transition-all cursor-pointer select-none group"
+        className="flex items-center gap-2 bg-white dark:bg-[#131f33] hover:bg-slate-50 dark:hover:bg-[#1a2b45] border border-[#2B5C8F]/75 hover:border-[#1E427B] dark:border-[#4B80BD] h-9 px-3 rounded-xl shadow-2xs hover:shadow-xs transition-all cursor-pointer select-none group"
         title={L('التبديل بين ملفات العائلة والتابعين', 'Switch family athlete profiles')}
       >
-        <div className="flex items-center gap-1 text-[#1E427B] dark:text-[#7EB0E8] font-bold text-xs shrink-0">
-          <UserCheck className="w-4 h-4 stroke-[2.2]" />
-          <span>{L('اللاعب:', 'Athlete:')}</span>
+        <div className="flex items-center gap-1.5 text-[#1E427B] dark:text-[#7EB0E8] font-bold text-xs shrink-0">
+          {userRole === 'guardian' ? (
+            <>
+              <Users className="w-4 h-4 stroke-[2.2]" />
+              <span>{L('الابن النشط:', 'Child:')}</span>
+            </>
+          ) : (
+            <>
+              <UserCheck className="w-4 h-4 stroke-[2.2]" />
+              <span>{L('اللاعب:', 'Athlete:')}</span>
+            </>
+          )}
         </div>
 
-        <span className="text-xs sm:text-[13px] font-bold text-[#0D2444] dark:text-white truncate max-w-[130px] xs:max-w-[170px] sm:max-w-[210px]">
+        <span className="text-xs sm:text-sm font-bold text-[#0D2444] dark:text-white truncate max-w-[140px] xs:max-w-[180px] sm:max-w-[240px]">
           {currentPlayer?.name} ({currentPlayer?.age} {L('سنة', 'y')})
         </span>
 
@@ -165,7 +174,7 @@ export const PlayerProfileSwitcher = () => {
                 <span>{L('الملفات العائلية المرتبطة', 'Connected Family Profiles')}</span>
               </div>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--primary-50)] text-[var(--primary)] font-bold">
-                {players.length} {L('ملفات', 'Profiles')}
+                {1 + familyDependents.length} {L('ملفات', 'Profiles')}
               </span>
             </div>
             <p className="text-[10.5px] text-[var(--muted)] mt-0.5">
@@ -223,8 +232,8 @@ export const PlayerProfileSwitcher = () => {
                     {L('تحت ولاية الحساب', 'Under Guardian')}
                   </span>
                 </div>
-                {familyDependents.map((pl, fIdx) => {
-                  const actualIdx = fIdx + 1;
+                {familyDependents.map((pl) => {
+                  const actualIdx = players.findIndex((p) => p.id === pl.id);
                   const isCurrent = selectedPlayerIndex === actualIdx;
                   return (
                     <div
@@ -260,37 +269,23 @@ export const PlayerProfileSwitcher = () => {
                 })}
               </div>
             )}
-
-            {/* Other Athletes in Registry if any */}
-            {otherPlayers.length > 0 && (
-              <div className="pt-1.5">
-                <div className="text-[10px] font-bold text-[var(--muted)] px-2 py-1 uppercase tracking-wider">
-                  {L('لاعبون آخرون في السجل', 'Other Athletes in Registry')}
-                </div>
-                {otherPlayers.map((pl, oIdx) => {
-                  const actualIdx = oIdx + 5;
-                  const isCurrent = selectedPlayerIndex === actualIdx;
-                  return (
-                    <div
-                      key={pl.id || actualIdx}
-                      onClick={() => handleSelect(actualIdx)}
-                      className={`flex items-center justify-between p-1.5 rounded-lg cursor-pointer transition-all ${
-                        isCurrent
-                          ? 'bg-[var(--primary-50)] border border-[var(--primary)] font-bold'
-                          : 'hover:bg-[var(--primary-50)]/40 text-[var(--ink)]'
-                      }`}
-                    >
-                      <span className="text-xs truncate">{pl.name} ({pl.age} {L('سنة', 'y')})</span>
-                      {isCurrent && <Check className="w-3.5 h-3.5 text-[#16845B]" />}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
           </div>
 
-          {/* Action button at bottom: Connect / Assign New Family Dependent */}
-          <div className="pt-2 mt-1.5 border-t border-[var(--line)]">
+          {/* Action buttons at bottom */}
+          <div className="pt-2 mt-1.5 border-t border-[var(--line)] space-y-1.5">
+            {userRole === 'guardian' && (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate('citizen-family');
+                  setIsOpen(false);
+                }}
+                className="w-full py-1.5 px-2.5 rounded-xl bg-[var(--primary)] hover:bg-[var(--primary-600)] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>{L('فتح إدارة ملفات العائلة', 'Open Family Management')}</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={() => {

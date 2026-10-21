@@ -29,6 +29,7 @@ export const CitizenBookingsTab = () => {
     navigate,
     logAudit,
     showToast,
+    userRole,
     SP_EN,
     GOV_EN
   } = useSeha();
@@ -41,10 +42,19 @@ export const CitizenBookingsTab = () => {
   const [mobile, setMobile] = useState('01012345678');
   const [otp, setOtp] = useState('123456');
   const [selectedSport, setSelectedSport] = useState(p.sp || 0);
-  const [selectedPartType, setSelectedPartType] = useState(p.lv - 1 || 2);
+  const [selectedPartType, setSelectedPartType] = useState(p.lv ? p.lv - 1 : 2);
   const [selectedHospital, setSelectedHospital] = useState(p.hs || 0);
   const [selectedSlotIndex, setSelectedSlotIndex] = useState(0);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(0);
+
+  // Sync state when selected child changes
+  React.useEffect(() => {
+    if (p) {
+      setNid(p.nid || '');
+      setSelectedSport(p.sp || 0);
+      setSelectedPartType(p.lv ? Math.max(0, p.lv - 1) : 1);
+    }
+  }, [p]);
 
   // Declarations
   const [decCardiac, setDecCardiac] = useState(true);
@@ -153,7 +163,7 @@ export const CitizenBookingsTab = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -286,6 +296,22 @@ export const CitizenBookingsTab = () => {
                     <span className="d"></span>
                     {L('بيانات الهوية والتحقق من الرقم القومي', 'National ID Verification')}
                   </h3>
+
+                  {userRole === 'guardian' && (
+                    <div className="nt ok text-xs mb-3 flex items-center justify-between">
+                      <div>
+                        <span>{L('أنت تحجز الآن موعد الفحص للابن: ', 'Booking exam appointment for child: ')}</span>
+                        <b>{p.name}</b> ({p.age} {L('سنة', 'y')} · {cfg.sports[p.sp]})
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => navigate('citizen-family')}
+                        className="text-[var(--primary)] hover:underline font-bold text-xs"
+                      >
+                        {L('تبديل الابن', 'Switch')}
+                      </button>
+                    </div>
+                  )}
 
                   <label className="f">
                     <span>{L('الرقم القومي (14 رقمًا) *', 'National ID (14 digits) *')}</span>

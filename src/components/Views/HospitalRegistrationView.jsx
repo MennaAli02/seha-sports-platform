@@ -97,7 +97,7 @@ export const HospitalRegistrationView = () => {
   const totalCapacity = hosps.reduce((acc, h) => acc + (h.cap || 0), 0);
 
   return (
-    <div>
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -116,7 +116,7 @@ export const HospitalRegistrationView = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="g4" style={{ marginBottom: '10px' }}>
+      <div className="g4">
         <KPICard
           value={hosps.length}
           label={L('إجمالي المستشفيات والمراكز', 'Total Facilities')}

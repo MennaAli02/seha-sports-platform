@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =====================================================================
+         Record Rules: seha.player
+         ===================================================================== -->
+    <record id="rule_seha_player_athlete" model="ir.rule">
+        <field name="name">Athlete: Own Profile Access</field>
+        <field name="model_id" ref="model_seha_player"/>
+        <field name="groups" eval="[(4, ref('group_seha_athlete'))]"/>
+        <field name="domain_force">['|', ('user_id', '=', user.id), ('partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_seha_player_guardian" model="ir.rule">
+        <field name="name">Guardian: Connected Children Profiles</field>
+        <field name="model_id" ref="model_seha_player"/>
+        <field name="groups" eval="[(4, ref('group_seha_guardian'))]"/>
+        <field name="domain_force">['|', ('parent_ids.user_id', '=', user.id), ('parent_ids.partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_seha_player_admin" model="ir.rule">
+        <field name="name">Admin/Medical: All Players Access</field>
+        <field name="model_id" ref="model_seha_player"/>
+        <field name="groups" eval="[(4, ref('group_seha_medical')), (4, ref('group_seha_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <!-- =====================================================================
+         Record Rules: seha.parent
+         ===================================================================== -->
+    <record id="rule_seha_parent_guardian" model="ir.rule">
+        <field name="name">Guardian: Own Profile Access</field>
+        <field name="model_id" ref="model_seha_parent"/>
+        <field name="groups" eval="[(4, ref('group_seha_guardian'))]"/>
+        <field name="domain_force">['|', ('user_id', '=', user.id), ('partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_seha_parent_athlete" model="ir.rule">
+        <field name="name">Athlete: Connected Guardian Read-Only</field>
+        <field name="model_id" ref="model_seha_parent"/>
+        <field name="groups" eval="[(4, ref('group_seha_athlete'))]"/>
+        <field name="domain_force">['|', ('player_ids.user_id', '=', user.id), ('player_ids.partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_seha_parent_admin" model="ir.rule">
+        <field name="name">Admin: All Parents Access</field>
+        <field name="model_id" ref="model_seha_parent"/>
+        <field name="groups" eval="[(4, ref('group_seha_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <!-- =====================================================================
+         Record Rules: seha.medical.certificate
+         ===================================================================== -->
+    <record id="rule_seha_cert_athlete" model="ir.rule">
+        <field name="name">Athlete: Own Certificates</field>
+        <field name="model_id" ref="model_seha_medical_certificate"/>
+        <field name="groups" eval="[(4, ref('group_seha_athlete'))]"/>
+        <field name="domain_force">['|', ('player_id.user_id', '=', user.id), ('player_id.partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_seha_cert_guardian" model="ir.rule">
+        <field name="name">Guardian: Connected Children Certificates</field>
+        <field name="model_id" ref="model_seha_medical_certificate"/>
+        <field name="groups" eval="[(4, ref('group_seha_guardian'))]"/>
+        <field name="domain_force">['|', ('player_id.parent_ids.user_id', '=', user.id), ('player_id.parent_ids.partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_seha_cert_admin" model="ir.rule">
+        <field name="name">Admin/Medical: All Certificates Access</field>
+        <field name="model_id" ref="model_seha_medical_certificate"/>
+        <field name="groups" eval="[(4, ref('group_seha_medical')), (4, ref('group_seha_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

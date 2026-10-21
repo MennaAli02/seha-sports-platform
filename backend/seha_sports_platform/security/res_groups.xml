@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Base Seha Internal User -->
+    <record id="group_seha_user" model="res.groups">
+        <field name="name">Seha User / Read-Only</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Medical Staff Group -->
+    <record id="group_seha_medical" model="res.groups">
+        <field name="name">Seha Authorized Medical Staff</field>
+        <field name="implied_ids" eval="[(4, ref('group_seha_user'))]"/>
+    </record>
+
+    <!-- Seha Administrator Group -->
+    <record id="group_seha_admin" model="res.groups">
+        <field name="name">Seha System Administrator</field>
+        <field name="implied_ids" eval="[(4, ref('group_seha_medical'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Athlete Portal Group -->
+    <record id="group_seha_athlete" model="res.groups">
+        <field name="name">Seha Athlete Portal User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+    <!-- Guardian Portal Group -->
+    <record id="group_seha_guardian" model="res.groups">
+        <field name="name">Seha Guardian Portal User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+</odoo>

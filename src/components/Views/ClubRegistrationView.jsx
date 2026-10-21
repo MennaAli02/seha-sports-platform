@@ -88,7 +88,7 @@ export const ClubRegistrationView = () => {
   const totalAthletes = clubs.reduce((acc, c) => acc + (c.players || 0), 0);
 
   return (
-    <div>
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -107,7 +107,7 @@ export const ClubRegistrationView = () => {
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="g4" style={{ marginBottom: '10px' }}>
+      <div className="g4">
         <KPICard
           value={clubs.length}
           label={L('إجمالي الجهات المسجلة', 'Total Registered Entities')}
@@ -134,9 +134,9 @@ export const ClubRegistrationView = () => {
         />
       </div>
 
-      <div className="g2 reg" style={{ gap: '20px' }}>
+      <div className="g2 reg">
         {/* Form Card */}
-        <div className="card" style={{ alignSelf: 'start', padding: '22px 20px', borderRadius: '16px' }}>
+        <div className="card self-start">
           <h3 style={{ margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '16px' }}>
             <span className="d"></span>
             {L('تسجيل نادٍ أو أكاديمية جديدة', 'New Club / Academy Registration')}

@@ -45,13 +45,13 @@ export default function App() {
     }
   }, [currentRoute, navigate]);
 
-  // Auth routing: If not authenticated or explicitly on auth views, render full-screen immersive view
+  // Auth routing: If not authenticated or explicitly on auth views, render immersive view
   if (!isAuthenticated || currentRoute === 'role_select' || currentRoute === 'login') {
     if (currentRoute === 'login') {
       return (
-        <div className="h-screen max-h-screen w-full overflow-hidden">
+        <div className="min-h-screen w-full overflow-y-auto">
           <LoginView
-            initialRole={userRole || 'super_admin'}
+            initialRole={userRole || 'athlete'}
             onLogin={(role, creds) => {
               login(role, creds);
             }}
@@ -64,11 +64,11 @@ export default function App() {
       );
     }
 
-    // Default: RoleSelectionView (as requested: "select role screen ( default )")
+    // Default: RoleSelectionView
     return (
-      <div className="h-screen max-h-screen w-full overflow-hidden">
+      <div className="min-h-screen w-full overflow-y-auto">
         <RoleSelectionView
-          selectedRole={userRole || 'super_admin'}
+          selectedRole={userRole || null}
           onSelectRole={(role) => {
             setUserRole(role);
           }}
@@ -87,8 +87,10 @@ export default function App() {
       case 'dash':
         return <DashboardView />;
       case 'citizen-home':
+      case 'citizen-family':
       case 'citizen-bookings':
       case 'citizen-certs':
+      case 'citizen-history':
       case 'citizen-consents':
         return <CitizenPortalView activeRoute={currentRoute} />;
       case 'consent':
@@ -112,13 +114,15 @@ export default function App() {
       case 'setup':
         return <PlatformSetupView />;
       default:
-        return userRole === 'citizen' ? (
+        return (userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian') ? (
           <CitizenPortalView activeRoute="citizen-home" />
         ) : (
           <DashboardView />
         );
     }
   };
+
+  const isCitizenRole = userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian';
 
   return (
     <div className="app-shell-wrapper">
@@ -129,8 +133,10 @@ export default function App() {
           onOpenHelp={() => setIsHelpOpen(true)}
         />
         <main id="main">
-          <ErrorBoundary onNavigateHome={() => navigate(userRole === 'citizen' ? 'citizen-home' : 'dash')}>
-            {renderActiveView()}
+          <ErrorBoundary onNavigateHome={() => navigate(isCitizenRole ? 'citizen-home' : 'dash')}>
+            <div className="page-container">
+              {renderActiveView()}
+            </div>
           </ErrorBoundary>
         </main>
       </div>

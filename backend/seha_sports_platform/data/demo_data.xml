@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Demo Contact: Guardian Youssef Abdullah -->
+    <record id="partner_demo_guardian" model="res.partner">
+        <field name="name">يوسف عبدالله السيد</field>
+        <field name="email">guardian@seha.gov.eg</field>
+        <field name="phone">01012345678</field>
+        <field name="is_company">False</field>
+    </record>
+
+    <!-- Demo Guardian Record -->
+    <record id="parent_demo_youssef" model="seha.parent">
+        <field name="name">يوسف عبدالله السيد</field>
+        <field name="partner_id" ref="partner_demo_guardian"/>
+        <field name="national_id">27501010104829</field>
+        <field name="phone">01012345678</field>
+        <field name="email">guardian@seha.gov.eg</field>
+        <field name="relationship_type">father</field>
+        <field name="verification_status">verified</field>
+    </record>
+
+    <!-- Demo Contact: Athlete 1 Ahmad Youssef -->
+    <record id="partner_demo_player_ahmad" model="res.partner">
+        <field name="name">أحمد يوسف السيد</field>
+        <field name="email">athlete@seha.gov.eg</field>
+        <field name="phone">01099887766</field>
+        <field name="is_company">False</field>
+    </record>
+
+    <!-- Demo Athlete 1: Ahmad Youssef -->
+    <record id="player_demo_ahmad" model="seha.player">
+        <field name="name">أحمد يوسف السيد</field>
+        <field name="partner_id" ref="partner_demo_player_ahmad"/>
+        <field name="national_id">30408150104829</field>
+        <field name="dob">2010-05-12</field>
+        <field name="gender">male</field>
+        <field name="phone">01099887766</field>
+        <field name="email">athlete@seha.gov.eg</field>
+        <field name="sport_id" ref="sport_football"/>
+        <field name="competition_level">level_3</field>
+        <field name="club_name">نادي المستقبل الرياضي</field>
+        <field name="fitness_status">fit</field>
+        <field name="parent_ids" eval="[(4, ref('parent_demo_youssef'))]"/>
+    </record>
+
+    <!-- Demo Contact: Athlete 2 Maryam Ahmad -->
+    <record id="partner_demo_player_maryam" model="res.partner">
+        <field name="name">مريم أحمد يوسف</field>
+        <field name="email">maryam@seha.gov.eg</field>
+        <field name="phone">01099887766</field>
+        <field name="is_company">False</field>
+    </record>
+
+    <!-- Demo Athlete 2: Maryam Ahmad -->
+    <record id="player_demo_maryam" model="seha.player">
+        <field name="name">مريم أحمد يوسف</field>
+        <field name="partner_id" ref="partner_demo_player_maryam"/>
+        <field name="national_id">30806120104829</field>
+        <field name="dob">2012-08-20</field>
+        <field name="gender">female</field>
+        <field name="phone">01099887766</field>
+        <field name="email">maryam@seha.gov.eg</field>
+        <field name="sport_id" ref="sport_athletics"/>
+        <field name="competition_level">level_2</field>
+        <field name="club_name">نادي المستقبل الرياضي</field>
+        <field name="fitness_status">fit</field>
+        <field name="parent_ids" eval="[(4, ref('parent_demo_youssef'))]"/>
+    </record>
+
+    <!-- Relations in seha.parent.player.relation -->
+    <record id="rel_youssef_ahmad" model="seha.parent.player.relation">
+        <field name="parent_id" ref="parent_demo_youssef"/>
+        <field name="player_id" ref="player_demo_ahmad"/>
+        <field name="relationship">father</field>
+        <field name="verification_status">verified</field>
+    </record>
+
+    <record id="rel_youssef_maryam" model="seha.parent.player.relation">
+        <field name="parent_id" ref="parent_demo_youssef"/>
+        <field name="player_id" ref="player_demo_maryam"/>
+        <field name="relationship">father</field>
+        <field name="verification_status">verified</field>
+    </record>
+
+    <!-- Demo Medical Certificate for Ahmad -->
+    <record id="cert_demo_ahmad" model="seha.medical.certificate">
+        <field name="name">SH-26-004517</field>
+        <field name="player_id" ref="player_demo_ahmad"/>
+        <field name="certificate_type">comprehensive</field>
+        <field name="level">level_3</field>
+        <field name="issue_date">2026-10-15</field>
+        <field name="expiry_date">2027-10-14</field>
+        <field name="state">valid</field>
+        <field name="issuing_hospital">مستشفى هليوبوليس التخصصي</field>
+        <field name="physician_name">د. عصام عبدالمجيد</field>
+        <field name="notes">لياقة طبية وقلبية كاملة صالحة لكافة بطولات الجمهورية والاتحادات الرياضية</field>
+    </record>
+
+    <!-- Demo Medical Certificate for Maryam -->
+    <record id="cert_demo_maryam" model="seha.medical.certificate">
+        <field name="name">SH-26-004518</field>
+        <field name="player_id" ref="player_demo_maryam"/>
+        <field name="certificate_type">comprehensive</field>
+        <field name="level">level_2</field>
+        <field name="issue_date">2026-10-18</field>
+        <field name="expiry_date">2027-10-17</field>
+        <field name="state">valid</field>
+        <field name="issuing_hospital">مستشفى هليوبوليس التخصصي</field>
+        <field name="physician_name">د. عصام عبدالمجيد</field>
+        <field name="notes">لياقة بدنية وقلبية سارية لألعاب القوى للناشئين</field>
+    </record>
+</odoo>

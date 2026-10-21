@@ -43,7 +43,7 @@ export const CertificateDetailView = () => {
   // If player status is 'book'
   if (p.st === 'book') {
     return (
-      <div className="space-y-4">
+      <div className="page-stack">
         <div className="ph">
           <div>
             <span className="lab flex items-center gap-1.5">
@@ -167,7 +167,7 @@ export const CertificateDetailView = () => {
     : L('انتهت صلاحية هذه الشهادة الطبية؛ يلزم الخضوع لكشف طبي دوري جديد لاستئناف الممارسة التنافسية الرسمية.', 'This medical certificate has expired; a new periodic sports examination is required for competition participation.');
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Page Header */}
       <div className="ph">
         <div>

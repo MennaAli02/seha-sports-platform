@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Sequence for seha.player -->
+    <record id="seq_seha_player" model="ir.sequence">
+        <field name="name">Athlete Reference</field>
+        <field name="code">seha.player</field>
+        <field name="prefix">ATH-%(year)s-</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <!-- Sequence for seha.parent -->
+    <record id="seq_seha_parent" model="ir.sequence">
+        <field name="name">Parent / Guardian Reference</field>
+        <field name="code">seha.parent</field>
+        <field name="prefix">PAR-%(year)s-</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <!-- Sequence for seha.medical.certificate -->
+    <record id="seq_seha_medical_certificate" model="ir.sequence">
+        <field name="name">Unified Sports Certificate Number</field>
+        <field name="code">seha.medical.certificate</field>
+        <field name="prefix">SH-26-</field>
+        <field name="padding">6</field>
+        <field name="number_next">4517</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

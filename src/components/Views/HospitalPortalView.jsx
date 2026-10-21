@@ -61,7 +61,7 @@ export const HospitalPortalView = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -93,7 +93,7 @@ export const HospitalPortalView = () => {
       </div>
 
       {/* 4 KPIs */}
-      <div className="g4" style={{ marginBottom: '10px' }}>
+      <div className="g4">
         <KPICard
           variant="brand"
           value={ls.length}
@@ -145,44 +145,23 @@ export const HospitalPortalView = () => {
       {/* Tab 1: Today's list */}
       {hospTab === 'today' && (
         <div className="card">
-          <div
-            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 np"
-            style={{ marginBottom: '24px' }}
-          >
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-[var(--space-4)] np">
             <div className="relative flex-1 max-w-md w-full">
               <Search
-                className="w-4 h-4 text-[var(--muted)] pointer-events-none"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  [isRTL ? 'right' : 'left']: '14px',
-                  zIndex: 2
-                }}
+                className="w-4 h-4 text-[var(--muted)] pointer-events-none absolute top-1/2 -translate-y-1/2 inset-inline-start-3.5 z-[2]"
               />
               <input
                 type="text"
                 placeholder={L('بحث سريع: رقم الحجز / الاسم / الرقم القومي…', 'Search booking code, athlete name, or national ID…')}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="search-input w-full py-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-100)] transition-all shadow-xs"
-                style={{
-                  [isRTL ? 'paddingRight' : 'paddingLeft']: '44px',
-                  [isRTL ? 'paddingLeft' : 'paddingRight']: query ? '38px' : '14px'
-                }}
+                className="search-input w-full py-2.5 ps-11 pe-9.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary-100)] transition-all shadow-xs"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
-                  className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer"
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    [isRTL ? 'left' : 'right']: '12px',
-                    zIndex: 2
-                  }}
+                  className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer absolute top-1/2 -translate-y-1/2 inset-inline-end-3 z-[2]"
                   title={L('مسح البحث', 'Clear search')}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -206,7 +185,7 @@ export const HospitalPortalView = () => {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto" style={{ marginTop: '22px', marginBottom: '24px' }}>
+            <div className="overflow-x-auto" style={{ marginBlock: 'var(--space-4)' }}>
               <table className="t">
                 <thead>
                   <tr>

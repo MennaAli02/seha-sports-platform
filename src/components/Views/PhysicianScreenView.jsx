@@ -38,7 +38,7 @@ export const PhysicianScreenView = () => {
   const abn = Object.keys(examRes).filter(k => examRes[k] === 0).length;
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -61,7 +61,7 @@ export const PhysicianScreenView = () => {
       </div>
 
       {/* Stepper */}
-      <div className="stp max-w-2xl" style={{ marginBottom: '12px' }}>
+      <div className="stp max-w-2xl mb-[var(--space-4)]">
         {[
           L('مسح الحجز ومطابقة الهوية', 'Scan & ID Match'),
           L('تسجيل الفحوصات الطبية', 'Record Findings'),
@@ -85,20 +85,20 @@ export const PhysicianScreenView = () => {
       {/* Step 1: Scan & ID Match */}
       {examStep === 1 && (
         <div className="card max-w-2xl">
-          <div className="flex items-center gap-2" style={{ marginBottom: '20px' }}>
+          <div className="flex items-center gap-2 mb-[var(--space-4)]">
             <QrCode className="w-5 h-5 text-[var(--primary)]" />
             <h3 className="m-0 text-base">{L('التحقق من تذكرة الحجز ومطابقة هوية الرياضي', 'Booking Verification & Biometric ID Match')}</h3>
           </div>
-          <p className="mut text-xs" style={{ marginBottom: '20px' }}>
+          <p className="mut text-xs mb-[var(--space-4)]">
             {L(
               'امسح رمز الاستجابة السريعة (QR) من هاتف المواطن أو اكتب كود الحجز للتأكد من سداد الرسوم ومطابقة الرقم القومي',
               'Scan the digital QR ticket from the citizen app or enter the booking code to verify identity and payment status'
             )}
           </p>
 
-          <div style={{ marginBottom: '20px' }}>
+          <div className="mb-[var(--space-4)]">
             <label className="f" style={{ display: 'block', margin: 0 }}>
-              <span style={{ display: 'block', marginBottom: '10px' }}>
+              <span className="block mb-2">
                 {L('رمز الحجز الإلكتروني', 'Electronic booking ticket code')}
               </span>
               <input

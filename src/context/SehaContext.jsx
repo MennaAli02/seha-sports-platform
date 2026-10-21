@@ -52,11 +52,17 @@ export const SehaProvider = ({ children }) => {
     setCurrentUser(targetPersona);
     setIsAuthenticated(true);
 
-    const targetRoute = role === 'citizen' ? 'citizen-home' : 'dash';
+    const isCitizenType = role === 'citizen' || role === 'athlete' || role === 'guardian';
+    const targetRoute = isCitizenType ? 'citizen-home' : 'dash';
     setCurrentRoute(targetRoute);
 
-    if (role === 'citizen') {
-      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول لبوابة المواطن`);
+    if (role === 'guardian') {
+      // For guardian, start with first child (index 1: Maryam)
+      setSelectedPlayerIndex(1);
+      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول كولي أمر (حساب عائلي)`);
+    } else if (role === 'athlete' || role === 'citizen') {
+      setSelectedPlayerIndex(0);
+      showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول كرياضي (حساب فردي)`);
     } else {
       showToast(`مرحبًا ${targetPersona.name} — تم تسجيل الدخول بصلاحيات مسؤول المنظومة`);
     }
@@ -68,30 +74,138 @@ export const SehaProvider = ({ children }) => {
     showToast('تم تسجيل الخروج بنجاح من المنظومة / Logged out');
   }, [showToast]);
 
+  const switchChildProfile = useCallback((idx) => {
+    if (idx >= 0 && idx < players.length) {
+      setSelectedPlayerIndex(idx);
+      const targetChild = players[idx];
+      const relLabel = targetChild.rel?.ar || 'اللاعب';
+      showToast(`تم التبديل إلى ملف: ${targetChild.name} (${relLabel})`);
+    }
+  }, [players, showToast]);
+
+  const connectExistingChild = useCallback((childData) => {
+    const existingIndex = players.findIndex(p => p.nid === childData.nationalId);
+    if (existingIndex !== -1) {
+      const updated = [...players];
+      updated[existingIndex] = {
+        ...updated[existingIndex],
+        gd: currentUser?.name || 'أحمد يوسف السيد',
+        rel: {
+          ar: `${childData.relationship || 'ابن'} (تابع موثق)`,
+          en: `${childData.relationship || 'Child'} (Verified Dependent)`,
+          isPrimary: false
+        },
+        verificationStatus: 'verified'
+      };
+      setPlayers(updated);
+      setSelectedPlayerIndex(existingIndex);
+      showToast(`تم ربط حساب الابن بنجاح: ${updated[existingIndex].name}`);
+      return { success: true, player: updated[existingIndex] };
+    } else {
+      // Connect as new connected account
+      const newIndex = players.length;
+      const newPlayer = {
+        id: 'PL-' + (1000 + newIndex),
+        name: childData.name || 'ابن رياضي',
+        nid: childData.nationalId,
+        g: childData.gender || 'M',
+        gd: currentUser?.name || 'أحمد يوسف السيد',
+        rel: {
+          ar: `${childData.relationship || 'ابن'} (تابع موثق)`,
+          en: `${childData.relationship || 'Child'} (Verified Dependent)`,
+          isPrimary: false
+        },
+        age: Number(childData.age) || 12,
+        sp: Number(childData.sport) || 0,
+        cl: 0,
+        hs: 0,
+        lv: 2,
+        st: 'fit',
+        ct: 'SH-26-00' + (4700 + newIndex),
+        bk: 'BK-26-01' + (8400 + newIndex),
+        gov: 'القاهرة',
+        iss: { y: 2026, m: 10, d: 20 },
+        exp: { y: 2027, m: 10, d: 19 },
+        verificationStatus: 'verified'
+      };
+      setPlayers(prev => [...prev, newPlayer]);
+      setSelectedPlayerIndex(newIndex);
+      showToast(`تم ربط وتوثيق حساب الرياضي بنجاح: ${newPlayer.name}`);
+      return { success: true, player: newPlayer };
+    }
+  }, [players, currentUser, showToast]);
+
+  const registerNewChild = useCallback((childData) => {
+    const newIndex = players.length;
+    const createdPlayer = {
+      id: 'PL-' + (1000 + newIndex),
+      name: childData.name.trim(),
+      g: childData.gender || 'M',
+      gd: currentUser?.name || 'أحمد يوسف السيد',
+      rel: {
+        ar: `${childData.relationship || 'ابن'} (تابع عائلي)`,
+        en: `${childData.relationship === 'ابنة' ? 'Daughter' : 'Son'} (Dependent)`,
+        isPrimary: false
+      },
+      cl: 0,
+      hs: 0,
+      iss: { y: 2026, m: 10, d: 20 },
+      exp: { y: 2027, m: 10, d: 19 },
+      doby: 2026 - Number(childData.age),
+      dobm: 6,
+      dobd: 15,
+      st: 'fit',
+      sp: Number(childData.sport) || 0,
+      age: Number(childData.age) || 10,
+      lv: 2,
+      ct: 'SH-26-00' + (4800 + newIndex),
+      bk: 'BK-26-01' + (8500 + newIndex),
+      nid: childData.nationalId || ('314051201048' + Math.floor(10 + Math.random() * 90)),
+      gov: 'القاهرة',
+      verificationStatus: childData.verificationStatus || 'verified'
+    };
+
+    setPlayers(prev => [...prev, createdPlayer]);
+    setSelectedPlayerIndex(newIndex);
+    showToast(`تم تسجيل وربط ملف التابع بنجاح: ${createdPlayer.name}`);
+    return createdPlayer;
+  }, [players, currentUser, showToast]);
+
   const navigate = useCallback((route, meta = {}) => {
     let targetRoute = !route ? 'dash' : route;
     if (targetRoute === 'mobile' || targetRoute === 'citizen') {
       targetRoute = 'citizen-home';
     }
 
-    // Role boundary guard: citizens can access citizen screens, the certificate A4 view, and public verification
+    const isCitizenRole = userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian';
+
+    // Role boundary guard
     const citizenAllowedRoutes = [
       'citizen-home',
+      'citizen-family',
       'citizen-bookings',
       'citizen-certs',
+      'citizen-history',
       'citizen-consents',
       'cert',
       'verify'
     ];
-    if (isAuthenticated && userRole === 'citizen' && !citizenAllowedRoutes.includes(targetRoute)) {
+
+    if (isAuthenticated && isCitizenRole && !citizenAllowedRoutes.includes(targetRoute)) {
       showToast('هذه الشاشة مقصورة على مسؤول المنظومة / Screen restricted to Super Admin');
+      targetRoute = 'citizen-home';
+    }
+
+    // Role-specific check: Athlete cannot open family management
+    if (isAuthenticated && (userRole === 'athlete' || userRole === 'citizen') && targetRoute === 'citizen-family') {
+      showToast('إدارة العائلة مقصورة على حساب ولي الأمر / Family management is for Parent accounts');
       targetRoute = 'citizen-home';
     }
 
     setCurrentRoute(targetRoute);
     if (meta.certIndex !== undefined) {
       setSelectedCertIndex(meta.certIndex);
-    } else if (targetRoute === 'cert' && userRole === 'citizen') {
+    } else if (targetRoute === 'cert' && isCitizenRole) {
       setSelectedCertIndex((prev) => (prev !== null ? prev : (selectedPlayerIndex ?? 0)));
     }
     if (meta.report !== undefined) {
@@ -103,7 +217,7 @@ export const SehaProvider = ({ children }) => {
       setVerifyQuery(meta.verifyQ);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [isAuthenticated, userRole, showToast]);
+  }, [isAuthenticated, userRole, selectedPlayerIndex, showToast]);
 
   const resetDemoData = useCallback(() => {
     const fresh = generateSeedData();
@@ -209,6 +323,9 @@ export const SehaProvider = ({ children }) => {
     setCurrentUser,
     login,
     logout,
+    switchChildProfile,
+    connectExistingChild,
+    registerNewChild,
     GOV_EN,
     SP_EN
   };

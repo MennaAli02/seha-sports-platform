@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="sport_football" model="seha.sport">
+        <field name="name">كرة القدم</field>
+        <field name="name_en">Football</field>
+        <field name="code">FOOTBALL</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="sport_handball" model="seha.sport">
+        <field name="name">كرة اليد</field>
+        <field name="name_en">Handball</field>
+        <field name="code">HANDBALL</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="sport_swimming" model="seha.sport">
+        <field name="name">السباحة</field>
+        <field name="name_en">Swimming</field>
+        <field name="code">SWIMMING</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="sport_basketball" model="seha.sport">
+        <field name="name">كرة السلة</field>
+        <field name="name_en">Basketball</field>
+        <field name="code">BASKETBALL</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <record id="sport_athletics" model="seha.sport">
+        <field name="name">ألعاب القوى</field>
+        <field name="name_en">Athletics</field>
+        <field name="code">ATHLETICS</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <record id="sport_volleyball" model="seha.sport">
+        <field name="name">الكرة الطائرة</field>
+        <field name="name_en">Volleyball</field>
+        <field name="code">VOLLEYBALL</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="sport_gymnastics" model="seha.sport">
+        <field name="name">الجمباز</field>
+        <field name="name_en">Gymnastics</field>
+        <field name="code">GYMNASTICS</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record id="sport_taekwondo" model="seha.sport">
+        <field name="name">التايكوندو</field>
+        <field name="name_en">Taekwondo</field>
+        <field name="code">TAEKWONDO</field>
+        <field name="sequence">8</field>
+    </record>
+
+    <record id="sport_squash" model="seha.sport">
+        <field name="name">الإسكواش</field>
+        <field name="name_en">Squash</field>
+        <field name="code">SQUASH</field>
+        <field name="sequence">9</field>
+    </record>
+
+    <record id="sport_boxing" model="seha.sport">
+        <field name="name">الملاكمة</field>
+        <field name="name_en">Boxing</field>
+        <field name="code">BOXING</field>
+        <field name="sequence">10</field>
+    </record>
+</odoo>

@@ -48,8 +48,10 @@ export const SideNavBar = () => {
       title: ['المواطن', 'Citizen'],
       routes: [
         { k: 'citizen-home', ic: 'home', t: ['الرئيسية', 'Home'] },
+        ...(userRole === 'guardian' ? [{ k: 'citizen-family', ic: 'club', t: ['إدارة العائلة', 'Family Hub'] }] : []),
         { k: 'citizen-bookings', ic: 'cal', t: ['حجز كشف', 'Bookings'] },
         { k: 'citizen-certs', ic: 'cert', t: ['الشهادات', 'Certificates'] },
+        { k: 'citizen-history', ic: 'steth', t: ['السجل الطبي', 'Medical History'] },
         { k: 'citizen-consents', ic: 'shield', t: ['الموافقات', 'Consents'] }
       ]
     },
@@ -72,7 +74,9 @@ export const SideNavBar = () => {
     }
   ];
 
-  const visibleSections = userRole === 'citizen'
+  const isCitizenRole = userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian';
+
+  const visibleSections = isCitizenRole
     ? sections.filter(sec => sec.title[1] === 'Citizen')
     : sections;
 
@@ -106,7 +110,7 @@ export const SideNavBar = () => {
 
           {sidebarExpanded && (
             <div
-              onClick={() => handleNavClick(userRole === 'citizen' ? 'citizen-home' : 'dash')}
+              onClick={() => handleNavClick(isCitizenRole ? 'citizen-home' : 'dash')}
               className="side-brand cursor-pointer group"
               title={L(cfg.org.ar, cfg.org.en)}
             >

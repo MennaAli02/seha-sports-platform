@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="view_seha_player_list" model="ir.ui.view">
+        <field name="name">seha.player.list</field>
+        <field name="model">seha.player</field>
+        <field name="arch" type="xml">
+            <list string="Athletes / اللاعبون الرياضيون" decoration-success="fitness_status == 'fit'" decoration-warning="fitness_status == 'conditional'" decoration-danger="fitness_status == 'unfit'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="national_id"/>
+                <field name="gender"/>
+                <field name="age"/>
+                <field name="sport_id"/>
+                <field name="competition_level"/>
+                <field name="club_name"/>
+                <field name="guardian_name"/>
+                <field name="fitness_status" widget="badge"/>
+                <field name="certificate_count" string="Certs"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_seha_player_form" model="ir.ui.view">
+        <field name="name">seha.player.form</field>
+        <field name="model">seha.player</field>
+        <field name="arch" type="xml">
+            <form string="Athlete Profile / ملف الرياضي">
+                <header>
+                    <field name="fitness_status" widget="statusbar" statusbar_visible="pending,conditional,fit"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_seha_certificate)d"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-certificate"
+                                context="{'search_default_player_id': id, 'default_player_id': id}">
+                            <field name="certificate_count" widget="statinfo" string="Certificates"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Athlete Full Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. أحمد يوسف السيد"/>
+                        </h1>
+                        <h3>
+                            <field name="code" readonly="1" class="text-muted"/>
+                        </h3>
+                    </div>
+
+                    <group>
+                        <group string="Civil &amp; Contact Identity">
+                            <field name="national_id" placeholder="14-digit Egyptian National ID"/>
+                            <field name="dob"/>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="governorate"/>
+                        </group>
+                        <group string="Sports &amp; System Governance">
+                            <field name="sport_id"/>
+                            <field name="competition_level"/>
+                            <field name="club_name"/>
+                            <field name="partner_id" readonly="1" groups="base.group_no_one"/>
+                            <field name="user_id" groups="base.group_no_one"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Parents &amp; Legal Guardians" name="guardians">
+                            <field name="parent_ids" widget="many2many_tags"/>
+                            <field name="parent_relation_ids">
+                                <list editable="bottom">
+                                    <field name="parent_id"/>
+                                    <field name="relationship"/>
+                                    <field name="verification_status" widget="badge"/>
+                                    <field name="verification_date"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Medical Certificates" name="certificates">
+                            <field name="certificate_ids" readonly="1">
+                                <list decoration-success="state == 'valid'" decoration-danger="state == 'expired'">
+                                    <field name="name"/>
+                                    <field name="certificate_type"/>
+                                    <field name="level"/>
+                                    <field name="issue_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="issuing_hospital"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes &amp; Observations" name="notes">
+                            <field name="notes" placeholder="Internal remarks, medical committee notes, or registry observations..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search & Filter View -->
+    <record id="view_seha_player_search" model="ir.ui.view">
+        <field name="name">seha.player.search</field>
+        <field name="model">seha.player</field>
+        <field name="arch" type="xml">
+            <search string="Search Athletes">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="national_id"/>
+                <field name="phone"/>
+                <field name="sport_id"/>
+                <field name="club_name"/>
+                
+                <separator/>
+                <filter string="Fit / لائق" name="filter_fit" domain="[('fitness_status', '=', 'fit')]"/>
+                <filter string="Conditional / مشروط" name="filter_cond" domain="[('fitness_status', '=', 'conditional')]"/>
+                <filter string="Pending / قيد الفحص" name="filter_pending" domain="[('fitness_status', '=', 'pending')]"/>
+                
+                <separator/>
+                <filter string="Male" name="filter_male" domain="[('gender', '=', 'male')]"/>
+                <filter string="Female" name="filter_female" domain="[('gender', '=', 'female')]"/>
+                
+                <separator/>
+                <group name="group_by">
+                    <filter string="Sport" name="group_sport" context="{'group_by': 'sport_id'}"/>
+                    <filter string="Competition Level" name="group_level" context="{'group_by': 'competition_level'}"/>
+                    <filter string="Fitness Status" name="group_status" context="{'group_by': 'fitness_status'}"/>
+                    <filter string="Club / Academy" name="group_club" context="{'group_by': 'club_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_seha_player" model="ir.actions.act_window">
+        <field name="name">Athletes / الرياضيون</field>
+        <field name="res_model">seha.player</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_seha_player_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a new athlete in the Seha Sports Platform!
+            </p>
+            <p>
+                Manage verified sports profiles, link guardians, and monitor certified health records.
+            </p>
+        </field>
+    </record>
+</odoo>

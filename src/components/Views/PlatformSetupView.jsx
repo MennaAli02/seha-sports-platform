@@ -37,7 +37,7 @@ export const PlatformSetupView = () => {
   ];
 
   return (
-    <div>
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -55,8 +55,7 @@ export const PlatformSetupView = () => {
         </div>
         <div className="act np">
           <button
-            className="btn"
-            style={{ fontWeight: 800, gap: '6px' }}
+            className="btn font-bold gap-1.5"
             onClick={() => showToast(L('تم حفظ جميع الإعدادات وتطبيقها بنجاح', 'All settings saved and applied successfully'))}
           >
             <Save size={16} />
@@ -65,9 +64,9 @@ export const PlatformSetupView = () => {
         </div>
       </div>
 
-      <div className="card" style={{ padding: '14px 16px', borderRadius: '14px' }}>
+      <div className="card">
         {/* Navigation Tabs */}
-        <div className="tabs" style={{ marginBottom: '10px', borderBottom: '1px solid var(--line)', paddingBottom: '10px' }}>
+        <div className="tabs mb-[var(--space-4)] border-b border-[var(--line)] pb-2.5">
           {tabs.map((t) => {
             const IconComponent = t.icon;
             const isActive = setupTab === t.id;
@@ -94,7 +93,7 @@ export const PlatformSetupView = () => {
         {/* Tab 1: Medical Code & Fees */}
         {setupTab === 'code' && (
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <div className="flex items-center justify-between mb-[var(--space-4)]">
               <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '16px' }}>
                 <span className="d"></span>
                 {L('مستويات الكود الطبي المعتمدة ورسوم الفحص', 'Authorized Medical Code Levels & Fees')}
@@ -104,7 +103,7 @@ export const PlatformSetupView = () => {
               </span>
             </div>
 
-            <div className="g2" style={{ gap: '10px', marginBottom: '10px' }}>
+            <div className="g2">
               {cfg.levels.map((l, i) => (
                 <div
                   key={l.id}
@@ -254,7 +253,7 @@ export const PlatformSetupView = () => {
 
         {/* Tab 2: Sports & Governorates */}
         {setupTab === 'lists' && (
-          <div className="g2" style={{ gap: '24px' }}>
+          <div className="g2">
             <div style={{ background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: '14px', padding: '18px' }}>
               <h3 style={{ margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand)', fontSize: '15px' }}>
                 <span className="d"></span>

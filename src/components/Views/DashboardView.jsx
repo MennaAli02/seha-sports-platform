@@ -44,7 +44,7 @@ export const DashboardView = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Page Header */}
       <div className="ph">
         <div>
@@ -72,7 +72,7 @@ export const DashboardView = () => {
       </div>
 
       {/* KPI Grid */}
-      <div className="g6" style={{ marginBottom: '10px' }}>
+      <div className="g6">
         <KPICard
           variant="primary-700"
           value={stats.total}
@@ -118,7 +118,7 @@ export const DashboardView = () => {
       </div>
 
       {/* Distribution: Governorate & Sport */}
-      <div className="g2" style={{ marginTop: '20px' }}>
+      <div className="g2">
         <div className="card">
           <h3>
             <span className="d"></span>
@@ -154,7 +154,7 @@ export const DashboardView = () => {
           <p className="mut" style={{ marginBottom: 0 }}>
             {L('نسب اللياقة المستخرجة بعد الفحص السريري وتخطيط القلب حسب المرحلة العمرية', 'Clearance percentages per clinical exam and ECG categorized by youth and senior bands')}
           </p>
-          <div className="g5" style={{ marginTop: '16px' }}>
+          <div className="g5 mt-4">
             {bands.map((x, i) => (
               <div
                 key={i}
@@ -187,7 +187,7 @@ export const DashboardView = () => {
           <p className="mut" style={{ marginBottom: 0 }}>
             {L('مسار طبي مخصص للحالات ذات الملاحظات الإكلينيكية لإعادة التأهيل دون استبعاد قسري', 'Dedicated medical track for athletes with clinical findings ensuring continuous care and re-evaluation')}
           </p>
-          <div className="g5" style={{ marginTop: '16px', marginBottom: '16px' }}>
+          <div className="g5 my-4">
             {cfg.stages.map((st, i) => {
               const isLast = i === 4;
               return (

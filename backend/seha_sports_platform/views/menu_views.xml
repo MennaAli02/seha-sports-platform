@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Root Menu -->
+    <menuitem id="menu_seha_root"
+              name="Seha Sports / منظومة صحة"
+              web_icon="seha_sports_platform,static/description/icon.png"
+              sequence="10"/>
+
+    <!-- Operational Submenus -->
+    <menuitem id="menu_seha_athletes"
+              name="Athletes / الرياضيون"
+              parent="menu_seha_root"
+              action="action_seha_player"
+              sequence="10"/>
+
+    <menuitem id="menu_seha_parents"
+              name="Parents &amp; Guardians / أولياء الأمور"
+              parent="menu_seha_root"
+              action="action_seha_parent"
+              sequence="20"/>
+
+    <menuitem id="menu_seha_certificates"
+              name="Medical Certificates / الشهادات الطبية"
+              parent="menu_seha_root"
+              action="action_seha_certificate"
+              sequence="30"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_seha_config"
+              name="Configuration / الإعدادات"
+              parent="menu_seha_root"
+              groups="seha_sports_platform.group_seha_admin"
+              sequence="90"/>
+
+    <menuitem id="menu_seha_sports_config"
+              name="Sports Disciplines / الرياضات"
+              parent="menu_seha_config"
+              action="action_seha_sport"
+              sequence="10"/>
+</odoo>

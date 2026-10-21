@@ -82,7 +82,7 @@ export const CitizenCertificatesTab = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -120,7 +120,7 @@ export const CitizenCertificatesTab = () => {
       </div>
 
       {/* 4 KPIs matching other screens */}
-      <div className="g4" style={{ marginBottom: '10px' }}>
+      <div className="g4">
         <KPICard
           variant="brand"
           value={3}

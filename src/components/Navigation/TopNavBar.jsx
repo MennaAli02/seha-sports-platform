@@ -26,8 +26,10 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
     switch (currentRoute) {
       case 'dash': return isRTL ? 'لوحة المؤشرات' : 'Dashboard';
       case 'citizen-home': return isRTL ? 'خدمات المواطن — الرئيسية' : 'Citizen — Home';
+      case 'citizen-family': return isRTL ? 'خدمات المواطن — إدارة العائلة' : 'Citizen — Family Management';
       case 'citizen-bookings': return isRTL ? 'خدمات المواطن — حجز كشف' : 'Citizen — Bookings';
       case 'citizen-certs': return isRTL ? 'خدمات المواطن — الشهادات' : 'Citizen — Certificates';
+      case 'citizen-history': return isRTL ? 'خدمات المواطن — السجل الطبي' : 'Citizen — Medical History';
       case 'citizen-consents': return isRTL ? 'خدمات المواطن — الموافقات' : 'Citizen — Consents';
       case 'consent': return isRTL ? 'موافقات الاطلاع' : 'Access consents';
       case 'cert': return isRTL ? 'سجل الشهادات' : 'Certificates';
@@ -101,7 +103,7 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
           </button>
 
           {/* User profile capsule OR Player/Family Switcher Dropdown */}
-          {userRole === 'citizen' || currentRoute.startsWith('citizen-') ? (
+          {userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian' || currentRoute.startsWith('citizen-') ? (
             <PlayerProfileSwitcher />
           ) : (
             <div className="user" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>

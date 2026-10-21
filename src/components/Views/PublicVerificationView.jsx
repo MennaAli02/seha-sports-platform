@@ -23,7 +23,7 @@ export const PublicVerificationView = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -42,23 +42,22 @@ export const PublicVerificationView = () => {
       </div>
 
       <div className="card text-start p-6 sm:p-8 shadow-sm">
-        <div className="w-14 h-14 rounded-2xl bg-[var(--primary-50)] text-[var(--primary)] flex items-center justify-center shadow-sm" style={{ marginBottom: '20px' }}>
+        <div className="w-14 h-14 rounded-2xl bg-[var(--primary-50)] text-[var(--primary)] flex items-center justify-center shadow-sm mb-[var(--space-4)]">
           <ShieldCheck className="w-7 h-7" />
         </div>
-        <h2 className="text-lg sm:text-xl font-bold text-[var(--ink)] text-start" style={{ marginBottom: '20px' }}>
+        <h2 className="text-lg sm:text-xl font-bold text-[var(--ink)] text-start mb-[var(--space-3)]">
           {L('أدخل رقم الشهادة أو امسح الرمز (QR)', 'Enter Certificate Number or Scan QR')}
         </h2>
-        <p className="mut text-xs max-w-xl text-start leading-relaxed" style={{ marginBottom: '20px' }}>
+        <p className="mut text-xs max-w-xl text-start leading-relaxed mb-[var(--space-4)]">
           {L('الصيغة المعتمدة للشهادات الصادرة تبدأ بـ SH متبوعة برقم العام ثم التسلسل الرقمي المعتمد', 'Official certificate format begins with SH followed by year code and sequence')}
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-start max-w-md" style={{ gap: '14px', marginBottom: '20px' }}>
+        <div className="flex flex-col sm:flex-row justify-start max-w-md gap-[var(--control-gap)] mb-[var(--space-4)]">
           <input
             id="vq"
             type="text"
             dir="ltr"
-            className="mono font-bold text-sm w-full px-3.5 py-2.5"
-            style={{ textAlign: isRTL ? 'right' : 'left' }}
+            className="mono font-bold text-sm w-full px-3.5 py-2.5 text-start"
             placeholder="SH-26-004517"
             value={vq}
             onChange={(e) => setVq(e.target.value)}
@@ -70,7 +69,7 @@ export const PublicVerificationView = () => {
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center justify-start gap-2.5" style={{ marginTop: '12px', marginBottom: '16px' }}>
+        <div className="flex flex-wrap items-center justify-start gap-[var(--control-gap)] mt-3 mb-4">
           <button
             className="chip text-xs"
             onClick={() => {

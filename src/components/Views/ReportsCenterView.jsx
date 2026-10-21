@@ -828,9 +828,9 @@ export const ReportsCenterView = () => {
 
   // Reports hub view
   return (
-    <div>
+    <div className="page-stack">
       {/* Header */}
-      <div className="ph" style={{ marginBottom: '12px' }}>
+      <div className="ph">
         <div>
           <span className="lab" style={{ 
             display: 'inline-flex', 
@@ -861,7 +861,7 @@ export const ReportsCenterView = () => {
         </div>
       </div>
 
-      <div className="g3" style={{ gap: '18px' }}>
+      <div className="g3">
         {Object.keys(REPORTS).map((k) => {
           const r = REPORTS[k];
           const slideCount = r.build().length;
@@ -874,8 +874,8 @@ export const ReportsCenterView = () => {
               style={{
                 background: 'var(--card)',
                 border: '1px solid var(--line)',
-                borderRadius: '16px',
-                padding: '22px 20px',
+                borderRadius: 'var(--radius-card, 16px)',
+                padding: 'var(--card-padding, 20px)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '12px',

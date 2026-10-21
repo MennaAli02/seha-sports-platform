@@ -92,7 +92,7 @@ export const CertificateRegistryView = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="page-stack">
       {/* Header */}
       <div className="ph">
         <div>
@@ -116,7 +116,7 @@ export const CertificateRegistryView = () => {
       </div>
 
       {/* KPIs */}
-      <div className="g4" style={{ marginBottom: '10px' }}>
+      <div className="g4">
         <KPICard
           variant="brand"
           value={stats.issued}
@@ -149,22 +149,12 @@ export const CertificateRegistryView = () => {
 
       {/* Search Bar & Filter Controls */}
       <div className="card">
-        <div
-          className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 np"
-          style={{ marginBottom: '24px' }}
-        >
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 mb-[var(--space-4)] np">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 max-w-2xl w-full">
             {/* Search Input */}
             <div className="relative flex-1 min-w-0 w-full">
               <Search
-                className="w-4 h-4 text-[var(--muted)] pointer-events-none"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  [isRTL ? 'right' : 'left']: '14px',
-                  zIndex: 2
-                }}
+                className="w-4 h-4 text-[var(--muted)] pointer-events-none absolute top-1/2 -translate-y-1/2 inset-inline-start-3.5 z-[2]"
               />
               <input
                 id="cq"
@@ -175,24 +165,13 @@ export const CertificateRegistryView = () => {
                 )}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                className="search-input w-full py-2.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--color-brand-violet)] focus:ring-2 focus:ring-[var(--color-brand-lavender)] transition-all shadow-xs"
-                style={{
-                  [isRTL ? 'paddingRight' : 'paddingLeft']: '44px',
-                  [isRTL ? 'paddingLeft' : 'paddingRight']: '38px'
-                }}
+                className="search-input w-full py-2.5 ps-11 pe-9.5 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl focus:border-[var(--color-brand-violet)] focus:ring-2 focus:ring-[var(--color-brand-lavender)] transition-all shadow-xs"
               />
               {q && (
                 <button
                   type="button"
                   onClick={() => setQ('')}
-                  className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer"
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    [isRTL ? 'left' : 'right']: '12px',
-                    zIndex: 2
-                  }}
+                  className="p-1 rounded-full text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--primary-50)] transition-colors cursor-pointer absolute top-1/2 -translate-y-1/2 inset-inline-end-3 z-[2]"
                   title={L('مسح البحث', 'Clear search')}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -311,7 +290,7 @@ export const CertificateRegistryView = () => {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto" style={{ marginTop: '22px', marginBottom: '24px' }}>
+          <div className="overflow-x-auto" style={{ marginBlock: 'var(--space-4)' }}>
             <table className="t">
               <thead>
                 <tr>
