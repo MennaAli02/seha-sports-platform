@@ -100,7 +100,7 @@ export const mockPersonas = {
     scopeDescriptionEn: 'Manage connected athlete children profiles, book examinations, and switch between profiles seamlessly',
     allowedRoutes: ['citizen-home', 'citizen-family', 'citizen-bookings', 'citizen-certs', 'citizen-history', 'citizen-consents', 'cert', 'verify'],
     avatarLetter: 'ي',
-    defaultRoute: 'citizen-home',
+    defaultRoute: 'citizen-family',
     defaultPassword: 'parent2026',
     featureTags: [
       { ar: 'إدارة العائلة والأبناء', en: 'Family Management' },

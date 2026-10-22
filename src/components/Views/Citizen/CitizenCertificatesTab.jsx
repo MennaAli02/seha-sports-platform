@@ -168,7 +168,7 @@ export const CitizenCertificatesTab = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[10px] text-xs my-[10px]">
           <div className="p-2.5 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40">
             <span className="mut block">{L('اسم الرياضي:', 'Athlete Name:')}</span>
-            <b className="text-[var(--ink)] text-sm">{p.name}</b>
+            <b className="text-[var(--ink)] text-sm">{isRTL ? p.name : (p.nameEn || p.name)}</b>
           </div>
           <div className="p-2.5 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40">
             <span className="mut block">{L('الرقم القومي:', 'National ID:')}</span>
@@ -185,37 +185,39 @@ export const CitizenCertificatesTab = () => {
         </div>
 
         {/* Clinical Exams Table */}
-        <table className="t mb-[10px]">
-          <thead>
-            <tr>
-              <th>{L('الفحص الطبي', 'Clinical Examination')}</th>
-              <th>{L('النتيجة الإكلينيكية', 'Finding')}</th>
-              <th>{L('الحالة', 'Status')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{L('رسم القلب الكهربائي (Resting ECG)', 'Resting ECG')}</td>
-              <td>{L('نظم جيبي طبيعي سليم', 'Normal sinus rhythm')}</td>
-              <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
-            </tr>
-            <tr>
-              <td>{L('الموجات الصوتية على القلب (ECHO)', 'Echocardiography (ECHO)')}</td>
-              <td>{L('وظائف الصمامات وعضلة القلب طبيعية', 'Normal valve function and ejection fraction')}</td>
-              <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
-            </tr>
-            <tr>
-              <td>{L('صورة الدم الكاملة (CBC)', 'Complete Blood Count (CBC)')}</td>
-              <td>{L('الهيموجلوبين ومؤشرات الدم بالحدود الطبيعية', 'Hemoglobin and blood parameters within normal range')}</td>
-              <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
-            </tr>
-            <tr>
-              <td>{L('الكشف الإكلينيكي والباطني', 'Clinical & Internal Examination')}</td>
-              <td>{L('ضغط الدم: ', 'BP: ')}{p.bp} · {L('النبض: ', 'HR: ')}{p.hr} bpm</td>
-              <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="overflow-x-auto mb-[10px]">
+          <table className="t">
+            <thead>
+              <tr>
+                <th>{L('الفحص الطبي', 'Clinical Examination')}</th>
+                <th>{L('النتيجة الإكلينيكية', 'Finding')}</th>
+                <th>{L('الحالة', 'Status')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{L('رسم القلب الكهربائي (Resting ECG)', 'Resting ECG')}</td>
+                <td>{L('نظم جيبي طبيعي سليم', 'Normal sinus rhythm')}</td>
+                <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
+              </tr>
+              <tr>
+                <td>{L('الموجات الصوتية على القلب (ECHO)', 'Echocardiography (ECHO)')}</td>
+                <td>{L('وظائف الصمامات وعضلة القلب طبيعية', 'Normal valve function and ejection fraction')}</td>
+                <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
+              </tr>
+              <tr>
+                <td>{L('صورة الدم الكاملة (CBC)', 'Complete Blood Count (CBC)')}</td>
+                <td>{L('الهيموجلوبين ومؤشرات الدم بالحدود الطبيعية', 'Hemoglobin and blood parameters within normal range')}</td>
+                <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
+              </tr>
+              <tr>
+                <td>{L('الكشف الإكلينيكي والباطني', 'Clinical & Internal Examination')}</td>
+                <td>{L('ضغط الدم: ', 'BP: ')}{p.bp} · {L('النبض: ', 'HR: ')}{p.hr} bpm</td>
+                <td><b className="text-[var(--success)]">{L('طبيعي', 'Normal')}</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         {/* Result banner & QR */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-3 rounded-lg border border-[var(--line)] bg-[var(--bg)]/40 mt-[10px]">
@@ -290,7 +292,7 @@ export const CitizenCertificatesTab = () => {
                   <td className="mono font-bold text-[var(--primary)]">{cert.ct}</td>
                   <td><b>{cert.season}</b></td>
                   <td>
-                    <div>{cert.sport}</div>
+                    <div>{isRTL ? cert.sport : (SP_EN[cert.sport] || cert.sport)}</div>
                     <span className="text-xs mut">{isRTL ? cert.levelName : cert.levelNameEn}</span>
                   </td>
                   <td>{isRTL ? cert.hosp : cert.hospEn}</td>

@@ -7,7 +7,13 @@ const SehaContext = createContext(undefined);
 export const SehaProvider = ({ children }) => {
   const initialData = useMemo(() => generateSeedData(), []);
 
-  const [players, setPlayers] = useState(initialData.players);
+  const [players, setPlayers] = useState(() => {
+    return initialData.players.map(p => ({
+      ...p,
+      nameEn: p.nameEn || (p.g === 'F' || p.id === 'P-1002' || p.nid === '30806120104829' ? 'Maryam Ahmad Youssef' : 'Ahmad Youssef El-Sayed'),
+      gdEn: p.gdEn || 'Youssef Abdullah El-Sayed'
+    }));
+  });
   const [clubs, setClubs] = useState(initialData.clubs);
   const [hosps, setHosps] = useState(initialData.hosps);
   const [consents, setConsents] = useState(initialData.consents);
@@ -55,6 +61,7 @@ export const SehaProvider = ({ children }) => {
     const userPersona = {
       ...basePersona,
       name: personaName,
+      nameEn: credentials.nameEn || basePersona.nameEn || 'Youssef Abdullah El-Sayed',
       nationalId: personaNationalId,
       email: personaEmail,
       phone: credentials.phone || basePersona.phone,
@@ -67,13 +74,16 @@ export const SehaProvider = ({ children }) => {
     setIsAuthenticated(true);
 
     const isCitizenType = role === 'citizen' || role === 'athlete' || role === 'guardian';
-    const targetRoute = isCitizenType ? 'citizen-home' : 'dash';
+    const targetRoute = role === 'guardian' ? 'citizen-family' : (isCitizenType ? 'citizen-home' : 'dash');
     setCurrentRoute(targetRoute);
 
     if (role === 'guardian') {
-      // For guardian, start with first child (index 1: Maryam)
-      setSelectedPlayerIndex(1);
-      showToast(`مرحبًا ${personaName} — تم تسجيل الدخول كولي أمر (حساب عائلي)`);
+      // For guardian, start on the family hub with 2 connected sons cards, starting with Ahmed (index 0)
+      setSelectedPlayerIndex(0);
+      showToast({
+        ar: `مرحبًا ${personaName} — تم تسجيل الدخول كولي أمر (حساب عائلي)`,
+        en: `Welcome ${userPersona.nameEn || 'Youssef Abdullah El-Sayed'} — Signed in as Parent (Family Hub)`
+      });
     } else if (role === 'athlete' || role === 'citizen') {
       // If logging in as an athlete, match the player by National ID
       const targetNid = String(personaNationalId).trim();
@@ -86,6 +96,7 @@ export const SehaProvider = ({ children }) => {
           id: credentials.athlete?.code || ('P-' + (1000 + players.length)),
           nid: targetNid,
           name: personaName,
+          nameEn: credentials.nameEn || 'Ahmad Youssef El-Sayed',
           g: credentials.gender === 'female' ? 'F' : 'M',
           age: 18,
           gov: "القاهرة",
@@ -98,6 +109,7 @@ export const SehaProvider = ({ children }) => {
           hs: 0,
           cl: 0,
           gd: "—",
+          gdEn: "—",
           rel: { ar: "الرياضي (حساب فردي)", en: "Athlete (Individual)", isPrimary: true },
           iss: { y: 2026, m: 10, d: 21 },
           exp: { y: 2027, m: 10, d: 20 },
@@ -114,24 +126,39 @@ export const SehaProvider = ({ children }) => {
         setPlayers(prev => [newPlayer, ...prev]);
         setSelectedPlayerIndex(0);
       }
-      showToast(`مرحبًا ${personaName} — تم تسجيل الدخول كرياضي (حساب فردي)`);
+      showToast({
+        ar: `مرحبًا ${personaName} — تم تسجيل الدخول كرياضي (حساب فردي)`,
+        en: `Welcome ${userPersona.nameEn || 'Ahmad Youssef El-Sayed'} — Signed in as Athlete (Individual Account)`
+      });
     } else {
-      showToast(`مرحبًا ${personaName} — تم تسجيل الدخول بصلاحيات مسؤول المنظومة`);
+      showToast({
+        ar: `مرحبًا ${personaName} — تم تسجيل الدخول بصلاحيات مسؤول المنظومة`,
+        en: `Welcome ${userPersona.nameEn || personaName} — Signed in as Platform Administrator`
+      });
     }
   }, [players, showToast]);
 
   const logout = useCallback(() => {
     setIsAuthenticated(false);
     setCurrentRoute('role_select');
-    showToast('تم تسجيل الخروج بنجاح من المنظومة / Logged out');
+    showToast({
+      ar: 'تم تسجيل الخروج بنجاح من المنظومة',
+      en: 'Successfully logged out of the platform'
+    });
   }, [showToast]);
 
   const switchChildProfile = useCallback((idx) => {
     if (idx >= 0 && idx < players.length) {
       setSelectedPlayerIndex(idx);
       const targetChild = players[idx];
-      const relLabel = targetChild.rel?.ar || 'اللاعب';
-      showToast(`تم التبديل إلى ملف: ${targetChild.name} (${relLabel})`);
+      const nameAr = targetChild.name || 'الابن';
+      const nameEn = targetChild.nameEn || (targetChild.id === 'P-1002' || targetChild.g === 'F' ? 'Maryam Ahmad Youssef' : 'Ahmad Youssef El-Sayed');
+      const relAr = targetChild.rel?.ar || (targetChild.g === 'F' ? 'الابنة' : 'الابن');
+      const relEn = targetChild.rel?.en || (targetChild.g === 'F' ? 'Daughter' : 'Son');
+      showToast({
+        ar: `تم التبديل إلى ملف: ${nameAr} (${relAr})`,
+        en: `Switched active profile to: ${nameEn} (${relEn})`
+      });
     }
   }, [players, showToast]);
 
@@ -142,6 +169,7 @@ export const SehaProvider = ({ children }) => {
       updated[existingIndex] = {
         ...updated[existingIndex],
         gd: currentUser?.name || 'يوسف عبدالله السيد',
+        gdEn: currentUser?.nameEn || 'Youssef Abdullah El-Sayed',
         rel: {
           ar: `${childData.relationship || 'ابن'} (تابع موثق)`,
           en: `${childData.relationship || 'Child'} (Verified Dependent)`,
@@ -151,20 +179,26 @@ export const SehaProvider = ({ children }) => {
       };
       setPlayers(updated);
       setSelectedPlayerIndex(existingIndex);
-      showToast(`تم ربط حساب الابن بنجاح: ${updated[existingIndex].name}`);
+      showToast({
+        ar: `تم ربط حساب الابن بنجاح: ${updated[existingIndex].name}`,
+        en: `Child profile connected successfully: ${updated[existingIndex].nameEn || updated[existingIndex].name}`
+      });
       return { success: true, player: updated[existingIndex] };
     } else {
       // Connect as new connected account
       const newIndex = players.length;
+      const isFemale = childData.gender === 'F' || childData.gender === 'female';
       const newPlayer = {
         id: 'PL-' + (1000 + newIndex),
-        name: childData.name || 'ابن رياضي',
+        name: childData.name || (isFemale ? 'مريم أحمد يوسف' : 'أحمد يوسف السيد'),
+        nameEn: childData.nameEn || (isFemale ? 'Maryam Ahmad Youssef' : 'Ahmad Youssef El-Sayed'),
         nid: childData.nationalId,
-        g: childData.gender || 'M',
-        gd: currentUser?.name || 'أحمد يوسف السيد',
+        g: isFemale ? 'F' : 'M',
+        gd: currentUser?.name || 'يوسف عبدالله السيد',
+        gdEn: currentUser?.nameEn || 'Youssef Abdullah El-Sayed',
         rel: {
-          ar: `${childData.relationship || 'ابن'} (تابع موثق)`,
-          en: `${childData.relationship || 'Child'} (Verified Dependent)`,
+          ar: `${childData.relationship || (isFemale ? 'ابنة' : 'ابن')} (تابع موثق)`,
+          en: `${isFemale ? 'Daughter' : 'Son'} (Verified Dependent)`,
           isPrimary: false
         },
         age: Number(childData.age) || 12,
@@ -182,21 +216,27 @@ export const SehaProvider = ({ children }) => {
       };
       setPlayers(prev => [...prev, newPlayer]);
       setSelectedPlayerIndex(newIndex);
-      showToast(`تم ربط وتوثيق حساب الرياضي بنجاح: ${newPlayer.name}`);
+      showToast({
+        ar: `تم ربط وتوثيق حساب الرياضي بنجاح: ${newPlayer.name}`,
+        en: `Athlete account connected and verified successfully: ${newPlayer.nameEn || newPlayer.name}`
+      });
       return { success: true, player: newPlayer };
     }
   }, [players, currentUser, showToast]);
 
   const registerNewChild = useCallback((childData) => {
     const newIndex = players.length;
+    const isFemale = childData.gender === 'F' || childData.gender === 'female';
     const createdPlayer = {
       id: 'PL-' + (1000 + newIndex),
       name: childData.name.trim(),
-      g: childData.gender || 'M',
-      gd: currentUser?.name || 'أحمد يوسف السيد',
+      nameEn: childData.nameEn || (isFemale ? 'Maryam Ahmad Youssef' : 'Ahmad Youssef El-Sayed'),
+      g: isFemale ? 'F' : 'M',
+      gd: currentUser?.name || 'يوسف عبدالله السيد',
+      gdEn: currentUser?.nameEn || 'Youssef Abdullah El-Sayed',
       rel: {
-        ar: `${childData.relationship || 'ابن'} (تابع عائلي)`,
-        en: `${childData.relationship === 'ابنة' ? 'Daughter' : 'Son'} (Dependent)`,
+        ar: `${childData.relationship || (isFemale ? 'ابنة' : 'ابن')} (تابع عائلي)`,
+        en: `${isFemale ? 'Daughter' : 'Son'} (Dependent)`,
         isPrimary: false
       },
       cl: 0,
@@ -219,7 +259,10 @@ export const SehaProvider = ({ children }) => {
 
     setPlayers(prev => [...prev, createdPlayer]);
     setSelectedPlayerIndex(newIndex);
-    showToast(`تم تسجيل وربط ملف التابع بنجاح: ${createdPlayer.name}`);
+    showToast({
+      ar: `تم تسجيل وربط ملف التابع بنجاح: ${createdPlayer.name}`,
+      en: `Dependent profile registered and linked successfully: ${createdPlayer.nameEn || createdPlayer.name}`
+    });
     return createdPlayer;
   }, [players, currentUser, showToast]);
 
@@ -244,13 +287,19 @@ export const SehaProvider = ({ children }) => {
     ];
 
     if (isAuthenticated && isCitizenRole && !citizenAllowedRoutes.includes(targetRoute)) {
-      showToast('هذه الشاشة مقصورة على مسؤول المنظومة / Screen restricted to Super Admin');
+      showToast({
+        ar: 'هذه الشاشة مقصورة على مسؤول المنظومة',
+        en: 'This screen is restricted to System Administrators'
+      });
       targetRoute = 'citizen-home';
     }
 
     // Role-specific check: Athlete cannot open family management
     if (isAuthenticated && (userRole === 'athlete' || userRole === 'citizen') && targetRoute === 'citizen-family') {
-      showToast('إدارة العائلة مقصورة على حساب ولي الأمر / Family management is for Parent accounts');
+      showToast({
+        ar: 'إدارة العائلة مقصورة على حساب ولي الأمر',
+        en: 'Family management is restricted to Parent / Guardian accounts'
+      });
       targetRoute = 'citizen-home';
     }
 
@@ -282,7 +331,10 @@ export const SehaProvider = ({ children }) => {
     setCfg(fresh.cfg);
     setSelectedCertIndex(null);
     setSelectedReport(null);
-    showToast('تمت إعادة تعيين البيانات التجريبية بنجاح / Reset completed');
+    showToast({
+      ar: 'تمت إعادة تعيين البيانات التجريبية بنجاح',
+      en: 'Demo data reset completed successfully'
+    });
   }, [showToast]);
 
   const stats = useMemo(() => {

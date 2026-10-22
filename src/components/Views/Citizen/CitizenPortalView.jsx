@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSeha } from '../../../context/SehaContext';
 import { CitizenHomeTab } from './CitizenHomeTab';
 import { CitizenFamilyTab } from './CitizenFamilyTab';
 import { CitizenBookingsTab } from './CitizenBookingsTab';
@@ -8,6 +9,8 @@ import { CitizenConsentsTab } from './CitizenConsentsTab';
 import { ActiveChildBanner } from './ActiveChildBanner';
 
 export const CitizenPortalView = ({ activeRoute = 'citizen-home' }) => {
+  const { userRole } = useSeha();
+
   const renderTab = () => {
     switch (activeRoute) {
       case 'citizen-family':
@@ -28,8 +31,10 @@ export const CitizenPortalView = ({ activeRoute = 'citizen-home' }) => {
 
   return (
     <div className="page-stack">
-      {/* Persistent Active Child Banner for Guardian Account Context */}
-      <ActiveChildBanner />
+      {/* Show Active Child Context Banner on child-specific screens for Guardian */}
+      {userRole === 'guardian' && activeRoute !== 'citizen-family' && (
+        <ActiveChildBanner />
+      )}
       {renderTab()}
     </div>
   );

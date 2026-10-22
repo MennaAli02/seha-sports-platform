@@ -179,6 +179,7 @@ export function generateSeedData() {
       id: "P-1001",
       nid: "30408150104829",
       name: "أحمد يوسف السيد",
+      nameEn: "Ahmad Youssef El-Sayed",
       g: "M",
       age: 16,
       gov: "القاهرة",
@@ -191,6 +192,7 @@ export function generateSeedData() {
       hs: 0,
       cl: 0,
       gd: "يوسف عبدالله السيد",
+      gdEn: "Youssef Abdullah El-Sayed",
       rel: { ar: "الابن (حساب رياضي)", en: "Son (Athlete Profile)", isPrimary: true },
       iss: { y: 2026, m: 10, d: 15 },
       exp: { y: 2027, m: 10, d: 14 },
@@ -241,6 +243,7 @@ export function generateSeedData() {
       id: "P-1002",
       nid: "30806120104829",
       name: "مريم أحمد يوسف",
+      nameEn: "Maryam Ahmad Youssef",
       g: "F",
       age: 14,
       gov: "القاهرة",
@@ -253,6 +256,7 @@ export function generateSeedData() {
       hs: 0,
       cl: 0,
       gd: "يوسف عبدالله السيد",
+      gdEn: "Youssef Abdullah El-Sayed",
       rel: { ar: "الابنة (تابع عائلي)", en: "Daughter (Dependent)", isPrimary: false },
       iss: { y: 2026, m: 10, d: 18 },
       exp: { y: 2027, m: 10, d: 17 },
@@ -332,8 +336,8 @@ export function generateSeedData() {
   ];
 
   const consents = [
-    { p: players[0], to: "نادي المستقبل الرياضي", sc: 0, du: 3, st: "ok" },
-    { p: players[1], to: "نادي المستقبل الرياضي", sc: 0, du: 3, st: "ok" }
+    { p: players[0], to: "نادي المستقبل الرياضي", toEn: "Al-Mostakbal Sports Club", sc: 0, du: 3, st: "ok" },
+    { p: players[1], to: "نادي المستقبل الرياضي", toEn: "Al-Mostakbal Sports Club", sc: 0, du: 3, st: "ok" }
   ];
 
   const audit = [
@@ -347,3 +351,46 @@ export function generateSeedData() {
 
   return { players, clubs, hosps, consents, audit, ash, cfg: JSON.parse(JSON.stringify(CFG)) };
 }
+
+export const getPlayerName = (player, isRTL) => {
+  if (!player) return '';
+  if (isRTL) return player.name || '';
+  if (player.nameEn) return player.nameEn;
+  const idStr = String(player.id || '');
+  const nidStr = String(player.nid || '');
+  const nameStr = String(player.name || '');
+  if (idStr === 'P-1002' || nidStr === '30806120104829' || player.g === 'F' || nameStr.includes('مريم')) {
+    return 'Maryam Ahmad Youssef';
+  }
+  if (idStr === 'P-1001' || nidStr === '30408150104829' || nameStr.includes('أحمد')) {
+    return 'Ahmad Youssef El-Sayed';
+  }
+  return player.name || '';
+};
+
+export const getGuardianName = (userOrPlayer, isRTL) => {
+  if (!userOrPlayer) return isRTL ? 'يوسف عبدالله السيد' : 'Youssef Abdullah El-Sayed';
+  if (isRTL) return userOrPlayer.name || userOrPlayer.gd || 'يوسف عبدالله السيد';
+  if (userOrPlayer.nameEn) return userOrPlayer.nameEn;
+  if (userOrPlayer.gdEn) return userOrPlayer.gdEn;
+  return 'Youssef Abdullah El-Sayed';
+};
+
+export const getRelationshipLabel = (player, isRTL) => {
+  if (!player) return '';
+  if (isRTL) {
+    if (typeof player.rel === 'object' && player.rel?.ar) return player.rel.ar;
+    if (typeof player.rel === 'string') return player.rel;
+    if (typeof player.relationship === 'string') return player.relationship;
+    return player.g === 'F' ? 'الابنة (تابع عائلي)' : 'الابن (حساب رياضي)';
+  }
+  if (typeof player.rel === 'object' && player.rel?.en) return player.rel.en;
+  if (typeof player.relationEn === 'string') return player.relationEn;
+  const idStr = String(player.id || '');
+  const nameStr = String(player.name || '');
+  if (idStr === 'P-1002' || player.g === 'F' || nameStr.includes('مريم')) {
+    return 'Daughter (Dependent)';
+  }
+  return 'Son (Athlete Profile)';
+};
+

@@ -4,11 +4,12 @@ import { useTheme } from '../../context/ThemeContext';
 import { useSeha } from '../../context/SehaContext';
 import { Sun, Moon, HelpCircle, Menu, Bell, Globe } from 'lucide-react';
 import { PlayerProfileSwitcher } from './PlayerProfileSwitcher';
+import { getGuardianName } from '../../data/mockData';
 
 export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
   const { toggleLanguage, isRTL, L } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
-  const { currentRoute, toggleSidebar, currentUser, userRole } = useSeha();
+  const { currentRoute, toggleSidebar, currentUser, userRole, navigate } = useSeha();
 
   // Keyboard shortcut Ctrl+K or Cmd+K for search
   useEffect(() => {
@@ -101,6 +102,28 @@ export const TopNavBar = ({ onOpenSearch, onOpenHelp }) => {
           >
             <Globe className="w-4 h-4" />
           </button>
+
+          {/* Guardian Account Identity Badge */}
+          {userRole === 'guardian' && (
+            <div
+              onClick={() => navigate('citizen-family')}
+              className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[var(--primary-50)] border border-[var(--primary-100)] cursor-pointer hover:border-[var(--primary)] transition-all select-none"
+              style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+              title={L('حساب ولي الأمر — إدارة ملفات العائلة', 'Guardian Account — Family Hub')}
+            >
+              <div className="w-6 h-6 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                {isRTL ? (currentUser?.avatarLetter || 'ي') : 'Y'}
+              </div>
+              <div className="flex flex-col text-start">
+                <b className="leading-tight text-xs text-[var(--ink)] truncate max-w-[130px]">
+                  {getGuardianName(currentUser, isRTL)}
+                </b>
+                <span className="text-[9.5px] text-[var(--primary-700)] font-semibold leading-tight">
+                  {L('ولي الأمر (عائلي)', 'Parent Account')}
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* User profile capsule OR Player/Family Switcher Dropdown */}
           {userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian' || currentRoute.startsWith('citizen-') ? (

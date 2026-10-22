@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useSeha } from '../../../context/SehaContext';
 import { StatusTag } from '../../Common/StatusTag';
@@ -29,7 +29,18 @@ export const CitizenConsentsTab = () => {
 
   const p = players[selectedPlayerIndex] || players[0];
 
-  const [targetEntity, setTargetEntity] = useState(clubs[0]?.n || 'نادي المستقبل الرياضي');
+  const [targetEntity, setTargetEntity] = useState(() =>
+    isRTL ? (clubs[0]?.n || 'نادي المستقبل الرياضي') : (clubs[0]?.nEn || 'Al-Mostakbal Sports Club')
+  );
+
+  useEffect(() => {
+    setTargetEntity((prev) => {
+      if (prev === 'نادي المستقبل الرياضي' && !isRTL) return 'Al-Mostakbal Sports Club';
+      if (prev === 'Al-Mostakbal Sports Club' && isRTL) return 'نادي المستقبل الرياضي';
+      return prev;
+    });
+  }, [isRTL]);
+
   const [selectedScope, setSelectedScope] = useState(0);
   const [selectedDuration, setSelectedDuration] = useState(2);
   const [agreedToLaw, setAgreedToLaw] = useState(false);
@@ -164,7 +175,7 @@ export const CitizenConsentsTab = () => {
               <span>{L('الرياضي / صاحب الملف الطبي', 'Athlete / Record Owner')}</span>
               <input
                 type="text"
-                value={`${p.name} (${p.age < 18 ? `${L('بموافقة ولي الأمر: ', 'Guardian: ')}${p.gd}` : L('بالغ', 'Adult')})`}
+                value={`${isRTL ? p.name : (p.nameEn || p.name)} (${p.age < 18 ? `${L('بموافقة ولي الأمر: ', 'Guardian: ')}${isRTL ? p.gd : (p.gdEn || p.gd)}` : L('بالغ', 'Adult')})`}
                 disabled
                 className="bg-[var(--bg)]/50 cursor-not-allowed"
               />
@@ -224,13 +235,17 @@ export const CitizenConsentsTab = () => {
               </span>
             </div>
 
-            <label className="chk">
+            <label
+              className="chk cursor-pointer flex items-start gap-2.5"
+              style={{ marginTop: '14px', marginBottom: '14px' }}
+            >
               <input
                 type="checkbox"
                 checked={agreedToLaw}
                 onChange={(e) => setAgreedToLaw(e.target.checked)}
+                className="mt-0.5 shrink-0"
               />
-              <span className="text-xs font-semibold text-[var(--primary-700)]">
+              <span className="text-xs font-semibold text-[var(--primary-700)] leading-relaxed">
                 {L('أوافق صراحةً على تفويض الجهة المذكورة أعلاه وفق النطاق والمدة المحددين (قانون 151/2020).', 'I explicitly authorize the specified entity within the stated scope and duration (Law 151/2020).')}
               </span>
             </label>
@@ -270,7 +285,7 @@ export const CitizenConsentsTab = () => {
                   const isActive = c.st === 'ok';
                   return (
                     <tr key={idx}>
-                      <td><b>{c.to}</b></td>
+                      <td><b>{isRTL ? c.to : (c.toEn || (c.to === 'نادي المستقبل الرياضي' ? 'Al-Mostakbal Sports Club' : c.to))}</b></td>
                       <td className="text-xs mut">
                         {isRTL ? cfg.scopes[c.sc]?.[0] : cfg.scopes[c.sc]?.[1]}
                         <br />
@@ -299,7 +314,7 @@ export const CitizenConsentsTab = () => {
             </table>
           </div>
 
-          <div className="nt text-xs mt-[10px] flex items-center gap-2 mb-0">
+          <div className="nt text-xs flex items-center gap-2 mb-0" style={{ marginTop: '10px' }}>
             <Lock className="w-4 h-4 text-[var(--primary)] shrink-0" />
             <span>
               {L(
@@ -313,12 +328,12 @@ export const CitizenConsentsTab = () => {
 
       {/* Access Audit Trail (Who Viewed What and When) */}
       <div className="card">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="m-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h3 className="m-0 flex items-center gap-2">
             <span className="d"></span>
-            {L('سجل الوصول والتدقيق — من اطلع على بياناتك ومتى؟', 'Access Audit Log — Who Viewed Your Record & When?')}
+            <span>{L('سجل الوصول والتدقيق — من اطلع على بياناتك ومتى؟', 'Access Audit Log — Who Viewed Your Record & When?')}</span>
           </h3>
-          <span className="mut text-xs font-mono">
+          <span className="mut text-xs font-mono shrink-0">
             {L('سجل تدقيق غير قابل للتعديل', 'Immutable Audit Trail')}
           </span>
         </div>

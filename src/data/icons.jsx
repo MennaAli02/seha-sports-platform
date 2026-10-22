@@ -62,11 +62,14 @@ export const IC = {
 };
 
 export const LOGO_SVG = (
-  <svg viewBox="0 0 48 48" width="34" height="34" fill="none" aria-label="Seha" style={{ flex: 'none' }}>
-    <rect x="2" y="2" width="44" height="44" rx="12" fill="var(--primary-600)"/>
-    <circle cx="24" cy="24" r="15" stroke="var(--primary-300)" strokeWidth="2.2"/>
-    <path d="M11 24h5.5l2.5-6 5 12 3.5-9 2 3H37" stroke="var(--card)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <img
+    src="/seha-icon.png"
+    alt="Seha SportsMed Platform"
+    width="34"
+    height="34"
+    className="w-[34px] h-[34px] object-contain flex-none transition-transform hover:scale-105 duration-200"
+    style={{ flex: 'none' }}
+  />
 );
 
 export const ECG_SVG = (

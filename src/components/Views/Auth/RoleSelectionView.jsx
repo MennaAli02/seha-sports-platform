@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Globe,
   Sun,
@@ -24,8 +24,9 @@ export const RoleSelectionView = ({
   const { language, toggleLanguage, isRTL, L } = useLanguage();
   const { toggleTheme, isDark } = useTheme();
 
-  // Try reading last used role from localStorage
+  // Try reading last used role from prop or localStorage
   const [selectedRole, setSelectedRole] = useState(() => {
+    if (propSelectedRole) return propSelectedRole;
     try {
       const stored = localStorage.getItem('seha_last_role');
       if (stored === 'athlete' || stored === 'guardian' || stored === 'super_admin') {
@@ -34,8 +35,14 @@ export const RoleSelectionView = ({
     } catch (err) {
       // Storage access blocked or unavailable
     }
-    return null;
+    return 'guardian';
   });
+
+  useEffect(() => {
+    if (propSelectedRole) {
+      setSelectedRole(propSelectedRole);
+    }
+  }, [propSelectedRole]);
 
   const cardRefs = useRef({});
 
@@ -152,8 +159,17 @@ export const RoleSelectionView = ({
         <header className="flex items-center justify-between pb-4 border-b border-[#DCE4EC] dark:border-[#1E426F] gap-3">
           {/* Logo & Brand text */}
           <div className="flex items-center gap-2.5">
-            <div className="shrink-0 scale-95">
-              {LOGO_SVG}
+            <div className="shrink-0">
+              <img
+                src="/seha-icon.png"
+                alt="Seha"
+                className="w-10 h-10 object-contain dark:hidden"
+              />
+              <img
+                src="/seha-icon-white.png"
+                alt="Seha"
+                className="w-10 h-10 object-contain hidden dark:block"
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">

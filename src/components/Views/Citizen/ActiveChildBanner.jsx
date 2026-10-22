@@ -70,7 +70,7 @@ export const ActiveChildBanner = () => {
                 {L('الملف النشط حاليًا', 'Active Child Profile')}
               </span>
               <span className="text-xs font-semibold text-[#4A607A] dark:text-[#ABC7E8] truncate">
-                {currentChild.rel?.ar || L('الابن', 'Son')}
+                {(isRTL ? currentChild.rel?.ar : currentChild.rel?.en) || L('الابن', 'Son')}
               </span>
               <span className="hidden xs:inline-flex items-center gap-1 text-xs font-bold text-[#16845B] dark:text-[#34D399]">
                 <ShieldCheck className="w-3.5 h-3.5" />
@@ -80,7 +80,7 @@ export const ActiveChildBanner = () => {
 
             <div className="flex flex-wrap items-center gap-[var(--space-2)]">
               <b className="text-base font-bold text-[#003366] dark:text-[#F2F6FB] truncate">
-                {currentChild.name}
+                {isRTL ? currentChild.name : (currentChild.nameEn || currentChild.name)}
               </b>
               <span className="text-[#4A607A] dark:text-[#94B0D0] text-xs sm:text-sm">
                 ({currentChild.age} {L('سنة', 'years')} · {isRTL ? cfg.sports[currentChild.sp] : SP_EN[cfg.sports[currentChild.sp]] || cfg.sports[currentChild.sp]})
@@ -127,9 +127,9 @@ export const ActiveChildBanner = () => {
                         }`}
                       >
                         <div className="min-w-0 flex-1">
-                          <div className="font-bold truncate">{ch.name}</div>
+                          <div className="font-bold truncate">{isRTL ? ch.name : (ch.nameEn || ch.name)}</div>
                           <div className="text-[10px] text-[var(--muted)] truncate">
-                            {ch.rel?.ar || 'ابن'} · {ch.age} {L('سنة', 'y')} · {cfg.sports[ch.sp]}
+                            {(isRTL ? ch.rel?.ar : ch.rel?.en) || L('ابن', 'Son')} · {ch.age} {L('سنة', 'y')} · {isRTL ? cfg.sports[ch.sp] : (SP_EN[cfg.sports[ch.sp]] || cfg.sports[ch.sp])}
                           </div>
                         </div>
                         {isSelected && <Check className="w-4 h-4 text-[#16845B] shrink-0" />}

@@ -308,7 +308,7 @@ export const CitizenBookingsTab = () => {
                     <div className="nt ok text-xs mb-3 flex items-center justify-between">
                       <div>
                         <span>{L('أنت تحجز الآن موعد الفحص للابن: ', 'Booking exam appointment for child: ')}</span>
-                        <b>{p.name}</b> ({p.age} {L('سنة', 'y')} · {cfg.sports[p.sp]})
+                        <b>{isRTL ? p.name : (p.nameEn || p.name)}</b> ({p.age} {L('سنة', 'y')} · {isRTL ? cfg.sports[p.sp] : (SP_EN[cfg.sports[p.sp]] || cfg.sports[p.sp])})
                       </div>
                       <button
                         type="button"

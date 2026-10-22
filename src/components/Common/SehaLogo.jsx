@@ -1,30 +1,74 @@
 import React from 'react';
 
-export const SehaLogo = ({ size = 34, className = '', withPulse = false }) => {
-  return (
-    <div className={`relative inline-flex items-center justify-center ${className}`} style={{ width: size, height: size }}>
-      <svg
-        viewBox="0 0 48 48"
-        width={size}
-        height={size}
-        fill="none"
-        aria-label="Seha SportsMed"
-        className="flex-none transition-transform hover:scale-105 duration-200"
+/**
+ * Official Seha SportsMed Platform Logo
+ * Supports icon mark or full brand typography, with light/dark adaptive variants
+ */
+export const SehaLogo = ({
+  size = 34,
+  className = '',
+  withPulse = false,
+  full = false,
+  variant = 'auto',
+  alt = 'Seha SportsMed Platform'
+}) => {
+  const isWhite = variant === 'white';
+  const isDefault = variant === 'default';
+
+  // If variant is auto, render both default and white with Tailwind dark: classes
+  if (variant === 'auto') {
+    return (
+      <div
+        className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
+        style={{
+          width: full ? 'auto' : size,
+          height: size
+        }}
       >
-        <rect x="2" y="2" width="44" height="44" rx="12" fill="var(--primary-600)" />
-        <circle cx="24" cy="24" r="15" stroke="var(--primary-300)" strokeWidth="2.2" />
-        <path
-          d="M11 24h5.5l2.5-6 5 12 3.5-9 2 3H37"
-          stroke="var(--card)"
-          strokeWidth="2.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <img
+          src={full ? '/seha-logo.png' : '/seha-icon.png'}
+          alt={alt}
+          className={`h-full w-auto object-contain transition-transform duration-200 hover:scale-105 dark:hidden`}
+          style={{ maxHeight: size }}
         />
-      </svg>
+        <img
+          src={full ? '/seha-logo-white.png' : '/seha-icon-white.png'}
+          alt={alt}
+          className={`h-full w-auto object-contain transition-transform duration-200 hover:scale-105 hidden dark:block`}
+          style={{ maxHeight: size }}
+        />
+        {withPulse && (
+          <span className="absolute -top-1 -right-1 flex h-3 w-3 pointer-events-none">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0066CC] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#003366]"></span>
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  const src = full
+    ? (isWhite ? '/seha-logo-white.png' : '/seha-logo.png')
+    : (isWhite ? '/seha-icon-white.png' : '/seha-icon.png');
+
+  return (
+    <div
+      className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
+      style={{
+        width: full ? 'auto' : size,
+        height: size
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        className="h-full w-auto object-contain transition-transform duration-200 hover:scale-105"
+        style={{ maxHeight: size }}
+      />
       {withPulse && (
-        <span className="absolute -top-1 -right-1 flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--primary-300)] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-[var(--primary)]"></span>
+        <span className="absolute -top-1 -right-1 flex h-3 w-3 pointer-events-none">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0066CC] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#003366]"></span>
         </span>
       )}
     </div>

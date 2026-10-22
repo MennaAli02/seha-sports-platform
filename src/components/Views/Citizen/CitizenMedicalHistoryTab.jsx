@@ -396,7 +396,7 @@ export const CitizenMedicalHistoryTab = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3 rounded-xl bg-[var(--bg)] border border-[var(--line)] my-3 text-xs">
               <div>
                 <span className="mut text-[11px] block">{L('اسم الرياضي:', 'Athlete:')}</span>
-                <b className="text-[var(--ink)]">{p.name}</b>
+                <b className="text-[var(--ink)]">{isRTL ? p.name : (p.nameEn || p.name)}</b>
               </div>
               <div>
                 <span className="mut text-[11px] block">{L('الرقم القومي:', 'National ID:')}</span>

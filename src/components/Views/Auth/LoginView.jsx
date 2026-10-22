@@ -39,9 +39,19 @@ export const LoginView = ({
   const { toggleTheme, isDark } = useTheme();
 
   // Normalize role
-  const normalizedInitial = initialRole === 'citizen' ? 'athlete' : initialRole;
-  const [selectedRole] = useState(normalizedInitial);
-  const activePersona = mockPersonas[selectedRole] || mockPersonas.athlete;
+  const getNormalizedRole = (r) => {
+    if (r === 'citizen' || r === 'player') return 'athlete';
+    if (r === 'parent') return 'guardian';
+    return r || 'guardian';
+  };
+
+  const [selectedRole, setSelectedRole] = useState(() => getNormalizedRole(initialRole));
+
+  useEffect(() => {
+    setSelectedRole(getNormalizedRole(initialRole));
+  }, [initialRole]);
+
+  const activePersona = mockPersonas[selectedRole] || mockPersonas.guardian;
 
   // Mode: 'login' | 'register'
   const [authMode, setAuthMode] = useState('login');
@@ -73,6 +83,33 @@ export const LoginView = ({
   const [successMessage, setSuccessMessage] = useState(null);
 
   const isSubmitting = localIsSubmitting || externalIsLoggingIn;
+
+  // Localize backend or local error messages according to active language
+  const localizeErrorMessage = (msg) => {
+    if (!msg) return '';
+    if (typeof msg === 'object' && msg.ar && msg.en) {
+      return L(msg.ar, msg.en);
+    }
+    const str = String(msg);
+    if (!isRTL) {
+      if (str.includes('الرقم القومي غير مسجل في المنظومة') || str.includes('الرقم القومي غير مسجل')) {
+        return 'National ID is not registered in the platform. Please verify the number or create a new account.';
+      }
+      if (str.includes('الرقم القومي أو كلمة المرور غير صحيحة') || str.includes('غير صحيحة')) {
+        return 'Invalid credentials. Please verify your National ID and password.';
+      }
+      if (str.includes('البريد الإلكتروني أو كلمة المرور')) {
+        return 'Invalid official email or password.';
+      }
+      if (str.includes('تعذر الاتصال بخادم المنظومة')) {
+        return 'Unable to connect to Seha backend server. Please make sure the server is running.';
+      }
+      if (str.includes('فشل تسجيل الحساب')) {
+        return 'Failed to register new account in backend.';
+      }
+    }
+    return str;
+  };
 
   // Convert Arabic-Indic digits (٠-٩) to standard Western digits (0-9) and strip non-digits
   const normalizeDigits = (val) => {
@@ -442,20 +479,24 @@ export const LoginView = ({
           {(localError || loginError) && (
             <div
               role="alert"
-              className="p-3.5 mb-5 rounded-[14px] bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 flex items-start gap-2.5 text-xs sm:text-sm text-red-700 dark:text-red-300 animate-in fade-in duration-150"
+              className="p-3.5 mb-5 rounded-[14px] bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900 flex items-start gap-2.5 text-xs sm:text-sm text-red-700 dark:text-red-300 animate-in fade-in duration-150 text-start"
             >
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-              <span className="font-semibold leading-relaxed">{localError || loginError}</span>
+              <span className="font-semibold leading-relaxed text-start">
+                {localizeErrorMessage(localError || loginError)}
+              </span>
             </div>
           )}
 
           {successMessage && (
             <div
               role="status"
-              className="p-3.5 mb-5 rounded-[14px] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-900 flex items-start gap-2.5 text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 animate-in fade-in duration-150"
+              className="p-3.5 mb-5 rounded-[14px] bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-900 flex items-start gap-2.5 text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 animate-in fade-in duration-150 text-start"
             >
               <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-              <span className="font-semibold leading-relaxed">{successMessage}</span>
+              <span className="font-semibold leading-relaxed text-start">
+                {localizeErrorMessage(successMessage)}
+              </span>
             </div>
           )}
 
@@ -506,7 +547,7 @@ export const LoginView = ({
                       selectedRole === 'super_admin'
                         ? 'admin@seha.gov.eg'
                         : selectedRole === 'guardian'
-                        ? '28005120104829'
+                        ? '27501010104829'
                         : '30408150104829'
                     }
                     required
@@ -633,6 +674,36 @@ export const LoginView = ({
                   </>
                 )}
               </button>
+
+              {/* Quick Demo Fill Helper */}
+              <div className="pt-1 flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedRole === 'guardian') {
+                      setIdentifier('27501010104829');
+                      setPassword('parent2026');
+                    } else if (selectedRole === 'athlete') {
+                      setIdentifier('30408150104829');
+                      setPassword('athlete2026');
+                    } else {
+                      setIdentifier('admin@seha.gov.eg');
+                      setPassword('admin2026');
+                    }
+                  }}
+                  className="text-xs px-3 py-1.5 rounded-full bg-[#EEF3F8] dark:bg-[#162E4F] hover:bg-[#E0EBF7] dark:hover:bg-[#1E3F6F] border border-[#CBD5E1] dark:border-[#274D7E] text-[#003366] dark:text-[#ABC7E8] font-bold cursor-pointer transition-all flex items-center gap-1.5"
+                  title={L('تعبئة بيانات الحساب التجريبي المعتمد تلقائيًا', 'Auto-fill demo credentials')}
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#16845B]" />
+                  <span>
+                    {selectedRole === 'guardian'
+                      ? L('تعبئة تجريبية لولي الأمر: 27501010104829 / parent2026', 'Fill Demo Guardian: 27501010104829 / parent2026')
+                      : selectedRole === 'athlete'
+                      ? L('تعبئة تجريبية للرياضي: 30408150104829 / athlete2026', 'Fill Demo Athlete: 30408150104829 / athlete2026')
+                      : L('تعبئة تجريبية للمسؤول: admin@seha.gov.eg / admin2026', 'Fill Demo Admin: admin@seha.gov.eg / admin2026')}
+                  </span>
+                </button>
+              </div>
             </form>
           ) : (
             /* ================= REGISTRATION FORM ================= */

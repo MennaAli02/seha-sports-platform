@@ -6,6 +6,7 @@ import odoo
 from odoo import http, _
 from odoo.http import request
 from odoo.addons.web.controllers.utils import ensure_db
+from odoo.addons.web.controllers.home import Home
 
 _logger = logging.getLogger(__name__)
 
@@ -61,7 +62,7 @@ class SehaApiController(http.Controller):
     # -------------------------------------------------------------------------
     # Helper: Resolve Active Role and Record
     # -------------------------------------------------------------------------
-    def _resolve_user_context(self, user):
+    def _resolve_user_context(self, user, role_hint=None):
         """Identifies roles and attached records for the authenticated user."""
         env = request.env(user=user)
         is_admin = user.has_group('seha_sports_platform.group_seha_admin')
@@ -87,7 +88,15 @@ class SehaApiController(http.Controller):
         if player:
             roles.append('athlete')
 
-        primary_role = roles[0] if roles else 'citizen'
+        if role_hint in ('guardian', 'parent') and parent:
+            primary_role = 'guardian'
+        elif role_hint in ('athlete', 'citizen', 'player') and player:
+            primary_role = 'athlete'
+        elif role_hint == 'super_admin' and is_admin:
+            primary_role = 'super_admin'
+        else:
+            primary_role = roles[0] if roles else 'citizen'
+
         return {
             'user': user,
             'roles': roles,
@@ -116,7 +125,11 @@ class SehaApiController(http.Controller):
 
         login = (data.get('login') or data.get('identifier') or '').strip()
         password = (data.get('password') or '').strip()
-        role_hint = data.get('role')
+        role_hint = (data.get('role') or '').strip().lower()
+        if role_hint in ('parent',):
+            role_hint = 'guardian'
+        elif role_hint in ('player', 'citizen'):
+            role_hint = 'athlete'
 
         if not login or not password:
             return error_response(_("Login identifier and password are required."), status=400, error_code='MISSING_CREDENTIALS')
@@ -137,6 +150,10 @@ class SehaApiController(http.Controller):
             # Query player and parent by national ID
             player = request.env['seha.player'].sudo().search([('national_id', '=', clean_nid)], limit=1)
             parent = request.env['seha.parent'].sudo().search([('national_id', '=', clean_nid)], limit=1)
+
+            # If user selected guardian/parent role but entered child's NID, resolve parent
+            if role_hint == 'guardian' and not parent and player and player.parent_ids:
+                parent = player.parent_ids[0]
 
             # Strict Backend Integrity Check: Must exist in database
             if not player and not parent:
@@ -208,14 +225,14 @@ class SehaApiController(http.Controller):
             )
 
         user = request.env['res.users'].sudo().browse(uid)
-        ctx = self._resolve_user_context(user)
+        ctx = self._resolve_user_context(user, role_hint=role_hint)
 
         res_data = {
             'session_id': request.session.sid,
             'user_id': user.id,
             'name': user.name,
             'email': user.email or user.login,
-            'national_id': clean_nid if len(clean_nid) == 14 else (ctx['player'].national_id if ctx['player'] else (ctx['parent'].national_id if ctx['parent'] else None)),
+            'national_id': clean_nid if len(clean_nid) == 14 else (ctx['parent'].national_id if ctx['parent'] else (ctx['player'].national_id if ctx['player'] else None)),
             'roles': ctx['roles'],
             'primary_role': ctx['primary_role'],
             'athlete': {
@@ -229,6 +246,14 @@ class SehaApiController(http.Controller):
                 'code': ctx['parent'].code,
                 'name': ctx['parent'].name,
                 'national_id': ctx['parent'].national_id,
+                'children': [{
+                    'id': ch.id,
+                    'code': ch.code,
+                    'name': ch.name,
+                    'national_id': ch.national_id,
+                    'sport': ch.sport_id.name if ch.sport_id else 'كرة القدم',
+                    'age': getattr(ch, 'age', 16),
+                } for ch in ctx['parent'].player_ids] if ctx['parent'] and hasattr(ctx['parent'], 'player_ids') else []
             } if ctx['parent'] else None,
         }
         return json_response(res_data)
@@ -658,3 +683,14 @@ class SehaApiController(http.Controller):
             'decree': cert.decree_reference,
             'verification_timestamp': date.today().isoformat(),
         })
+
+
+class SehaWebLoginController(Home):
+    """
+    Ensure /web/login does not crash with 'Session expired (invalid CSRF token)'
+    when browser tabs are restored, cookies expire, or containers are restarted.
+    """
+    @http.route('/web/login', type='http', auth='none', readonly=False, csrf=False)
+    def web_login(self, *args, **kw):
+        return super().web_login(*args, **kw)
+

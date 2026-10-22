@@ -36,6 +36,8 @@ export const CitizenFamilyTab = () => {
     showToast,
     connectExistingChild,
     registerNewChild,
+    currentUser,
+    userRole,
     SP_EN,
     GOV_EN
   } = useSeha();
@@ -186,118 +188,77 @@ export const CitizenFamilyTab = () => {
         />
       </div>
 
-      {/* Active Child Spotlight Card */}
-      <div className="card bg-gradient-to-r from-[var(--primary-50)] via-[var(--card)] to-[var(--card)] border-2 border-[var(--primary)]">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          
-          <div className="flex items-start gap-3.5">
-            <div className="w-14 h-14 rounded-2xl bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xl shadow-md shrink-0 mt-0.5">
-              {currentChild.name.charAt(0)}
+      {/* Parent Master Account Card (Identity Hero) */}
+      <div className="card bg-gradient-to-r from-[var(--primary-50)] via-[var(--card)] to-[var(--card)] border-2 border-[var(--primary)] shadow-sm">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-[var(--primary)] text-white flex items-center justify-center font-bold text-2xl shadow-md shrink-0 mt-0.5">
+              {currentUser?.avatarLetter || 'ي'}
             </div>
 
             <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[var(--primary)] text-white">
-                  {L('الملف النشط حاليًا', 'Active Athlete Context')}
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--primary)] text-white font-bold">
+                  {L('حساب ولي الأمر الأساسي (حساب عائلي)', 'Primary Parent / Guardian Account')}
+                </span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  {L('ولاية أسرية موثقة ومعتمدة', 'Verified Legal Custody')}
                 </span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--line)] text-[var(--muted)] font-semibold">
-                  {currentChild.rel?.ar || L('الابن', 'Child')}
+                  {L('الحساب الرئيسي لرب الأسرة', 'Head of Household Profile')}
                 </span>
-                {currentChild.verificationStatus === 'pending' ? (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-bold border border-amber-200 flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {L('قيد التحقق', 'Pending')}
-                  </span>
-                ) : (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" />
-                    {L('موثق رسميًا', 'Verified')}
-                  </span>
-                )}
               </div>
 
-              <h2 className="text-base sm:text-lg font-bold text-[var(--ink)] mt-1 mb-0.5">
-                {currentChild.name}
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[var(--ink)] m-0 leading-tight">
+                {isRTL ? (currentUser?.name || 'يوسف عبدالله السيد') : (currentUser?.nameEn || 'Youssef Abdullah El-Sayed')}
               </h2>
 
-              <p className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-                <span className="font-semibold text-[var(--ink)]">
-                  {isRTL ? cfg.sports[currentChild.sp] : SP_EN[cfg.sports[currentChild.sp]] || cfg.sports[currentChild.sp]}
+              <div className="flex flex-wrap items-center gap-2.5 text-xs text-[var(--muted)] mt-2">
+                <span className="inline-flex items-center gap-1 font-semibold text-[var(--ink)]">
+                  <span>{L('الرقم القومي لولي الأمر:', 'Guardian NID:')}</span>
+                  <b className="mono text-[var(--primary-700)]">{currentUser?.nationalId || '27501010104829'}</b>
                 </span>
                 <span>·</span>
-                <span>{currentChild.age} {L('سنة', 'years')}</span>
+                <span className="inline-flex items-center gap-1">
+                  <span>{L('الأبناء المرتبطون:', 'Connected Children:')}</span>
+                  <b className="text-[var(--ink)] font-bold">{familyChildren.length} {L('أبناء (أحمد يوسف، مريم أحمد)', 'Children (Ahmed & Maryam)')}</b>
+                </span>
                 <span>·</span>
-                <span className="mono">{currentChild.nid}</span>
+                <span>{currentUser?.email || 'guardian@seha.gov.eg'}</span>
                 <span>·</span>
-                <span>{L('رقم الشهادة:', 'Cert:')} <b className="mono text-[var(--primary-700)]">{currentChild.ct}</b></span>
-              </p>
+                <span className="mono">{currentUser?.phone || '01012345678'}</span>
+              </div>
             </div>
           </div>
 
-          {/* Quick Nav Actions for the Selected Child */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 lg:pt-0 border-t lg:border-t-0 border-[var(--line)]">
-            <button
-              type="button"
-              className="btn sm"
-              onClick={() => navigate('citizen-home')}
-              title={L('الانتقال للرئيسية والملف الطبي', 'Go to athlete dashboard')}
-            >
-              <Activity className="w-4 h-4" />
-              <span>{L('الرئيسية والملف', 'Dashboard')}</span>
-            </button>
-
-            <button
-              type="button"
-              className="btn sec sm"
-              onClick={() => navigate('citizen-bookings')}
-              title={L('حجز فحص طبي جديد لهذا الابن', 'Book medical exam')}
-            >
-              <Calendar className="w-4 h-4" />
-              <span>{L('حجز كشف طبي', 'Book Exam')}</span>
-            </button>
-
-            <button
-              type="button"
-              className="btn sec sm"
-              onClick={() => navigate('citizen-history')}
-              title={L('استعراض السجل الطبي الكامل', 'View medical history')}
-            >
-              <HeartPulse className="w-4 h-4" />
-              <span>{L('السجل الطبي', 'Medical History')}</span>
-            </button>
-
-            <button
-              type="button"
-              className="btn sec sm"
-              onClick={() => navigate('citizen-certs')}
-              title={L('عرض الشهادات المعتمدة', 'View certificates')}
-            >
-              <Award className="w-4 h-4" />
-              <span>{L('الشهادات', 'Certificates')}</span>
-            </button>
+          <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-[var(--line)] w-full md:w-auto justify-end">
+            <span className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white dark:bg-[#1B355A] border border-[var(--line)] text-[var(--ink)] flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-[var(--primary)]" />
+              <span>{L('الابن النشط حاليًا:', 'Active Son:')} <b className="text-[var(--primary)]">{currentChild?.name}</b></span>
+            </span>
           </div>
-
         </div>
       </div>
 
       {/* Grid of All Connected Children */}
       <div className="card">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between" style={{ marginBottom: '10px' }}>
           <div>
-            <h3 className="m-0">
+            <h3 className="m-0 text-base sm:text-lg font-bold text-[var(--ink)]">
               <span className="d"></span>
-              {L('قائمة الأبناء والرياضيين التابعين في حسابك', 'Connected Family Athlete Profiles')}
+              {L('حسابات الأبناء التابعين لولي الأمر (2 أبناء)', 'Connected Sons / Children Accounts (2 Profiles)')}
             </h3>
-            <p className="text-xs text-[var(--muted)] mt-0.5">
+            <p className="text-xs text-[var(--muted)] mt-0.5" style={{ marginBottom: '10px' }}>
               {L(
-                'اختر أي ابن لتعيينه كملف نشط أو للبدء في إجراءات الفحص الطبي واستخراج الشهادات له.',
-                'Select any child to set as active or start booking medical examinations.'
+                'اضغط على أي بطاقة أو زر لتعيين الابن كملف نشط للمنظومة، أو للانتقال المباشر للوحته الفردية أو حجز الفحص الطبي له.',
+                'Select any son to set as active or open individual athlete dashboard & bookings.'
               )}
             </p>
           </div>
 
-          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-[var(--primary-50)] text-[var(--primary)] border border-[var(--line)]">
-            {familyChildren.length} {L('ملفات عائلية', 'Profiles')}
+          <span className="text-xs font-bold px-3 py-1 rounded-lg bg-[var(--primary-50)] text-[var(--primary)] border border-[var(--primary-100)]">
+            {familyChildren.length} {L('أبناء مسجلون بالحساب', 'Registered Sons')}
           </span>
         </div>
 
@@ -331,16 +292,16 @@ export const CitizenFamilyTab = () => {
                       <div>
                         <div className="flex items-center gap-1.5">
                           <h4 className="font-bold text-sm text-[var(--ink)] m-0 leading-tight">
-                            {child.name}
+                            {isRTL ? child.name : (child.nameEn || child.name)}
                           </h4>
                           {isActive && (
                             <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[var(--primary)] text-white font-bold">
-                              {L('النشط', 'Active')}
+                              {L('النشط حاليًا', 'Active')}
                             </span>
                           )}
                         </div>
                         <span className="text-[11px] text-[var(--muted)] block mt-0.5">
-                          {child.rel?.ar || L('ابن', 'Son')} · {child.age} {L('سنة', 'years')}
+                          {(isRTL ? child.rel?.ar : child.rel?.en) || L('ابن', 'Son')} · {child.age} {L('سنة', 'years')}
                         </span>
                       </div>
                     </div>
@@ -355,7 +316,7 @@ export const CitizenFamilyTab = () => {
                       ) : (
                         <span className="tag tg text-[10px] font-bold" title={L('تم التحقق والتأكيد رسميًا', 'Formally verified')}>
                           <CheckCircle2 className="w-3 h-3" />
-                          <span>{L('موثق', 'Verified')}</span>
+                          <span>{L('موثق رسميًا', 'Verified')}</span>
                         </span>
                       )}
                     </div>
@@ -389,16 +350,17 @@ export const CitizenFamilyTab = () => {
                   {isActive ? (
                     <div className="flex items-center gap-1.5 text-xs text-[var(--primary-700)] font-bold">
                       <UserCheck className="w-4 h-4 text-[#16845B]" />
-                      <span>{L('الملف النشط حاليًا للمنظومة', 'Currently selected context')}</span>
+                      <span>{L('الملف النشط حاليًا للمنظومة', 'Currently active profile')}</span>
                     </div>
                   ) : (
                     <button
                       type="button"
                       className="btn sm"
                       onClick={() => handleSelectChild(actualIndex)}
+                      title={L('تعيين كملف نشط للمنظومة', 'Switch to this son')}
                     >
                       <UserCheck className="w-3.5 h-3.5" />
-                      <span>{L('تعيين كملف نشط', 'Set as Active')}</span>
+                      <span>{L('تعيين كالابن النشط', 'Set as Active')}</span>
                     </button>
                   )}
 
@@ -406,28 +368,29 @@ export const CitizenFamilyTab = () => {
                     <button
                       type="button"
                       className="btn sec sm"
-                      onClick={() => handleOpenChildService(actualIndex, 'citizen-bookings')}
-                      title={L('حجز كشف طبي', 'Book Exam')}
+                      onClick={() => handleOpenChildService(actualIndex, 'citizen-home')}
+                      title={L('لوحة تحكم الابن (الرئيسية)', 'Open son dashboard')}
                     >
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span className="hidden xs:inline">{L('حجز كشف', 'Book')}</span>
+                      <Activity className="w-3.5 h-3.5" />
+                      <span>{L('لوحة الابن', 'Dashboard')}</span>
                     </button>
                     <button
                       type="button"
                       className="btn sec sm"
-                      onClick={() => handleOpenChildService(actualIndex, 'citizen-history')}
-                      title={L('السجل الطبي', 'Medical History')}
+                      onClick={() => handleOpenChildService(actualIndex, 'citizen-bookings')}
+                      title={L('حجز كشف طبي', 'Book Exam')}
                     >
-                      <HeartPulse className="w-3.5 h-3.5" />
-                      <span className="hidden xs:inline">{L('السجل', 'History')}</span>
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{L('حجز كشف', 'Book')}</span>
                     </button>
                     <button
                       type="button"
-                      className="btn ghost sm"
-                      onClick={() => handleOpenChildService(actualIndex, 'citizen-home')}
-                      title={L('فتح الملف الشخصي', 'View Profile')}
+                      className="btn sec sm"
+                      onClick={() => handleOpenChildService(actualIndex, 'citizen-certs')}
+                      title={L('الشهادات الطبية', 'Certificates')}
                     >
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <Award className="w-3.5 h-3.5" />
+                      <span>{L('الشهادات', 'Certs')}</span>
                     </button>
                   </div>
                 </div>

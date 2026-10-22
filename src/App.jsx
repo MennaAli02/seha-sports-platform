@@ -51,7 +51,8 @@ export default function App() {
       return (
         <div className="min-h-screen w-full overflow-y-auto">
           <LoginView
-            initialRole={userRole || 'athlete'}
+            key={userRole || 'role-login'}
+            initialRole={userRole || 'guardian'}
             onLogin={(role, creds) => {
               login(role, creds);
             }}
@@ -114,7 +115,10 @@ export default function App() {
       case 'setup':
         return <PlatformSetupView />;
       default:
-        return (userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian') ? (
+        if (userRole === 'guardian') {
+          return <CitizenPortalView activeRoute="citizen-family" />;
+        }
+        return (userRole === 'citizen' || userRole === 'athlete') ? (
           <CitizenPortalView activeRoute="citizen-home" />
         ) : (
           <DashboardView />
@@ -133,7 +137,7 @@ export default function App() {
           onOpenHelp={() => setIsHelpOpen(true)}
         />
         <main id="main">
-          <ErrorBoundary onNavigateHome={() => navigate(isCitizenRole ? 'citizen-home' : 'dash')}>
+          <ErrorBoundary onNavigateHome={() => navigate(userRole === 'guardian' ? 'citizen-family' : (isCitizenRole ? 'citizen-home' : 'dash'))}>
             <div className="page-container">
               {renderActiveView()}
             </div>

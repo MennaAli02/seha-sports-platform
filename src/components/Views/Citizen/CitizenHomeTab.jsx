@@ -78,7 +78,7 @@ export const CitizenHomeTab = () => {
             {/* Row 2: Athlete Name Row (12px to chips) */}
             <div className="flex flex-wrap items-baseline gap-[var(--space-3)] mb-[var(--space-3)]">
               <h1 className="m-0 text-2xl sm:text-3xl font-extrabold text-[var(--ink)] tracking-tight leading-tight">
-                {p.name}
+                {isRTL ? p.name : (p.nameEn || p.name)}
               </h1>
               {p.rel && (
                 <span className="text-xs px-3 py-1 rounded-full bg-[var(--primary-100)] text-[var(--primary-700)] font-bold">
@@ -117,7 +117,7 @@ export const CitizenHomeTab = () => {
               {p.gd && (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[var(--primary-50)] border border-[var(--primary-100)] font-bold text-[var(--primary-700)] dark:text-[#ABC7E8]">
                   <Users className="w-3.5 h-3.5 text-[var(--primary)]" />
-                  <span>{L('ولي الأمر المسؤول:', 'Guardian:')} {p.gd}</span>
+                  <span>{L('ولي الأمر المسؤول:', 'Guardian:')} {isRTL ? p.gd : (p.gdEn || p.gd)}</span>
                 </span>
               )}
             </div>

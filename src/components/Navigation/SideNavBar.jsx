@@ -45,10 +45,16 @@ export const SideNavBar = () => {
       ]
     },
     {
-      title: ['المواطن', 'Citizen'],
-      routes: [
-        { k: 'citizen-home', ic: 'home', t: ['الرئيسية', 'Home'] },
-        ...(userRole === 'guardian' ? [{ k: 'citizen-family', ic: 'club', t: ['إدارة العائلة', 'Family Hub'] }] : []),
+      title: userRole === 'guardian' ? ['حساب ولي الأمر (عائلي)', 'Guardian Account'] : ['المواطن', 'Citizen'],
+      routes: userRole === 'guardian' ? [
+        { k: 'citizen-family', ic: 'club', t: ['إدارة ملفات الأبناء', 'Children Profiles'] },
+        { k: 'citizen-home', ic: 'home', t: ['لوحة الابن النشط', 'Active Son Dashboard'] },
+        { k: 'citizen-bookings', ic: 'cal', t: ['حجز كشوفات الأبناء', 'Bookings'] },
+        { k: 'citizen-certs', ic: 'cert', t: ['شهادات الأبناء', 'Certificates'] },
+        { k: 'citizen-history', ic: 'steth', t: ['السجل الطبي للأبناء', 'Medical History'] },
+        { k: 'citizen-consents', ic: 'shield', t: ['موافقات الأبناء', 'Consents'] }
+      ] : [
+        { k: 'citizen-home', ic: 'home', t: ['الرئيسية والملف', 'Home'] },
         { k: 'citizen-bookings', ic: 'cal', t: ['حجز كشف', 'Bookings'] },
         { k: 'citizen-certs', ic: 'cert', t: ['الشهادات', 'Certificates'] },
         { k: 'citizen-history', ic: 'steth', t: ['السجل الطبي', 'Medical History'] },
@@ -77,7 +83,7 @@ export const SideNavBar = () => {
   const isCitizenRole = userRole === 'citizen' || userRole === 'athlete' || userRole === 'guardian';
 
   const visibleSections = isCitizenRole
-    ? sections.filter(sec => sec.title[1] === 'Citizen')
+    ? sections.filter(sec => sec.title[1] === 'Citizen' || sec.title[1] === 'Guardian Account')
     : sections;
 
   return (
@@ -110,12 +116,18 @@ export const SideNavBar = () => {
 
           {sidebarExpanded && (
             <div
-              onClick={() => handleNavClick(isCitizenRole ? 'citizen-home' : 'dash')}
+              onClick={() => handleNavClick(userRole === 'guardian' ? 'citizen-family' : (isCitizenRole ? 'citizen-home' : 'dash'))}
               className="side-brand cursor-pointer group"
               title={L(cfg.org.ar, cfg.org.en)}
             >
               <div className="side-logo shrink-0">
-                {LOGO_SVG}
+                <div className="w-[32px] h-[32px] rounded-lg bg-white flex items-center justify-center p-0.5 shadow-xs transition-transform group-hover:scale-105">
+                  <img
+                    src="/seha-icon.png"
+                    alt="Seha"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
               <div className="side-brand-text min-w-0 flex-1">
                 <b className="block leading-tight text-[13px] font-bold text-white">{L(cfg.org.ar, cfg.org.en)}</b>

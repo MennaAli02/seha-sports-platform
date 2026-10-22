@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useSeha } from '../../context/SehaContext';
-import { SP_EN } from '../../data/mockData';
+import { SP_EN, getPlayerName, getGuardianName, getRelationshipLabel } from '../../data/mockData';
 import {
   UserCheck,
   ChevronDown,
@@ -24,6 +24,7 @@ export const PlayerProfileSwitcher = () => {
     cfg,
     showToast,
     userRole,
+    currentUser,
     navigate
   } = useSeha();
 
@@ -58,12 +59,12 @@ export const PlayerProfileSwitcher = () => {
     setSelectedPlayerIndex(idx);
     setIsOpen(false);
     const selected = players[idx];
-    const relText = selected.rel ? L(selected.rel.ar, selected.rel.en) : L('لاعب', 'Athlete');
-    showToast(
-      isRTL
-        ? `تم التبديل إلى ملف: ${selected.name} (${relText})`
-        : `Switched to profile: ${selected.name} (${relText})`
-    );
+    if (selected) {
+      showToast({
+        ar: `تم التبديل إلى ملف: ${getPlayerName(selected, true)} (${getRelationshipLabel(selected, true)})`,
+        en: `Switched profile to: ${getPlayerName(selected, false)} (${getRelationshipLabel(selected, false)})`
+      });
+    }
   };
 
   const handleAddDependent = (e) => {
@@ -148,7 +149,7 @@ export const PlayerProfileSwitcher = () => {
           {userRole === 'guardian' ? (
             <>
               <Users className="w-4 h-4 stroke-[2.2]" />
-              <span>{L('الابن النشط:', 'Child:')}</span>
+              <span>{L('تبديل الابن:', 'Switch Son:')}</span>
             </>
           ) : (
             <>
@@ -159,9 +160,9 @@ export const PlayerProfileSwitcher = () => {
         </div>
 
         <div className="flex items-center gap-1.5 min-w-0 max-w-[200px] xs:max-w-[260px] sm:max-w-[320px]">
-          <bdi className="text-xs sm:text-sm font-bold text-[#0D2444] dark:text-white truncate">
-            {currentPlayer?.name}
-          </bdi>
+          <span className="text-xs sm:text-sm font-bold text-[#0D2444] dark:text-white truncate">
+            {getPlayerName(currentPlayer, isRTL)}
+          </span>
           <span className="text-[11px] font-medium text-[#4A607A] dark:text-[#94B0D0] shrink-0" dir="ltr">
             ({currentPlayer?.age} {L('سنة', 'y')})
           </span>
@@ -182,142 +183,293 @@ export const PlayerProfileSwitcher = () => {
           } z-50 w-[320px] xs:w-[360px] sm:w-[400px] max-w-[calc(100vw-24px)] rounded-2xl bg-[var(--card)] border border-[var(--line)] shadow-xl p-3 text-start animate-in fade-in zoom-in-95 duration-150`}
         >
           {/* Menu Header */}
-          <div className="p-2 pb-2.5 mb-2 border-b border-[var(--line)]">
+          <div className="p-2 pb-[10px] mb-[10px] border-b border-[var(--line)]">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 font-bold text-xs text-[var(--ink)] min-w-0">
                 <Users className="w-4 h-4 text-[var(--primary)] shrink-0" />
-                <span className="truncate">{L('الملفات العائلية المرتبطة', 'Connected Family Profiles')}</span>
+                <span className="truncate">
+                  {userRole === 'guardian'
+                    ? L('ملفات الأبناء المرتبطين بحسابك', 'Connected Sons & Family Profiles')
+                    : L('الملفات العائلية المرتبطة', 'Connected Family Profiles')}
+                </span>
               </div>
               <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[var(--primary-50)] text-[var(--primary)] font-bold whitespace-nowrap shrink-0 border border-[var(--primary-100)]">
-                {players.length} {L('ملفات', 'Profiles')}
+                {players.length} {L('أبناء', 'Profiles')}
               </span>
             </div>
-            <p className="text-[11px] text-[var(--muted)] mt-1 leading-snug">
-              {L(
-                'اختر الملف الرياضي لإظهار شهاداته وحجوزاته وموافقاته الموثقة.',
-                'Select profile to view verified certificates, bookings, and consents.'
-              )}
+            <p className="text-[11px] text-[var(--muted)] mt-[10px] leading-snug">
+              {userRole === 'guardian'
+                ? L(
+                    'اختر أحد الأبناء للتبديل إليه واستعراض شهاداته وحجوزاته وسجله الطبي.',
+                    'Select a connected son or child to manage appointments, certificates, and medical history.'
+                  )
+                : L(
+                    'اختر الملف الرياضي لإظهار شهاداته وحجوزاته وموافقاته الموثقة.',
+                    'Select profile to view verified certificates, bookings, and consents.'
+                  )}
             </p>
           </div>
 
-          <div className="max-h-72 overflow-y-auto flex flex-col gap-[10px] pr-0.5">
-            {/* Primary Profile */}
-            {primaryPlayer && (
-              <div>
-                <div className="text-[10px] font-bold text-[var(--muted)] px-2 pb-1.5 uppercase tracking-wider">
-                  {L('الحساب الرئيسي', 'Primary Profile')}
-                </div>
-                <div
-                  onClick={() => handleSelect(0)}
-                  className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
-                    selectedPlayerIndex === 0
-                      ? 'bg-[var(--primary-50)] border-2 border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold shadow-xs'
-                      : 'hover:bg-[var(--primary-50)]/60 border border-[var(--line)] text-[var(--ink)]'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <div className="max-h-80 overflow-y-auto flex flex-col gap-[10px] pr-0.5">
+            {userRole === 'guardian' ? (
+              /* GUARDIAN / PARENT VIEW: Clearly shows Parent Account Identity + Connected Sons */
+              <div className="flex flex-col gap-[10px]">
+                {/* Parent Profile Identity Box */}
+                <div className="p-2.5 rounded-xl bg-gradient-to-r from-[var(--primary-50)] to-transparent border border-[var(--primary-100)] flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div className="w-8 h-8 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                      {primaryPlayer?.name?.charAt(0) || 'أ'}
+                      {isRTL ? (currentUser?.avatarLetter || 'ي') : 'Y'}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <bdi className="text-xs font-bold truncate text-[var(--ink)]">{primaryPlayer?.name}</bdi>
-                        <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[#16845B]/15 text-[#16845B] font-bold whitespace-nowrap">
-                          {L('الأساسي', 'Main')}
-                        </span>
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-[var(--ink)] truncate">
+                        {getGuardianName(currentUser, isRTL)}
                       </div>
-                      <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-0.5">
-                        <bdi className="font-semibold text-[var(--ink)]">{getSportName(primaryPlayer?.sp)}</bdi>
-                        <span className="opacity-40">·</span>
-                        <span>{primaryPlayer?.age} {L('سنة', 'years')}</span>
+                      <div className="text-[10px] text-[var(--primary-700)] font-semibold flex items-center gap-1 mt-0.5">
+                        <ShieldCheck className="w-3 h-3 text-[#16845B]" />
+                        <span>{L('حساب ولي الأمر (حساب عائلي)', 'Parent Account (Family Hub)')}</span>
                       </div>
                     </div>
                   </div>
-                  {selectedPlayerIndex === 0 && (
-                    <Check className="w-4 h-4 text-[#16845B] stroke-[2.5] shrink-0" />
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => { setIsOpen(false); navigate('citizen-family'); }}
+                    className="text-[10.5px] font-bold text-[var(--primary)] hover:underline whitespace-nowrap px-2.5 py-1 rounded-lg bg-white dark:bg-[#1B355A] border border-[var(--line)] shadow-xs"
+                  >
+                    {L('إدارة العائلة', 'Family Hub')}
+                  </button>
+                </div>
+
+                {/* Connected Sons & Children Accounts */}
+                <div>
+                  <div className="text-[10px] font-bold text-[var(--muted)] px-1 mb-[10px] uppercase tracking-wider flex items-center justify-between">
+                    <span>{L('الأبناء المسجلون في حسابك', 'Connected Sons / Children')}</span>
+                    <span className="text-[10px] font-bold text-[var(--primary)]">
+                      {players.length} {L('أبناء', 'Profiles')}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col gap-[10px]">
+                    {players.map((child, idx) => {
+                      const isSelected = selectedPlayerIndex === idx;
+                      return (
+                        <div
+                          key={child.id || idx}
+                          onClick={() => handleSelect(idx)}
+                          className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
+                            isSelected
+                              ? 'bg-[var(--primary-50)] border-2 border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold shadow-xs ring-1 ring-[var(--primary)]/20'
+                              : 'hover:bg-[var(--primary-50)]/60 border border-[var(--line)] text-[var(--ink)]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 shadow-xs ${
+                              isSelected
+                                ? 'bg-[var(--primary)] text-white'
+                                : 'bg-[#0066CC]/15 text-[#0066CC] dark:text-[#ABC7E8]'
+                            }`}>
+                              {getPlayerName(child, isRTL).charAt(0)}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-xs font-bold truncate text-[var(--ink)]">
+                                  {getPlayerName(child, isRTL)}
+                                </span>
+                                <span className={`text-[9.5px] px-1.5 py-0.2 rounded font-bold whitespace-nowrap ${
+                                  isSelected
+                                    ? 'bg-[#16845B]/15 text-[#16845B]'
+                                    : 'bg-[var(--line)] text-[var(--muted)]'
+                                }`}>
+                                  {getRelationshipLabel(child, isRTL)}
+                                </span>
+                              </div>
+                              <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-1">
+                                <span className="font-semibold text-[var(--ink)]">{getSportName(child?.sp)}</span>
+                                <span className="opacity-40">·</span>
+                                <span>{child?.age} {L('سنة', 'years')}</span>
+                                <span className="opacity-40">·</span>
+                                <span className="mono text-[10px]">{child.nid}</span>
+                              </div>
+                            </div>
+                          </div>
+                          {isSelected && (
+                            <Check className="w-4 h-4 text-[#16845B] stroke-[2.5] shrink-0" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            )}
-
-            {/* Family Dependents */}
-            {familyDependents.length > 0 && (
-              <div className="pt-1 flex flex-col gap-[10px]">
-                <div className="text-[10px] font-bold text-[var(--muted)] px-2 pb-1 uppercase tracking-wider flex items-center justify-between gap-2">
-                  <span className="whitespace-nowrap">{L('التابعون وأفراد العائلة', 'Family Dependents')}</span>
-                  <span className="text-[10px] text-[var(--primary)] font-semibold whitespace-nowrap">
-                    {L('تحت ولاية الحساب', 'Under Guardianship')}
-                  </span>
-                </div>
-                {familyDependents.map((pl) => {
-                  const actualIdx = players.findIndex((p) => p.id === pl.id);
-                  const isCurrent = selectedPlayerIndex === actualIdx;
-                  return (
+            ) : (
+              /* ATHLETE VIEW: Primary Profile + Dependents */
+              <div className="flex flex-col gap-[10px]">
+                {primaryPlayer && (
+                  <div>
+                    <div className="text-[10px] font-bold text-[var(--muted)] px-2 mb-[10px] uppercase tracking-wider">
+                      {L('الحساب الرئيسي', 'Primary Profile')}
+                    </div>
                     <div
-                      key={pl.id || actualIdx}
-                      onClick={() => handleSelect(actualIdx)}
+                      onClick={() => handleSelect(0)}
                       className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
-                        isCurrent
+                        selectedPlayerIndex === 0
                           ? 'bg-[var(--primary-50)] border-2 border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold shadow-xs'
                           : 'hover:bg-[var(--primary-50)]/60 border border-[var(--line)] text-[var(--ink)]'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                        <div className="w-8 h-8 rounded-lg bg-[#0066CC]/15 text-[#0066CC] dark:text-[#ABC7E8] flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                          {pl?.name?.charAt(0) || 'أ'}
+                        <div className="w-8 h-8 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                          {getPlayerName(primaryPlayer, isRTL).charAt(0)}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5">
-                            <bdi className="text-xs font-bold truncate text-[var(--ink)]">{pl?.name}</bdi>
-                            <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[var(--line)] text-[var(--muted)] whitespace-nowrap">
-                              {pl.rel ? L(pl.rel.ar, pl.rel.en) : L('تابع', 'Dependent')}
+                            <span className="text-xs font-bold truncate text-[var(--ink)]">
+                              {getPlayerName(primaryPlayer, isRTL)}
+                            </span>
+                            <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[#16845B]/15 text-[#16845B] font-bold whitespace-nowrap">
+                              {L('الأساسي', 'Main')}
                             </span>
                           </div>
-                          <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-0.5">
-                            <bdi className="font-semibold text-[var(--ink)]">{getSportName(pl?.sp)}</bdi>
+                          <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-1">
+                            <span className="font-semibold text-[var(--ink)]">{getSportName(primaryPlayer?.sp)}</span>
                             <span className="opacity-40">·</span>
-                            <span>{pl?.age} {L('سنة', 'years')}</span>
+                            <span>{primaryPlayer?.age} {L('سنة', 'years')}</span>
                           </div>
                         </div>
                       </div>
-                      {isCurrent && (
+                      {selectedPlayerIndex === 0 && (
                         <Check className="w-4 h-4 text-[#16845B] stroke-[2.5] shrink-0" />
                       )}
                     </div>
-                  );
-                })}
+                  </div>
+                )}
+
+                {/* Connected Parent Account (Under Guardianship) */}
+                <div className="flex flex-col gap-[10px]">
+                  <div className="text-[10px] font-bold text-[var(--muted)] px-2 uppercase tracking-wider flex items-center justify-between gap-2">
+                    <span className="whitespace-nowrap">{L('حساب ولي الأمر المرتبط', 'Parent Account')}</span>
+                    <span className="text-[10px] text-[var(--primary)] font-bold whitespace-nowrap flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-[#16845B]" />
+                      {L('تحت الولاية القانونية', 'Under Guardianship')}
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-gradient-to-r from-[var(--primary-50)]/70 to-transparent border border-[var(--primary-100)] flex items-center justify-between select-none">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-[var(--primary)] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                        {isRTL ? 'ي' : 'Y'}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-bold text-[var(--ink)] truncate">
+                            {getGuardianName(primaryPlayer, isRTL)}
+                          </span>
+                          <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 whitespace-nowrap">
+                            {L('ولي الأمر (الأب)', 'Guardian (Father)')}
+                          </span>
+                        </div>
+                        <div className="text-[10.5px] text-[var(--muted)] flex flex-wrap items-center gap-1.5 mt-1">
+                          <span>{L('الرقم القومي:', 'NID:')}</span>
+                          <span className="mono font-semibold text-[var(--ink)]">27501010104829</span>
+                          <span className="opacity-40">·</span>
+                          <span className="text-emerald-700 font-semibold">{L('ولاية موثقة', 'Verified Custody')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Connected Siblings under the same Guardian */}
+                {familyDependents.length > 0 && (
+                  <div className="flex flex-col gap-[10px]">
+                    <div className="text-[10px] font-bold text-[var(--muted)] px-2 uppercase tracking-wider flex items-center justify-between gap-2">
+                      <span className="whitespace-nowrap">{L('الأشقاء التابعون لنفس ولي الأمر', 'Connected Siblings')}</span>
+                      <span className="text-[10px] text-[var(--muted)] font-semibold whitespace-nowrap">
+                        {L('ملفات العائلة', 'Family Profiles')}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-[10px]">
+                      {familyDependents.map((pl) => {
+                        const actualIdx = players.findIndex((p) => p.id === pl.id);
+                        const isCurrent = selectedPlayerIndex === actualIdx;
+                        return (
+                          <div
+                            key={pl.id || actualIdx}
+                            onClick={() => handleSelect(actualIdx)}
+                            className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
+                              isCurrent
+                                ? 'bg-[var(--primary-50)] border-2 border-[var(--primary)] text-[var(--primary-700)] dark:text-white font-bold shadow-xs'
+                                : 'hover:bg-[var(--primary-50)]/60 border border-[var(--line)] text-[var(--ink)]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                              <div className="w-8 h-8 rounded-lg bg-[#0066CC]/15 text-[#0066CC] dark:text-[#ABC7E8] flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                                {getPlayerName(pl, isRTL).charAt(0)}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-xs font-bold truncate text-[var(--ink)]">
+                                    {getPlayerName(pl, isRTL)}
+                                  </span>
+                                  <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-[var(--line)] text-[var(--muted)] whitespace-nowrap">
+                                    {pl.g === 'F' ? L('الأخت (رياضية)', 'Sister (Athlete)') : L('الأخ (رياضي)', 'Brother (Athlete)')}
+                                  </span>
+                                </div>
+                                <div className="text-[11px] text-[var(--muted)] flex items-center gap-1.5 mt-1">
+                                  <span className="font-semibold text-[var(--ink)]">{getSportName(pl?.sp)}</span>
+                                  <span className="opacity-40">·</span>
+                                  <span>{pl?.age} {L('سنة', 'years')}</span>
+                                </div>
+                              </div>
+                            </div>
+                            {isCurrent && (
+                              <Check className="w-4 h-4 text-[#16845B] stroke-[2.5] shrink-0" />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
           {/* Action buttons at bottom */}
-          <div className="pt-2.5 mt-2 border-t border-[var(--line)] space-y-1.5">
-            {userRole === 'guardian' && (
-              <button
-                type="button"
-                onClick={() => {
-                  navigate('citizen-family');
-                  setIsOpen(false);
-                }}
-                className="w-full py-1.5 px-2.5 rounded-xl bg-[var(--primary)] hover:bg-[var(--primary-600)] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <Users className="w-3.5 h-3.5" />
-                <span>{L('فتح إدارة ملفات العائلة', 'Open Family Management')}</span>
-              </button>
+          <div className="pt-[10px] mt-[10px] border-t border-[var(--line)] flex flex-col gap-[10px]">
+            {userRole === 'guardian' ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate('citizen-family');
+                    setIsOpen(false);
+                  }}
+                  className="w-full py-2 px-3 rounded-xl bg-[var(--primary)] hover:bg-[var(--primary-600)] text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>{L('فتح إدارة ملفات العائلة', 'Open Family Management')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddModal(true);
+                    setIsOpen(false);
+                  }}
+                  className="w-full py-2 px-3 rounded-xl bg-[var(--primary-50)] hover:bg-[var(--primary-100)] text-[var(--primary-700)] dark:text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer border border-[var(--primary-100)]"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{L('إضافة / ربط ملف ابن جديد', 'Connect New Child Profile')}</span>
+                </button>
+              </>
+            ) : (
+              <div className="text-center py-1 text-[11px] text-[var(--muted)] flex items-center justify-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#16845B] shrink-0" />
+                <span>{L('حساب رياضي قاصر تحت الولاية القانونية لولي الأمر (قانون 151 لسنة 2020)', 'Minor athlete account under verified parental custody (Law 151/2020)')}</span>
+              </div>
             )}
-            <button
-              type="button"
-              onClick={() => {
-                setShowAddModal(true);
-                setIsOpen(false);
-              }}
-              className="w-full py-1.5 px-2.5 rounded-xl bg-[var(--primary-50)] hover:bg-[var(--primary-100)] text-[var(--primary-700)] dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>{L('إضافة / ربط ملف تابع جديد (فرد عائلة)', 'Connect New Family Dependent')}</span>
-            </button>
           </div>
         </div>
+
       )}
 
       {/* Modal to add a new family dependent */}
