@@ -24,6 +24,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { useTheme } from '../../../context/ThemeContext';
 import { mockPersonas } from '../../../data/mockPersonas';
 import { CFG } from '../../../data/mockData';
+import { getApiUrl, getFallbackApiUrl } from '../../../config/api';
 
 // Security: Detect development environment
 const IS_DEV = Boolean(import.meta.env && import.meta.env.DEV);
@@ -180,13 +181,13 @@ export const LoginView = ({
 
       let res;
       try {
-        res = await fetch('/api/v1/auth/login', {
+        res = await fetch(getApiUrl('/api/v1/auth/login'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
       } catch (proxyErr) {
-        res = await fetch('http://localhost:8019/api/v1/auth/login', {
+        res = await fetch(getFallbackApiUrl('/api/v1/auth/login'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -277,13 +278,13 @@ export const LoginView = ({
 
       let res;
       try {
-        res = await fetch('/api/v1/auth/register', {
+        res = await fetch(getApiUrl('/api/v1/auth/register'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
       } catch (proxyErr) {
-        res = await fetch('http://localhost:8019/api/v1/auth/register', {
+        res = await fetch(getFallbackApiUrl('/api/v1/auth/register'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)

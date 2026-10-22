@@ -1,0 +1,42 @@
+services:
+  # ===========================================================================
+  # PostgreSQL Database Service
+  # ===========================================================================
+  seha-db:
+    image: postgres:16-alpine
+    container_name: seha-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${ODOO_DB_NAME:-sports_platform}
+      POSTGRES_USER: ${DB_USER:-odoo}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-odoo}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - seha-db-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+
+  # ===========================================================================
+  # Odoo 19 Backend Service
+  # ===========================================================================
+  odoo:
+    image: odoo:19.0
+    container_name: seha-odoo
+    depends_on:
+      - seha-db
+    restart: unless-stopped
+    environment:
+      HOST: ${DB_HOST:-seha-db}
+      PORT: ${DB_PORT:-5432}
+      USER: ${DB_USER:-odoo}
+      PASSWORD: ${DB_PASSWORD:-odoo}
+      ODOO_DB_NAME: ${ODOO_DB_NAME:-sports_platform}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:5173}
+    volumes:
+      - ./backend/odoo.conf:/etc/odoo/odoo.conf
+      - ./backend/seha_sports_platform:/mnt/extra-addons/seha_sports_platform
+    ports:
+      - "${ODOO_PORT:-8022}:8069"
+
+volumes:
+  seha-db-data:

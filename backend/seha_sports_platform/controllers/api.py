@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+import os
 from datetime import date
 import odoo
 from odoo import http, _
@@ -10,7 +11,7 @@ from odoo.addons.web.controllers.home import Home
 
 _logger = logging.getLogger(__name__)
 
-ALLOWED_ORIGINS = [
+DEFAULT_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
@@ -19,18 +20,38 @@ ALLOWED_ORIGINS = [
 ]
 
 
+def _get_allowed_origins():
+    """Retrieve allowed CORS origins dynamically from CORS_ALLOWED_ORIGINS environment variable."""
+    extra = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+    origins = list(DEFAULT_ALLOWED_ORIGINS)
+    if extra:
+        for org in extra.split(','):
+            org = org.strip()
+            if org and org not in origins:
+                origins.append(org)
+    return origins
+
+
+def _resolve_target_db():
+    """Dynamically determine the active database from request, environment variable, or default."""
+    if request.db:
+        return request.db
+    return os.environ.get('ODOO_DB_NAME') or 'sports_platform'
+
+
 def _get_cors_headers():
     origin = request.httprequest.headers.get('Origin')
+    allowed_origins = _get_allowed_origins()
     headers = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
         'Access-Control-Allow-Credentials': 'true',
     }
-    if origin in ALLOWED_ORIGINS:
-        headers['Access-Control-Allow-Origin'] = origin
-    elif not origin:
+    if '*' in allowed_origins or not origin:
         headers['Access-Control-Allow-Origin'] = '*'
+    elif origin in allowed_origins:
+        headers['Access-Control-Allow-Origin'] = origin
     else:
         headers['Access-Control-Allow-Origin'] = origin
     return headers
@@ -136,7 +157,7 @@ class SehaApiController(http.Controller):
 
         # Ensure database is selected
         if not request.db:
-            request.session.db = 'sports_platform'
+            request.session.db = _resolve_target_db()
             ensure_db()
         request.update_env(user=odoo.SUPERUSER_ID, su=True)
 
@@ -294,7 +315,7 @@ class SehaApiController(http.Controller):
             return error_response(_("كلمة المرور يجب ألا تقل عن 6 أحرف أو أرقام."), status=400, error_code='INVALID_PASSWORD')
 
         if not request.db:
-            request.session.db = 'sports_platform'
+            request.session.db = _resolve_target_db()
             ensure_db()
         request.update_env(user=odoo.SUPERUSER_ID, su=True)
         su_env = request.env
